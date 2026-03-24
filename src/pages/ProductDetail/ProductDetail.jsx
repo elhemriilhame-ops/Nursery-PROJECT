@@ -6,11 +6,13 @@ import { ShoppingBag, ChevronRight, Heart, Share2, Ruler, ShieldCheck, Truck } f
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { useCart } from '@/context/CartContext';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [selectedSize, setSelectedSize] = useState('Standard');
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   const product = useMemo(() => {
     return [...FLOWERS, ...PLANTS, ...OILS].find(p => p.id === id);
@@ -101,7 +103,11 @@ export default function ProductDetail() {
                <span className="text-lg w-12 text-center font-bold px-4">{quantity}</span>
                <button onClick={() => setQuantity(q => q+1)} className="text-xl px-4">+</button>
             </div>
-            <Button size="lg" className="flex-1 bg-charcoal text-white hover:bg-sage px-12 h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 transform active:scale-95 group">
+            <Button
+              size="lg"
+              onClick={() => addToCart(product, quantity, selectedSize)}
+              className="flex-1 bg-charcoal text-white hover:bg-sage px-12 h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 transform active:scale-95 group"
+            >
               <ShoppingBag size={18} className="mr-3 group-hover:rotate-12 transition-transform" />
               Add to Boutique Basket
             </Button>

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useCart } from '@/context/CartContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,9 +72,11 @@ export default function Navbar() {
           </button>
           <Link to="/cart" className="text-charcoal hover:scale-110 transition-transform relative">
             <ShoppingBag size={22} strokeWidth={1.5} />
-            <span className="absolute -top-1 -right-2 bg-sage text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-              0
-            </span>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-2 bg-sage text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {totalItems > 9 ? '9+' : totalItems}
+              </span>
+            )}
           </Link>
         </div>
       </div>

@@ -1,28 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, X, Minus, Plus, Truck, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { FLOWERS, PLANTS } from '@/data/mockData';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '@/context/CartContext';
 
 export default function Cart() {
-  // Mock cart items
-  const [items, setItems] = useState([
-    { ...FLOWERS[0], quantity: 1, size: 'Standard' },
-    { ...PLANTS[0], quantity: 1, size: 'Premium' },
-  ]);
+  const { items, updateQuantity, removeItem, subtotal } = useCart();
 
-  const updateQuantity = (id, delta) => {
-    setItems(prev => prev.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
-
-  const removeItem = (id) => {
-    setItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const shipping = 15;
   const total = subtotal + shipping;
 
@@ -69,16 +54,16 @@ export default function Cart() {
                             <h3 className="text-2xl font-serif text-charcoal">{item.name}</h3>
                             <p className="text-[10px] uppercase font-bold tracking-widest text-sage mt-2">{item.size} Edition</p>
                          </div>
-                         <button onClick={() => removeItem(item.id)} className="text-charcoal/30 hover:text-charcoal transition-colors p-2">
+                         <button onClick={() => removeItem(item.id, item.size)} className="text-charcoal/30 hover:text-charcoal transition-colors p-2">
                            <X size={20} />
                          </button>
                        </div>
 
                        <div className="flex justify-between items-center pt-6 border-t border-border">
                           <div className="flex items-center border border-border bg-parchment/10 h-10 px-2">
-                            <button onClick={() => updateQuantity(item.id, -1)} className="px-3 hover:text-sage transition-colors"><Minus size={14} /></button>
+                            <button onClick={() => updateQuantity(item.id, item.size, -1)} className="px-3 hover:text-sage transition-colors"><Minus size={14} /></button>
                             <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, 1)} className="px-3 hover:text-sage transition-colors"><Plus size={14} /></button>
+                            <button onClick={() => updateQuantity(item.id, item.size, 1)} className="px-3 hover:text-sage transition-colors"><Plus size={14} /></button>
                           </div>
                           <span className="text-lg font-sans text-charcoal/80">${item.price * item.quantity} USD</span>
                        </div>
