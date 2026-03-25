@@ -23,6 +23,31 @@ export const FLOWERS = [
     image: '/flower-1.png',
     category: 'Bouquets',
     description: 'Deep red roses mixed with soft pink peonies for a romantic, high-contrast look.'
+  },
+  {
+    id: 'f4',
+    name: 'Rose Petal Tulip Bouquet',
+    price: 75,
+    image: '/flower-tulip.jpg',
+    category: 'Bouquets',
+    description: 'A dreamy arrangement of fresh pink tulips, elegantly wrapped in blush tissue and tied with a silk satin ribbon. A tender gesture for any occasion.',
+    featured: true
+  },
+  {
+    id: 'f5',
+    name: 'Lily & Rose Harmony',
+    price: 110,
+    image: '/flower-lily.jpg',
+    category: 'Bouquets',
+    description: 'A captivating mix of ivory and blush Oriental lilies paired with delicate miniature roses. Arranged in a decorative glass vase for a refined, long-lasting display.'
+  },
+  {
+    id: 'f6',
+    name: 'Soleil Bouquet',
+    price: 90,
+    image: '/flower-sunrose.jpg',
+    category: 'Bouquets',
+    description: "Bold sunflowers and passionate red roses intertwined with baby's breath and lush greenery, presented in a luxe black-and-gold wrap. A statement of warmth and elegance."
   }
 ];
 

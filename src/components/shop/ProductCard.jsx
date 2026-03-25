@@ -14,7 +14,7 @@ export function ProductCard({ id, name, price, image, category, description, fea
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -45,15 +45,15 @@ export function ProductCard({ id, name, price, image, category, description, fea
             <ShoppingBag size={20} />
           </Button>
           <Button asChild size="icon" variant="secondary" className="bg-white/90 rounded-none w-12 h-12 shadow-xl hover:bg-white text-charcoal active:scale-95 transition-all">
-             <Link to={`/product/${id}`}><Eye size={20} /></Link>
+            <Link to={`/product/${id}`}><Eye size={20} /></Link>
           </Button>
         </div>
 
         {/* Quick Add Button */}
         <div className="absolute bottom-0 inset-x-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-           <Button onClick={handleAddToCart} className="w-full bg-white text-charcoal border border-charcoal/10 hover:bg-charcoal hover:text-white rounded-none uppercase tracking-[0.2em] text-[10px] font-bold py-6 shadow-2xl">
-              Add To Cart
-           </Button>
+          <Button onClick={handleAddToCart} className="w-full bg-white text-charcoal border border-charcoal/10 hover:bg-charcoal hover:text-white rounded-none uppercase tracking-[0.2em] text-[10px] font-bold py-6 shadow-2xl">
+            Add To Cart
+          </Button>
         </div>
       </div>
 

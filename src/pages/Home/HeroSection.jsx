@@ -6,7 +6,7 @@ export function HeroSection() {
   return (
     <div className="relative h-[100vh] w-full flex items-center justify-center overflow-hidden">
       {/* Background with Zoom Effect */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 1.1 }}
         animate={{ scale: 1.05 }}
         transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
@@ -19,10 +19,10 @@ export function HeroSection() {
       {/* Content */}
       <div className="relative z-20 text-center space-y-12 px-6 max-w-4xl">
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 1, ease: "easeOut" }}
-           className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="space-y-6"
         >
           <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 py-2 border-b border-white/20">The Premium Experience</span>
           <h1 className="text-6xl md:text-8xl lg:text-9xl text-white font-serif tracking-tight leading-[0.9]">
@@ -51,7 +51,7 @@ export function HeroSection() {
       </div>
 
       {/* Aesthetic Down Arrow */}
-      <motion.div 
+      <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"

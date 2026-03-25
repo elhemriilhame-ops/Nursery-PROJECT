@@ -7,11 +7,11 @@
     --sage: #8A9A5B;
     --blossom: #F5E6E8;
     --charcoal: #1A1A1A;
-    
+
     /* Font Families */
     --font-serif: "Cormorant Garamond", serif;
     --font-sans: "Inter", sans-serif;
-    
+
     /* Border Radius */
     --radius-lg: 0.5rem;
 
@@ -63,23 +63,48 @@
 
 /* Explicit Utility Mapping to keep legacy classes working without @theme rule warnings */
 @layer utilities {
-  .font-serif { font-family: var(--font-serif); }
-  .font-sans { font-family: var(--font-sans); }
-  
-  .text-sage { color: var(--sage); }
-  .bg-sage { background-color: var(--sage); }
-  .text-charcoal { color: var(--charcoal); }
-  .bg-parchment { background-color: var(--parchment); }
-  
-  .border-border { border-color: hsl(var(--border) / 1); }
-  .bg-background { background-color: hsl(var(--background) / 1); }
-  .text-foreground { color: hsl(var(--foreground) / 1); }
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+
+  .text-sage {
+    color: var(--sage);
+  }
+
+  .bg-sage {
+    background-color: var(--sage);
+  }
+
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+
+  .bg-parchment {
+    background-color: var(--parchment);
+  }
+
+  .border-border {
+    border-color: hsl(var(--border) / 1);
+  }
+
+  .bg-background {
+    background-color: hsl(var(--background) / 1);
+  }
+
+  .text-foreground {
+    color: hsl(var(--foreground) / 1);
+  }
 }
 
 @layer base {
   * {
     border-color: hsl(var(--border) / 1);
   }
+
   body {
     background-color: hsl(var(--background) / 1);
     color: hsl(var(--foreground) / 1);
@@ -87,7 +112,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-serif);
     font-weight: 500;
   }
