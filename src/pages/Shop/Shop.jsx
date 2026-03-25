@@ -41,8 +41,8 @@ export default function Shop() {
       {/* Header */}
       <div className="container mx-auto px-6 py-16 text-center space-y-6">
         <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">Discover</span>
-        <h1 className="text-4xl md:text-6xl text-charcoal">{categoryTitle}</h1>
-        <p className="text-charcoal/60 max-w-2xl mx-auto font-sans font-light italic text-lg leading-relaxed">
+        <h1 className="text-3xl md:text-5xl text-charcoal">{categoryTitle}</h1>
+        <p className="text-charcoal/60 max-w-2xl mx-auto font-sans font-light italic text-sm leading-relaxed">
           Hand-picked and curated for the minimalist aesthetic. Elevate your space with our premium botanical selections.
         </p>
       </div>

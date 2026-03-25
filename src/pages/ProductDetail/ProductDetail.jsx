@@ -64,9 +64,9 @@ export default function ProductDetail() {
               </div>
             </div>
             
-            <h1 className="text-5xl md:text-6xl text-charcoal leading-tight">{product.name}</h1>
-            <p className="text-2xl font-sans text-charcoal/80">${product.price} USD</p>
-            <p className="text-charcoal/60 leading-relaxed max-w-lg font-sans italic">
+            <h1 className="text-3xl md:text-5xl text-charcoal leading-tight">{product.name}</h1>
+            <p className="text-lg font-sans text-charcoal/80">${product.price} USD</p>
+            <p className="text-charcoal/60 leading-relaxed max-w-lg font-sans italic text-sm">
                {product.description}
             </p>
           </div>
@@ -106,7 +106,7 @@ export default function ProductDetail() {
             <Button
               size="lg"
               onClick={() => addToCart(product, quantity, selectedSize)}
-              className="flex-1 bg-charcoal text-white hover:bg-sage px-12 h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 transform active:scale-95 group"
+              className="flex-1 bg-charcoal text-white hover:bg-[var(--maroon)] px-12 h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 transform active:scale-95 group"
             >
               <ShoppingBag size={18} className="mr-3 group-hover:rotate-12 transition-transform" />
               Add to Boutique Basket

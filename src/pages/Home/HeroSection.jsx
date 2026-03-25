@@ -25,7 +25,7 @@ export function HeroSection() {
           className="space-y-6"
         >
           <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 py-2 border-b border-white/20">The Premium Experience</span>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl text-white font-serif tracking-tight leading-[0.9]">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-serif tracking-tight leading-[0.95]">
             The Art of <br />Botanical Living
           </h1>
         </motion.div>
@@ -34,7 +34,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-          className="text-white/80 text-lg md:text-xl font-sans font-light tracking-wide max-w-xl mx-auto leading-relaxed"
+          className="text-white/80 text-base md:text-lg font-sans font-light tracking-wide max-w-xl mx-auto leading-relaxed"
         >
           Curated bouquets, rare house plants, and botanical elixirs for the sophisticated interior. Hand-picked for elegance.
         </motion.p>
@@ -44,7 +44,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
         >
-          <Button asChild size="lg" className="bg-white text-charcoal hover:bg-parchment px-12 py-8 rounded-none uppercase tracking-[0.2em] text-xs font-semibold shadow-2xl transition-all hover:scale-105 active:scale-95 duration-300">
+          <Button asChild size="lg" className="bg-white text-charcoal hover:bg-[var(--maroon)] hover:text-white px-12 py-8 rounded-none uppercase tracking-[0.2em] text-xs font-semibold shadow-2xl transition-all hover:scale-105 active:scale-95 duration-300">
             <Link to="/shop/all">Explore the Boutique</Link>
           </Button>
         </motion.div>

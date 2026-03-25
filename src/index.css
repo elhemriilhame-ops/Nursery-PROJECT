@@ -7,7 +7,9 @@
     --sage: #8A9A5B;
     --blossom: #F5E6E8;
     --charcoal: #1A1A1A;
-
+    --maroon: #7B3B3B;
+    --green-hover: #6B8A4E;
+    
     /* Font Families */
     --font-serif: "Cormorant Garamond", serif;
     --font-sans: "Inter", sans-serif;
@@ -109,8 +111,15 @@
     background-color: hsl(var(--background) / 1);
     color: hsl(var(--foreground) / 1);
     font-family: var(--font-sans);
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  button, a {
+    transition: all 0.3s ease;
   }
 
   h1,

@@ -16,7 +16,7 @@ export default function Cart() {
       {/* Header */}
       <div className="container mx-auto px-6 py-16 text-center space-y-6">
          <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">Review</span>
-         <h1 className="text-4xl md:text-6xl text-charcoal">Botanical Basket</h1>
+         <h1 className="text-3xl md:text-5xl text-charcoal">Botanical Basket</h1>
          <Link to="/shop/all" className="inline-flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/40 hover:text-charcoal transition-colors underline underline-offset-8 decoration-sage/30 hover:decoration-sage">
             <ArrowLeft size={14} /> <span>Continue Exploring</span>
          </Link>
@@ -105,11 +105,11 @@ export default function Cart() {
 
               <div className="pt-10 border-t border-border flex justify-between items-baseline">
                 <span className="text-[10px] uppercase tracking-[0.4em] font-black text-charcoal">Total Amount</span>
-                <span className="text-4xl font-serif text-charcoal leading-none">${total} <span className="text-xs font-sans text-charcoal/30 uppercase tracking-widest font-black ml-2">USD</span></span>
+                <span className="text-2xl font-serif text-charcoal leading-none">${total} <span className="text-[10px] font-sans text-charcoal/30 uppercase tracking-widest font-black ml-2">USD</span></span>
               </div>
 
               <div className="space-y-4 pt-4">
-                 <Button className="w-full bg-charcoal text-white hover:bg-sage h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 group">
+                 <Button className="w-full bg-charcoal text-white hover:bg-[var(--maroon)] h-16 rounded-none uppercase tracking-[0.3em] text-[10px] font-bold shadow-2xl transition-all duration-300 group">
                     <ShieldCheck size={18} className="mr-3 group-hover:scale-110 transition-transform" />
                     Secure Finalization
                  </Button>

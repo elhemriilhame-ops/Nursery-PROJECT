@@ -45,7 +45,7 @@ export default function Navbar() {
         </button>
 
         {/* Logo */}
-        <Link to="/" className="text-3xl font-serif tracking-tight text-charcoal absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
+        <Link to="/" className="text-2xl font-serif tracking-tight text-charcoal absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
           Sunflowers
         </Link>
 
@@ -55,7 +55,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
-              className="text-sm uppercase tracking-widest font-sans font-medium text-charcoal/70 hover:text-charcoal transition-colors"
+              className="text-xs uppercase tracking-[0.2em] font-sans font-medium text-charcoal/70 hover:text-charcoal transition-colors"
             >
               {link.name}
             </Link>
