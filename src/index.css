@@ -7,8 +7,8 @@
     --sage: #8A9A5B;
     --blossom: #F5E6E8;
     --charcoal: #1A1A1A;
-    --maroon: #7B3B3B;
-    --green-hover: #6B8A4E;
+    --maroon: #A3B18A; /* New Light Olive Green */
+    --green-hover: #A3B18A;
     
     /* Font Families */
     --font-serif: "Cormorant Garamond", serif;
@@ -130,5 +130,14 @@
   h6 {
     font-family: var(--font-serif);
     font-weight: 500;
+  }
+
+  /* Universal Hover Pattern for Buttons */
+  button:hover, 
+  .btn:hover,
+  [role="button"]:hover {
+    background-color: #A3B18A !important;
+    color: white !important;
+    border-color: #A3B18A !important;
   }
 }
