@@ -4,11 +4,13 @@ import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,9 +69,29 @@ export default function Navbar() {
           <button className="text-charcoal hover:scale-110 transition-transform">
             <Search size={22} strokeWidth={1.5} />
           </button>
-          <button className="hidden sm:block text-charcoal hover:scale-110 transition-transform">
-            <User size={22} strokeWidth={1.5} />
-          </button>
+          <div className="hidden sm:flex items-center">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-end mr-2">
+                  <span className="text-[10px] font-bold text-charcoal/80 leading-none tracking-tight">{user.name}</span>
+                  {user.role === 'admin' && (
+                    <Link to="/admin" className="text-[8px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
+                  )}
+                </div>
+                <button 
+                  onClick={logout}
+                  className="text-charcoal hover:text-red-500 transition-colors"
+                  title="Logout"
+                >
+                  <User size={22} strokeWidth={1.5} />
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-charcoal/60 hover:text-sage transition-all border border-sage/10 px-6 py-2.5 rounded-full hover:bg-sage/5">
+                Connexion
+              </Link>
+            )}
+          </div>
           <Link to="/cart" className="text-charcoal hover:scale-110 transition-transform relative">
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (
