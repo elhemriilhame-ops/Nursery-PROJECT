@@ -65,7 +65,7 @@ export default function Cart() {
                             <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
                             <button onClick={() => updateQuantity(item.id, item.size, 1)} className="px-3 hover:text-sage transition-colors"><Plus size={14} /></button>
                           </div>
-                          <span className="text-lg font-sans text-charcoal/80">${item.price * item.quantity} USD</span>
+                          <span className="text-lg font-sans text-charcoal/80">{item.price * item.quantity} DH</span>
                        </div>
                      </div>
                    </motion.div>
@@ -95,17 +95,17 @@ export default function Cart() {
               <div className="space-y-6 text-sm">
                 <div className="flex justify-between">
                   <span className="text-charcoal/60 uppercase tracking-widest text-[10px] font-bold">Subtotal</span>
-                  <span className="font-sans font-medium text-lg leading-none">${subtotal}</span>
+                  <span className="font-sans font-medium text-lg leading-none">{subtotal} DH</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-charcoal/60 uppercase tracking-widest text-[10px] font-bold">Exquisite Shipping</span>
-                  <span className="font-sans font-medium text-lg leading-none">${shipping}</span>
+                  <span className="font-sans font-medium text-lg leading-none">{shipping} DH</span>
                 </div>
               </div>
 
               <div className="pt-10 border-t border-border flex justify-between items-baseline">
                 <span className="text-[10px] uppercase tracking-[0.4em] font-black text-charcoal">Total Amount</span>
-                <span className="text-2xl font-serif text-charcoal leading-none">${total} <span className="text-[10px] font-sans text-charcoal/30 uppercase tracking-widest font-black ml-2">USD</span></span>
+                <span className="text-2xl font-serif text-charcoal leading-none">{total} <span className="text-[10px] font-sans text-charcoal/30 uppercase tracking-widest font-black ml-2">DH</span></span>
               </div>
 
               <div className="space-y-4 pt-4">

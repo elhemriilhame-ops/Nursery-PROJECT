@@ -65,7 +65,7 @@ export default function ProductDetail() {
             </div>
             
             <h1 className="text-3xl md:text-5xl text-charcoal leading-tight">{product.name}</h1>
-            <p className="text-lg font-sans text-charcoal/80">${product.price} USD</p>
+            <p className="text-lg font-sans text-charcoal/80">{product.price} DH</p>
             <p className="text-charcoal/60 leading-relaxed max-w-lg font-sans italic text-sm">
                {product.description}
             </p>

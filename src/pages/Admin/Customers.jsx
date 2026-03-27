@@ -41,12 +41,12 @@ const Customers = () => {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-serif font-black text-slate-800 tracking-tight">Base Clients</h1>
-          <p className="text-xs text-slate-400 mt-1">Liste complète des utilisateurs enregistrés sur la plateforme.</p>
+          <h1 className="text-3xl font-serif font-black text-slate-800 tracking-tight">Customer Base</h1>
+          <p className="text-xs text-slate-400 mt-1">Full list of registered users on the platform.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="bg-sage/10 text-sage px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-sage/10 flex items-center gap-2 shadow-sm">
-            <Users size={16} /> {customers.length} Utilisateurs
+            <Users size={16} /> {customers.length} Users
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ const Customers = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Rechercher par email..."
+                placeholder="Search by email..."
                 className="pl-12 pr-6 py-3 bg-slate-50 rounded-2xl outline-none focus:ring-4 focus:ring-sage/5 transition-all text-sm w-full"
               />
            </div>
@@ -67,20 +67,20 @@ const Customers = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50/50 text-slate-300 text-[10px] font-black uppercase tracking-[0.2em]">
-                <th className="px-10 py-6">UTILISATEUR</th>
+                <th className="px-10 py-6">USER</th>
                 <th className="px-10 py-6">ROLE</th>
-                <th className="px-10 py-6">DATE D'INSCRIPTION</th>
+                <th className="px-10 py-6">REGISTRATION DATE</th>
                 <th className="px-10 py-6 text-right">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr>
-                   <td colSpan="4" className="px-10 py-20 text-center animate-pulse text-slate-300 font-serif text-xl italic">Chargement des données...</td>
+                   <td colSpan="4" className="px-10 py-20 text-center animate-pulse text-slate-300 font-serif text-xl italic">Loading data...</td>
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="px-10 py-20 text-center text-slate-300 font-serif text-xl italic">Aucun utilisateur trouvé.</td>
+                  <td colSpan="4" className="px-10 py-20 text-center text-slate-300 font-serif text-xl italic">No users found.</td>
                 </tr>
               ) : customers.map((customer) => (
                 <tr key={customer._id} className="hover:bg-slate-50/50 transition-colors group">

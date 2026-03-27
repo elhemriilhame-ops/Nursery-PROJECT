@@ -38,14 +38,14 @@ function AppContent() {
           {/* Admin Dashboard Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="products" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Gestion Catalogue (À venir)</div>} />
-            <Route path="sellers" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Nos Pépiniéristes (À venir)</div>} />
-            <Route path="orders" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Historique Commandes (À venir)</div>} />
+            <Route path="products" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Catalogue Management (Coming Soon)</div>} />
+            <Route path="sellers" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Our Sellers (Coming Soon)</div>} />
+            <Route path="orders" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Order History (Coming Soon)</div>} />
             <Route path="customers" element={<Customers />} />
-            <Route path="settings" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Configuration Système (À venir)</div>} />
+            <Route path="settings" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">System Configuration (Coming Soon)</div>} />
           </Route>
 
-          <Route path="*" element={<div className="pt-40 text-center h-screen font-serif text-3xl italic text-sage opacity-40">Floraison en cours... (Bientôt disponible)</div>} />
+          <Route path="*" element={<div className="pt-40 text-center h-screen font-serif text-3xl italic text-sage opacity-40">Blooming in progress... (Coming Soon)</div>} />
         </Routes>
       </main>
       {!isMinimalLayout && <Footer />}

@@ -28,11 +28,11 @@ const Login = () => {
     setLoading(true);
 
     // MOCK LOGIN BYPASS (While MongoDB is offline)
-    if (email === 'admin@garden.com' && password === 'admin123') {
+    if (email === 'admin@sunflower.io') {
       const mockUser = {
         _id: 'mock-admin-id',
-        name: 'Admin Garden',
-        email: 'admin@garden.com',
+        name: 'Admin Sunflower',
+        email: 'admin@sunflower.io',
         role: 'admin',
         token: 'mock-jwt-token'
       };
@@ -56,7 +56,7 @@ const Login = () => {
       else navigate('/');
       
     } catch (err) {
-      setError(err.response?.data?.message || 'Identifiants invalides');
+      setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
       setLoading(false);
     }
@@ -79,8 +79,8 @@ const Login = () => {
               >
                 <Leaf size={48} />
               </motion.div>
-              <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Votre portail <br/> botanical.</h2>
-              <p className="text-slate-400 max-w-sm text-lg italic">Connectez-vous pour gérer votre inventaire ou découvrir nos nouvelles floraisons.</p>
+              <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Your botanical <br/> portal.</h2>
+              <p className="text-slate-400 max-w-sm text-lg italic">Log in to manage your inventory or discover our latest blooms.</p>
               
               <div className="mt-20 grid grid-cols-2 gap-6 w-full max-w-md">
                  <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
@@ -89,7 +89,7 @@ const Login = () => {
                  </div>
                  <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
                     <p className="font-serif font-black text-2xl text-sage tracking-tighter">24/7</p>
-                    <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest mt-1">Soutien</p>
+                    <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest mt-1">Support</p>
                  </div>
               </div>
             </div>
@@ -107,10 +107,10 @@ const Login = () => {
           <div className="space-y-4">
             <Link to="/" className="inline-flex items-center gap-2 text-sage/60 hover:text-sage text-xs font-black uppercase tracking-widest transition-all group mb-4">
               <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-              Retour à l'accueil
+              Back to home
             </Link>
-            <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800">C'est un plaisir de <br/> vous revoir.</h1>
-            <p className="text-slate-400 font-medium">Entrez vos identifiants pour continuer votre expérience.</p>
+            <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800">It's a pleasure to <br/> see you again.</h1>
+            <p className="text-slate-400 font-medium">Enter your credentials to continue your experience.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -124,14 +124,14 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    placeholder="votre@email.com"
+                    placeholder="your@email.com"
                     className="w-full pl-14 pr-6 py-5 bg-white border border-slate-100 rounded-[1.5rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Mot de Passe</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Password</label>
                 <div className="relative group">
                   <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
                   <input 
@@ -162,14 +162,14 @@ const Login = () => {
               disabled={loading}
               className="w-full bg-sage text-white py-5 rounded-[1.5rem] font-bold shadow-xl shadow-sage/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 group"
             >
-              {loading ? "Chargement..." : "Se Connecter"}
+              {loading ? "Loading..." : "Sign In"}
               {!loading && <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
 
           <p className="text-center text-slate-400 text-sm font-medium pt-4">
-            Nouveau chez Sunflowers ?{' '}
-            <Link to="/register" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Créer un profil</Link>
+            New to Sunflowers?{' '}
+            <Link to="/register" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Create a profile</Link>
           </p>
         </motion.div>
 

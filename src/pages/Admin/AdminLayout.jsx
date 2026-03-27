@@ -30,10 +30,10 @@ const AdminLayout = () => {
   const menuItems = [
     { name: 'Dashboard', icon: BarChart3, path: '/admin' },
     { name: 'Catalogue', icon: Package, path: '/admin/products' },
-    { name: 'Pépiniéristes', icon: Store, path: '/admin/sellers' },
-    { name: 'Commandes', icon: ShoppingCart, path: '/admin/orders' },
-    { name: 'Clients', icon: Users, path: '/admin/customers' },
-    { name: 'Paramètres', icon: Settings, path: '/admin/settings' },
+    { name: 'Sellers', icon: Store, path: '/admin/sellers' },
+    { name: 'Orders', icon: ShoppingCart, path: '/admin/orders' },
+    { name: 'Customers', icon: Users, path: '/admin/customers' },
+    { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];
 
   return (
@@ -91,7 +91,7 @@ const AdminLayout = () => {
               className={`flex items-center gap-4 px-4 py-3.5 text-red-500/80 hover:bg-red-50 hover:text-red-600 rounded-2xl w-full transition-all group`}
             >
               <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
-              {isSidebarOpen && <span className="font-bold text-[15px]">Déconnexion</span>}
+              {isSidebarOpen && <span className="font-bold text-[15px]">Logout</span>}
             </button>
           </div>
         </motion.aside>
@@ -112,7 +112,7 @@ const AdminLayout = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage/60 transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Rechercher commandes, clients..."
+                placeholder="Search orders, customers..."
                 className="pl-12 pr-6 py-3 bg-slate-50 border-none rounded-2xl focus:ring-4 focus:ring-sage/5 focus:bg-white transition-all outline-none w-80 text-sm font-medium"
               />
             </div>
@@ -129,7 +129,7 @@ const AdminLayout = () => {
             <div className="flex items-center gap-4 pl-2">
               <div className="text-right hidden sm:block">
                 <p className="text-[15px] font-bold text-slate-800 tracking-tight">Admin System</p>
-                <p className="text-[10px] text-sage font-bold uppercase tracking-widest leading-none">Accès Total</p>
+                <p className="text-[10px] text-sage font-bold uppercase tracking-widest leading-none">Full Access</p>
               </div>
               <div className="w-12 h-12 rounded-2xl bg-white p-1 border-2 border-sage/10 shadow-lg shadow-black/5 group cursor-pointer hover:border-sage/40 transition-all">
                 <div className="w-full h-full rounded-xl bg-sage/5 overflow-hidden flex items-center justify-center">

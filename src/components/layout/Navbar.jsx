@@ -32,14 +32,14 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b',
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-md border-border py-4' 
+        isScrolled
+          ? 'bg-white/80 backdrop-blur-md border-border py-4'
           : 'bg-transparent border-transparent py-6'
       )}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="lg:hidden text-charcoal"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
@@ -78,7 +78,7 @@ export default function Navbar() {
                     <Link to="/admin" className="text-[8px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
                   )}
                 </div>
-                <button 
+                <button
                   onClick={logout}
                   className="text-charcoal hover:text-red-500 transition-colors"
                   title="Logout"
@@ -88,7 +88,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-charcoal/60 hover:text-sage transition-all border border-sage/10 px-6 py-2.5 rounded-full hover:bg-sage/5">
-                Connexion
+                Sign In
               </Link>
             )}
           </div>

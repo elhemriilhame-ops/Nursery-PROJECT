@@ -19,17 +19,17 @@ import {
 
 const Dashboard = () => {
   const stats = [
-    { label: 'Chiffre d\'Affaires', value: '45,290 €', change: '+12.5%', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Commandes Actives', value: '1,248', change: '+5.2%', icon: ShoppingBag, color: 'text-sage', bg: 'bg-sage/10' },
-    { label: 'Nouveaux Clients', value: '3,845', change: '+3.1%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { label: 'Pépiniéristes', value: '42', change: '+0.8%', icon: Store, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Revenue', value: '45,290 DH', change: '+12.5%', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { label: 'Active Orders', value: '1,248', change: '+5.2%', icon: ShoppingBag, color: 'text-sage', bg: 'bg-sage/10' },
+    { label: 'New Customers', value: '3,845', change: '+3.1%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Sellers', value: '42', change: '+0.8%', icon: Store, color: 'text-amber-600', bg: 'bg-amber-50' },
   ];
 
   const recentOrders = [
-    { id: '#GARD-9021', customer: 'Sophie Lefebvre', product: 'Pivoine Arbustive', status: 'Shipped', amount: '65.00 €', seller: 'Jardin de Provence' },
-    { id: '#GARD-9022', customer: 'Benoît Morin', product: 'Cactus Cierge XL', status: 'Pending', amount: '120.00 €', seller: 'Desert Bloom' },
-    { id: '#GARD-9023', customer: 'Clémence Durand', product: 'Lot de 3 Hydrangeas', status: 'Processing', amount: '48.50 €', seller: 'Au Pays des Fleurs' },
-    { id: '#GARD-9024', customer: 'Marc Petit', product: 'Bonsaï Ficus Retusa', status: 'Delivered', amount: '89.00 €', seller: 'Atelier de la Nature' },
+    { id: '#GARD-9021', customer: 'Sophie Lefebvre', product: 'Tree Peony', status: 'Shipped', amount: '65.00 DH', seller: 'Provence Garden' },
+    { id: '#GARD-9022', customer: 'Benoît Morin', product: 'Cactus Cierge XL', status: 'Pending', amount: '120.00 DH', seller: 'Desert Bloom' },
+    { id: '#GARD-9023', customer: 'Clémence Durand', product: 'Hydrangea Set of 3', status: 'Processing', amount: '48.50 DH', seller: 'Flower Country' },
+    { id: '#GARD-9024', customer: 'Marc Petit', product: 'Bonsai Ficus Retusa', status: 'Delivered', amount: '89.00 DH', seller: 'Nature Atelier' },
   ];
 
   const containerVariants = {
@@ -61,18 +61,18 @@ const Dashboard = () => {
             <div className="w-2 h-2 rounded-full bg-sage animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-sage/80 opacity-60">System Online</span>
           </div>
-          <h1 className="text-4xl font-serif font-black text-slate-800 tracking-tight">Bonjour, l'Admin.</h1>
-          <p className="text-slate-400 text-sm mt-1 max-w-sm">Le tableau de bord centralisé pour piloter vos ventes et la communauté des pépiniéristes.</p>
+          <h1 className="text-4xl font-serif font-black text-slate-800 tracking-tight">Welcome, Admin.</h1>
+          <p className="text-slate-400 text-sm mt-1 max-w-sm">The centralized dashboard to manage your sales and the nursery community.</p>
         </div>
 
         <div className="flex items-center gap-4 relative z-10">
           <button className="px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-2xl text-sm font-bold hover:shadow-lg hover:border-slate-300 transition-all flex items-center gap-2">
             <ArrowRightCircle size={18} />
-            Exporter CSV
+            Export CSV
           </button>
           <button className="px-6 py-3 bg-sage text-white rounded-2xl text-sm font-bold shadow-xl shadow-sage/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
             <PlusSquare size={18} />
-            Nouveau Produit
+            New Product
           </button>
         </div>
       </div>
@@ -110,12 +110,12 @@ const Dashboard = () => {
         >
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h3 className="text-2xl font-serif font-black text-slate-800">Performance Trimestrielle</h3>
-              <p className="text-xs text-slate-400 mt-1">Analyse des revenus générés par les commandes validées.</p>
+              <h3 className="text-2xl font-serif font-black text-slate-800">Quarterly Performance</h3>
+              <p className="text-xs text-slate-400 mt-1">Analysis of revenue generated from validated orders.</p>
             </div>
             <div className="flex bg-slate-50 p-1.5 rounded-2xl gap-2">
               <button className="px-5 py-2 hover:bg-white hover:shadow-md rounded-xl text-xs font-bold text-slate-400 hover:text-sage transition-all">Sellers</button>
-              <button className="px-5 py-2 bg-white shadow-md rounded-xl text-xs font-bold text-sage">Revenus</button>
+              <button className="px-5 py-2 bg-white shadow-md rounded-xl text-xs font-bold text-sage">Revenue</button>
             </div>
           </div>
           
@@ -123,7 +123,7 @@ const Dashboard = () => {
              {[30, 50, 45, 80, 75, 45, 95, 85, 40, 65, 80, 35].map((h, i) => (
                <div key={i} className="flex-grow flex flex-col items-center group relative h-full justify-end">
                  <div className="absolute -top-10 bg-slate-800 text-white text-[10px] px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none mb-2 font-bold shadow-xl translate-y-3 group-hover:translate-y-0">
-                    {h * 153} €
+                    {h * 153} DH
                  </div>
                  <motion.div 
                   initial={{ height: 0 }}
@@ -137,7 +137,7 @@ const Dashboard = () => {
              ))}
           </div>
           <div className="flex justify-between mt-8 text-[11px] font-black text-slate-300 uppercase tracking-widest px-4 border-t border-slate-50 pt-6">
-            {['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => (
+            {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => (
               <span key={m}>{m}</span>
             ))}
           </div>
@@ -151,7 +151,7 @@ const Dashboard = () => {
            <div className="absolute top-0 right-0 w-64 h-64 bg-sage/20 rounded-full -translate-x-1/2 -translate-y-1/2 blur-[80px] pointer-events-none" />
            
            <div className="flex items-center justify-between mb-8 z-10 relative">
-             <h3 className="text-2xl font-serif font-black">Stock Global</h3>
+             <h3 className="text-2xl font-serif font-black">Global Stock</h3>
              <div className="p-2 bg-white/5 rounded-xl text-white/40">
                 <Clock size={16} />
              </div>
@@ -161,9 +161,9 @@ const Dashboard = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-[11px] font-black uppercase tracking-widest">
                   <span className="flex items-center gap-3 text-white/50">
-                    <Flower2 size={16} className="text-sage" /> Fleurs de Saison
+                    <Flower2 size={16} className="text-sage" /> Seasonal Flowers
                   </span>
-                  <span className="text-sage">842 Uni.</span>
+                  <span className="text-sage">842 Units</span>
                 </div>
                 <div className="h-4 bg-white/5 rounded-2xl overflow-hidden p-1">
                   <motion.div 
@@ -178,9 +178,9 @@ const Dashboard = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-[11px] font-black uppercase tracking-widest">
                   <span className="flex items-center gap-3 text-white/40">
-                    <Leaf size={16} className="text-emerald-400" /> Plantes d'Intérieur
+                    <Leaf size={16} className="text-emerald-400" /> Indoor Plants
                   </span>
-                  <span className="text-emerald-400">1,200 Uni.</span>
+                  <span className="text-emerald-400">1,200 Units</span>
                 </div>
                 <div className="h-4 bg-white/5 rounded-2xl overflow-hidden p-1">
                   <motion.div 
@@ -195,9 +195,9 @@ const Dashboard = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-[11px] font-black uppercase tracking-widest">
                   <span className="flex items-center gap-3 text-white/30">
-                    <Sprout size={16} className="text-amber-400" /> Autres Produits
+                    <Sprout size={16} className="text-amber-400" /> Other Products
                   </span>
-                  <span className="text-amber-400">22% Stock Bas</span>
+                  <span className="text-amber-400">22% Low Stock</span>
                 </div>
                 <div className="h-4 bg-white/5 rounded-2xl overflow-hidden p-1">
                   <motion.div 
@@ -211,7 +211,7 @@ const Dashboard = () => {
            </div>
 
            <button className="mt-12 w-full py-5 bg-white text-slate-900 rounded-[1.5rem] text-sm font-black transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-sage/20 hover:-translate-y-1 active:scale-95 group">
-              Audit de l'Inventaire
+              Inventory Audit
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
            </button>
         </motion.div>
@@ -224,20 +224,20 @@ const Dashboard = () => {
       >
         <div className="p-10 flex items-center justify-between border-b border-slate-50">
           <div>
-            <h3 className="text-2xl font-serif font-black text-slate-800">Dernières Commandes</h3>
-            <p className="text-xs text-slate-400 mt-1">Surveillance du flux de vente en temps réel.</p>
+            <h3 className="text-2xl font-serif font-black text-slate-800">Latest Orders</h3>
+            <p className="text-xs text-slate-400 mt-1">Real-time monitoring of sales flow.</p>
           </div>
-          <button className="px-6 py-2.5 bg-slate-50 text-slate-400 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-sage/10 hover:text-sage transition-all">Consulter Tout</button>
+          <button className="px-6 py-2.5 bg-slate-50 text-slate-400 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-sage/10 hover:text-sage transition-all">View All</button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-                <th className="px-10 py-6">ID COMMANDE</th>
-                <th className="px-10 py-6">CLIENT</th>
-                <th className="px-10 py-6"> PRODUIT</th>
-                <th className="px-10 py-6">STATUT</th>
-                <th className="px-10 py-6"> MONTANT</th>
+                <th className="px-10 py-6">ORDER ID</th>
+                <th className="px-10 py-6">CUSTOMER</th>
+                <th className="px-10 py-6"> PRODUCT</th>
+                <th className="px-10 py-6">STATUS</th>
+                <th className="px-10 py-6"> AMOUNT</th>
                 <th className="px-10 py-6"> ACTIONS</th>
               </tr>
             </thead>

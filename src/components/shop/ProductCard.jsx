@@ -65,7 +65,7 @@ export function ProductCard({ id, name, price, image, category, description, fea
             <Link to={`/product/${id}`}>{name}</Link>
           </h3>
         </div>
-        <p className="text-sm font-sans text-charcoal/60 tracking-wider">${price} USD</p>
+        <p className="text-sm font-sans text-charcoal/60 tracking-wider">{price} DH</p>
       </div>
     </motion.div>
   );

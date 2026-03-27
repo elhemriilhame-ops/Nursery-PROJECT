@@ -7,9 +7,10 @@
     --sage: #8A9A5B;
     --blossom: #F5E6E8;
     --charcoal: #1A1A1A;
-    --maroon: #A3B18A; /* New Light Olive Green */
+    --maroon: #A3B18A;
+    /* New Light Olive Green */
     --green-hover: #A3B18A;
-    
+
     /* Font Families */
     --font-serif: "Cormorant Garamond", serif;
     --font-sans: "Inter", sans-serif;
@@ -118,7 +119,8 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  button, a {
+  button,
+  a {
     transition: all 0.3s ease;
   }
 
@@ -133,7 +135,7 @@
   }
 
   /* Universal Hover Pattern for Buttons */
-  button:hover, 
+  button:hover,
   .btn:hover,
   [role="button"]:hover {
     background-color: #A3B18A !important;
