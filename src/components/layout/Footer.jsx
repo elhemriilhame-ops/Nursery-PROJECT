@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Brand Section */}
         <div className="space-y-6">
           <Link to="/" className="text-3xl font-serif">Sunflowers</Link>
-          <p className="text-sm text-charcoal/60 leading-relaxed max-w-xs">
+          <p className="text-sm text-charcoal leading-relaxed max-w-xs">
             Bringing the beauty of nature to your doorstep. Our premium selection of flowers, plants, and essential oils is curated for the elegant home.
           </p>
           <div className="flex space-x-4">
@@ -23,7 +23,7 @@ export default function Footer() {
         {/* Quick Links */}
         <div>
           <h4 className="text-xs uppercase font-sans tracking-widest font-semibold mb-6">Explore</h4>
-          <ul className="space-y-4 text-sm text-charcoal/80">
+          <ul className="space-y-4 text-sm text-charcoal">
             <li><Link to="/shop/flowers" className="hover:text-sage">Flower Delivery</Link></li>
             <li><Link to="/shop/plants" className="hover:text-sage">House Plants</Link></li>
             <li><Link to="/shop/oils" className="hover:text-sage">Aromatherapy</Link></li>
@@ -34,7 +34,7 @@ export default function Footer() {
         {/* Support */}
         <div>
           <h4 className="text-xs uppercase font-sans tracking-widest font-semibold mb-6">Support</h4>
-          <ul className="space-y-4 text-sm text-charcoal/80">
+          <ul className="space-y-4 text-sm text-charcoal">
             <li><Link to="/about" className="hover:text-sage">Our Story</Link></li>
             <li><Link to="/faq" className="hover:text-sage">Shipping & FAQ</Link></li>
             <li><Link to="/contact" className="hover:text-sage">Contact Us</Link></li>
@@ -45,7 +45,7 @@ export default function Footer() {
         {/* Newsletter */}
         <div className="space-y-6">
           <h4 className="text-xs uppercase font-sans tracking-widest font-semibold mb-6">Join our newsletter</h4>
-          <p className="text-sm text-charcoal/60">Subscribe to receive botanical tips and exclusive offers.</p>
+          <p className="text-sm text-charcoal">Subscribe to receive botanical tips and exclusive offers.</p>
           <div className="flex space-x-2">
             <Input type="email" placeholder="Email address" className="bg-parchment/30 border-border focus-visible:ring-sage" />
             <Button variant="outline" className="border-charcoal hover:bg-charcoal hover:text-white">Join</Button>
@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-charcoal/40 font-medium">
+      <div className="container mx-auto px-6 mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-charcoal font-medium">
         <p>© 2026 Sunflowers Nursery. All rights reserved.</p>
         <p>Crafted for elegance & sustainability.</p>
       </div>

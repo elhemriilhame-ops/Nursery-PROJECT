@@ -38,7 +38,7 @@ export default function ProductDetail() {
   return (
     <div className="pt-24 min-h-screen bg-white">
       {/* Breadcrumbs */}
-      <div className="container mx-auto px-6 py-6 flex items-center space-x-2 text-[10px] uppercase tracking-widest text-charcoal/40 font-bold">
+      <div className="container mx-auto px-6 py-6 flex items-center space-x-2 text-[10px] uppercase tracking-widest text-charcoal font-bold">
         <Link to="/" className="hover:text-sage transition-colors">Home</Link>
         <ChevronRight size={12} />
         <Link to={`/shop/${product.category.toLowerCase()}`} className="hover:text-sage transition-colors">{product.category}</Link>
@@ -78,8 +78,8 @@ export default function ProductDetail() {
             </div>
             
             <h1 className="text-3xl md:text-5xl text-charcoal leading-tight">{product.name}</h1>
-            <p className="text-lg font-sans text-charcoal/80">{product.price} DH</p>
-            <p className="text-charcoal/60 leading-relaxed max-w-lg font-sans italic text-sm">
+            <p className="text-lg font-sans text-charcoal">{product.price} DH</p>
+            <p className="text-charcoal leading-relaxed max-w-lg font-sans italic text-sm">
                {product.description}
             </p>
           </div>
@@ -91,7 +91,7 @@ export default function ProductDetail() {
                    <div className="bg-sage/10 p-2 rounded-full">
                       <Info size={16} className="text-sage" />
                    </div>
-                   <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal/40 italic">Botanical Care Guide</h3>
+                   <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal italic">Botanical Care Guide</h3>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
@@ -101,7 +101,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Light</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.light}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.light}</p>
                       </div>
                    </div>
 
@@ -111,7 +111,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Temperature</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.temperature}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.temperature}</p>
                       </div>
                    </div>
 
@@ -121,7 +121,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Humidity</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.humidity}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.humidity}</p>
                       </div>
                    </div>
 
@@ -131,7 +131,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Watering</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.watering}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.watering}</p>
                       </div>
                    </div>
 
@@ -141,7 +141,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Soil Type</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.soil}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.soil}</p>
                       </div>
                    </div>
 
@@ -151,7 +151,7 @@ export default function ProductDetail() {
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Compatibility</p>
-                         <p className="text-xs font-bold text-charcoal/80">{product.care.sensitivity}</p>
+                         <p className="text-xs font-bold text-charcoal">{product.care.sensitivity}</p>
                       </div>
                    </div>
                 </div>
@@ -174,7 +174,7 @@ export default function ProductDetail() {
                   className={`px-8 py-4 border text-[10px] uppercase tracking-widest font-bold transition-all duration-300 ${
                     selectedSize === size 
                       ? 'bg-charcoal text-white border-charcoal' 
-                      : 'border-border text-charcoal/60 hover:border-charcoal/30'
+                      : 'border-border text-charcoal hover:border-charcoal/30'
                   }`}
                 >
                   {size}
@@ -209,14 +209,14 @@ export default function ProductDetail() {
                <Truck size={24} className="text-sage mt-1" strokeWidth={1} />
                <div>
                   <h4 className="text-[10px] uppercase font-bold tracking-widest">Careful Delivery</h4>
-                  <p className="text-xs text-charcoal/60 mt-2 font-sans">Delivered by our specialized team within 24-48 hours. Guaranteed freshness.</p>
+                  <p className="text-xs text-charcoal mt-2 font-sans">Delivered by our specialized team within 24-48 hours. Guaranteed freshness.</p>
                </div>
             </div>
             <div className="flex items-start space-x-4">
                <ShieldCheck size={24} className="text-sage mt-1" strokeWidth={1} />
                <div>
                   <h4 className="text-[10px] uppercase font-bold tracking-widest">Premium Card Included</h4>
-                  <p className="text-xs text-charcoal/60 mt-2 font-sans">Each order includes a hand-written botanical card of your choice.</p>
+                  <p className="text-xs text-charcoal mt-2 font-sans">Each order includes a hand-written botanical card of your choice.</p>
                </div>
             </div>
           </div>
@@ -228,12 +228,12 @@ export default function ProductDetail() {
           <div className="max-w-3xl mx-auto space-y-16">
             <div className="text-center space-y-4">
                <h3 className="text-3xl font-serif">A Little More about {product.name}</h3>
-               <p className="text-sm text-charcoal/60 leading-relaxed font-sans font-light italic">
+               <p className="text-sm text-charcoal leading-relaxed font-sans font-light italic">
                  Everything we source is ethical, sustainable, and chosen for its longevity and aesthetic appeal.
                </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 text-sm text-charcoal/80 leading-relaxed font-sans">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 text-sm text-charcoal leading-relaxed font-sans">
               <div className="space-y-4">
                 <h4 className="font-bold uppercase tracking-widest text-[10px]">Botanical Origin</h4>
                 <p>Carefully sourced from our partner farms in the South of France and sustainable nurseries across Europe. We ensure the highest standard of vibrant growth.</p>
@@ -251,7 +251,7 @@ export default function ProductDetail() {
          <div className="container mx-auto px-6 py-32 bg-parchment/20 border-t border-border mt-32">
             <div className="text-center mb-16 space-y-4">
               <h2 className="text-4xl">You Might Also Adore</h2>
-              <p className="text-[10px] uppercase tracking-[0.4em] text-charcoal/40 font-bold">Complements for your botanical journey</p>
+              <p className="text-[10px] uppercase tracking-[0.4em] text-charcoal font-bold">Complements for your botanical journey</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                {related.map(p => <ProductCard key={p.id} {...p} />)}

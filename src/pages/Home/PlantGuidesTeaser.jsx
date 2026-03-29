@@ -31,7 +31,7 @@ export function PlantGuidesTeaser() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">Mastering the Art of <br />Greenery</h2>
           </div>
           
-          <p className="text-charcoal/60 leading-relaxed max-w-md font-sans font-light italic">
+          <p className="text-charcoal leading-relaxed max-w-md font-sans font-light italic">
             "Every plant tells a story. From the way it reaches for the sun to the delicate patterns on its leaves."
           </p>
           

@@ -28,15 +28,17 @@ const Login = () => {
     setLoading(true);
 
     // MOCK LOGIN BYPASS (While MongoDB is offline)
-    if (email === 'admin@sunflower.io') {
+    if (email === 'admin@sunflower.io' || email === 'admin@garden.com') {
       const mockUser = {
         _id: 'mock-admin-id',
         name: 'Admin Sunflower',
-        email: 'admin@sunflower.io',
+        email: email,
         role: 'admin',
         token: 'mock-jwt-token'
       };
       login(mockUser);
+      setEmail('');
+      setPassword('');
       navigate('/admin');
       setLoading(false);
       return;
@@ -50,6 +52,9 @@ const Login = () => {
       
       login(data);
       
+      setEmail('');
+      setPassword('');
+
       // Redirect based on role
       if (data.role === 'admin') navigate('/admin');
       else if (data.role === 'pépiniériste') navigate('/seller/dashboard');
@@ -80,16 +85,16 @@ const Login = () => {
                 <Leaf size={48} />
               </motion.div>
               <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Your botanical <br/> portal.</h2>
-              <p className="text-slate-400 max-w-sm text-lg italic">Log in to manage your inventory or discover our latest blooms.</p>
+              <p className="text-slate-800 max-w-sm text-lg italic">Log in to manage your inventory or discover our latest blooms.</p>
               
               <div className="mt-20 grid grid-cols-2 gap-6 w-full max-w-md">
                  <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
                     <p className="font-serif font-black text-2xl text-sage tracking-tighter">4.9/5</p>
-                    <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest mt-1">Satisfaction</p>
+                    <p className="text-[10px] font-black uppercase text-slate-700 tracking-widest mt-1">Satisfaction</p>
                  </div>
                  <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
                     <p className="font-serif font-black text-2xl text-sage tracking-tighter">24/7</p>
-                    <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest mt-1">Support</p>
+                    <p className="text-[10px] font-black uppercase text-slate-700 tracking-widest mt-1">Support</p>
                  </div>
               </div>
             </div>
@@ -110,15 +115,15 @@ const Login = () => {
               Back to home
             </Link>
             <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800">It's a pleasure to <br/> see you again.</h1>
-            <p className="text-slate-400 font-medium">Enter your credentials to continue your experience.</p>
+            <p className="text-slate-800 font-medium">Enter your credentials to continue your experience.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-5">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Email</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Email</label>
                 <div className="relative group">
-                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input 
                     type="email" 
                     value={email}
@@ -131,9 +136,9 @@ const Login = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Password</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Password</label>
                 <div className="relative group">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input 
                     type="password" 
                     value={password}
@@ -167,7 +172,7 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="text-center text-slate-400 text-sm font-medium pt-4">
+          <p className="text-center text-slate-800 text-sm font-medium pt-4">
             New to Sunflowers?{' '}
             <Link to="/register" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Create a profile</Link>
           </p>

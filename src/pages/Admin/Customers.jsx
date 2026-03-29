@@ -42,7 +42,7 @@ const Customers = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-serif font-black text-slate-800 tracking-tight">Customer Base</h1>
-          <p className="text-xs text-slate-400 mt-1">Full list of registered users on the platform.</p>
+          <p className="text-xs text-slate-800 mt-1">Full list of registered users on the platform.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="bg-sage/10 text-sage px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-sage/10 flex items-center gap-2 shadow-sm">
@@ -54,7 +54,7 @@ const Customers = () => {
       <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="p-8 border-b border-slate-50 flex items-center justify-between">
            <div className="relative group w-80">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
               <input 
                 type="text" 
                 placeholder="Search by email..."
@@ -66,7 +66,7 @@ const Customers = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/50 text-slate-300 text-[10px] font-black uppercase tracking-[0.2em]">
+              <tr className="bg-slate-50/50 text-slate-700 text-[10px] font-black uppercase tracking-[0.2em]">
                 <th className="px-10 py-6">USER</th>
                 <th className="px-10 py-6">ROLE</th>
                 <th className="px-10 py-6">REGISTRATION DATE</th>
@@ -76,11 +76,11 @@ const Customers = () => {
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr>
-                   <td colSpan="4" className="px-10 py-20 text-center animate-pulse text-slate-300 font-serif text-xl italic">Loading data...</td>
+                   <td colSpan="4" className="px-10 py-20 text-center animate-pulse text-slate-700 font-serif text-xl italic">Loading data...</td>
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="px-10 py-20 text-center text-slate-300 font-serif text-xl italic">No users found.</td>
+                  <td colSpan="4" className="px-10 py-20 text-center text-slate-700 font-serif text-xl italic">No users found.</td>
                 </tr>
               ) : customers.map((customer) => (
                 <tr key={customer._id} className="hover:bg-slate-50/50 transition-colors group">
@@ -91,7 +91,7 @@ const Customers = () => {
                       </div>
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-black text-slate-800">{customer.name}</span>
-                        <span className="text-xs text-slate-400 italic">{customer.email}</span>
+                        <span className="text-xs text-slate-800 italic">{customer.email}</span>
                       </div>
                     </div>
                   </td>
@@ -105,13 +105,13 @@ const Customers = () => {
                     </span>
                   </td>
                   <td className="px-10 py-6">
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
+                    <div className="flex items-center gap-2 text-slate-800 text-xs font-medium">
                       <Calendar size={14} />
                       {new Date(customer.createdAt).toLocaleDateString()}
                     </div>
                   </td>
                   <td className="px-10 py-6 text-right">
-                    <button className="p-3 bg-slate-50 rounded-xl text-slate-300 hover:bg-white hover:text-sage hover:border-slate-200 border border-transparent transition-all shadow-sm">
+                    <button className="p-3 bg-slate-50 rounded-xl text-slate-700 hover:bg-white hover:text-sage hover:border-slate-200 border border-transparent transition-all shadow-sm">
                       <MoreVertical size={18} />
                     </button>
                   </td>

@@ -13,7 +13,7 @@ export default function Home() {
         <section>
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl md:text-5xl">Curated Botanical Boutique</h2>
-            <p className="text-charcoal/60 max-w-lg mx-auto uppercase tracking-widest text-[10px] font-semibold">
+            <p className="text-charcoal max-w-lg mx-auto uppercase tracking-widest text-[10px] font-semibold">
               Elegance in every petal and leaf
             </p>
           </div>

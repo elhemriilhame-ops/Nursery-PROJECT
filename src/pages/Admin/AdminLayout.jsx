@@ -75,7 +75,7 @@ const AdminLayout = () => {
                   flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group
                   ${isActive 
                     ? 'bg-sage text-white shadow-[0_8px_20px_rgba(138,154,91,0.25)]' 
-                    : 'text-slate-400 hover:text-sage hover:bg-sage/5'}
+                    : 'text-slate-800 hover:text-sage hover:bg-sage/5'}
                 `}
               >
                 <div className={`${isSidebarOpen ? '' : 'mx-auto'} transition-transform group-hover:scale-110`}>
@@ -111,7 +111,7 @@ const AdminLayout = () => {
               <Menu size={22} />
             </button>
             <div className="relative group hidden lg:block">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage/60 transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage/60 transition-colors" size={18} />
               <input 
                 type="text" 
                 placeholder="Search orders, customers..."
@@ -122,7 +122,7 @@ const AdminLayout = () => {
 
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3 pr-6 border-r border-[#EEEEEE]">
-              <button className="relative p-3 text-slate-400 hover:text-sage transition-all hover:bg-sage/5 rounded-2xl">
+              <button className="relative p-3 text-slate-800 hover:text-sage transition-all hover:bg-sage/5 rounded-2xl">
                 <Bell size={22} />
                 <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white ring-2 ring-red-500/20"></span>
               </button>

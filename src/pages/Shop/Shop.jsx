@@ -87,7 +87,7 @@ export default function Shop() {
       <div className="container mx-auto px-6 py-16 text-center space-y-6">
         <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">Discover</span>
         <h1 className="text-3xl md:text-5xl text-charcoal">{categoryTitle}</h1>
-        <p className="text-charcoal/60 max-w-2xl mx-auto font-sans font-light italic text-sm leading-relaxed">
+        <p className="text-charcoal max-w-2xl mx-auto font-sans font-light italic text-sm leading-relaxed">
           Hand-picked and curated for the minimalist aesthetic. Elevate your space with our premium botanical selections.
         </p>
       </div>
@@ -100,9 +100,9 @@ export default function Shop() {
                    <h3 className="text-xl font-serif font-black text-slate-800 tracking-tight">Delivery details</h3>
                    <div className="space-y-4">
                       <div className="space-y-1.5">
-                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 ml-1">Delivery zip code</label>
+                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-800 ml-1">Delivery zip code</label>
                          <div className="relative">
-                            <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
+                            <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-700" />
                             <input 
                               type="text" 
                               value={zipCode}
@@ -113,9 +113,9 @@ export default function Shop() {
                          </div>
                       </div>
                       <div className="space-y-1.5">
-                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-400 ml-1">Delivery date</label>
+                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-800 ml-1">Delivery date</label>
                          <div className="relative cursor-pointer">
-                            <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                            <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-700 pointer-events-none" />
                             <select 
                               value={deliveryDate}
                               onChange={(e) => setDeliveryDate(e.target.value)}
@@ -152,7 +152,7 @@ export default function Shop() {
                              className="w-full flex items-center justify-between group py-1"
                            >
                               <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Occasion</span>
-                              {isOccasionOpen ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDownIcon size={18} className="text-slate-400" />}
+                              {isOccasionOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
                            </button>
                            {isOccasionOpen && (
                               <div className="mt-4 flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export default function Shop() {
                                      className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 ${
                                        selectedOccasion === occ 
                                          ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-400 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
                                      }`}
                                    >
                                      {occ}
@@ -180,7 +180,7 @@ export default function Shop() {
                              className="w-full flex items-center justify-between group py-1"
                            >
                               <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Price Range</span>
-                              {isPriceOpen ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDownIcon size={18} className="text-slate-400" />}
+                              {isPriceOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
                            </button>
                            {isPriceOpen && (
                               <div className="mt-4 flex flex-wrap gap-2">
@@ -191,7 +191,7 @@ export default function Shop() {
                                      className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 ${
                                        selectedPrice?.label === range.label 
                                          ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-400 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
                                      }`}
                                    >
                                      {range.label}
@@ -208,7 +208,7 @@ export default function Shop() {
                              className="w-full flex items-center justify-between group py-1"
                            >
                               <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Color Palette</span>
-                              {isColorOpen ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDownIcon size={18} className="text-slate-400" />}
+                              {isColorOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
                            </button>
                            {isColorOpen && (
                               <div className="mt-4 flex flex-wrap gap-2">
@@ -219,7 +219,7 @@ export default function Shop() {
                                      className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 flex items-center gap-2 ${
                                        selectedColor === color 
                                          ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-400 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
                                      }`}
                                    >
                                      <div className={`w-2 h-2 rounded-full border border-slate-200`} style={{ backgroundColor: color.toLowerCase() }} />
@@ -250,7 +250,7 @@ export default function Shop() {
 
              <div className="flex-grow">
                {products.length === 0 ? (
-                 <div className="h-96 flex flex-col items-center justify-center space-y-4 border-2 border-dashed border-slate-100 rounded-[3rem] text-slate-300">
+                 <div className="h-96 flex flex-col items-center justify-center space-y-4 border-2 border-dashed border-slate-100 rounded-[3rem] text-slate-700">
                     <Filter size={48} strokeWidth={1} />
                     <p className="font-serif italic text-xl">No matching blooms found.</p>
                     <button onClick={() => {

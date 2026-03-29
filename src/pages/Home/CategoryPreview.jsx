@@ -34,7 +34,7 @@ export function CategoryPreview() {
           <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-500 pointer-events-none p-4">
              <div className="bg-white/80 backdrop-blur-sm p-6 px-10 border border-charcoal/5 text-center">
                  <h3 className="text-xl font-serif text-charcoal">{cat.name}</h3>
-                 <span className="text-[10px] uppercase tracking-[0.2em] text-charcoal/60 mt-1 block">Discover</span>
+                 <span className="text-[10px] uppercase tracking-[0.2em] text-charcoal mt-1 block">Discover</span>
              </div>
           </div>
         </Link>

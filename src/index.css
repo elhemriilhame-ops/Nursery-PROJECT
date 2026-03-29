@@ -105,6 +105,17 @@
   .text-foreground {
     color: hsl(var(--foreground) / 1);
   }
+
+  /* User requested all gray text to be black for visibility test */
+  .text-slate-300,
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600,
+  .text-charcoal\/40,
+  .text-charcoal\/60,
+  .text-charcoal\/80 {
+    color: var(--charcoal) !important;
+  }
 }
 
 @layer base {

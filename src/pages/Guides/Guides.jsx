@@ -13,7 +13,7 @@ export default function Guides() {
            <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">The Botanists Journal</span>
            <h1 className="text-5xl md:text-7xl">Nurture Your <br />Botanical Haven</h1>
         </div>
-        <p className="text-charcoal/60 mx-auto font-sans font-light italic text-xl leading-relaxed max-w-2xl">
+        <p className="text-charcoal mx-auto font-sans font-light italic text-xl leading-relaxed max-w-2xl">
           Dive into our wealth of knowledge, from basic plant care to advanced floral arrangement techniques. Crafting a lush sanctuary begins with understanding.
         </p>
       </div>
@@ -70,14 +70,14 @@ export default function Guides() {
                </div>
 
                <div className="space-y-4">
-                 <div className="flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-charcoal/40">
+                 <div className="flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-charcoal">
                     <span>{guide.date}</span>
                     <span className="text-sage">{guide.author}</span>
                  </div>
                  <h3 className="text-3xl font-serif text-charcoal group-hover:text-sage transition-colors duration-300 leading-snug">
                    {guide.title}
                  </h3>
-                 <p className="text-sm text-charcoal/60 leading-relaxed font-sans max-w-xs line-clamp-2">
+                 <p className="text-sm text-charcoal leading-relaxed font-sans max-w-xs line-clamp-2">
                    {guide.description}
                  </p>
                  <Link to="#" className="inline-flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:translate-x-2 transition-transform duration-300">
@@ -94,7 +94,7 @@ export default function Guides() {
       <div className="container mx-auto px-6 py-32 mt-32 bg-parchment/30 text-center space-y-12">
          <div className="space-y-4">
             <h2 className="text-4xl md:text-5xl">Join the Botanical Collective</h2>
-            <p className="text-charcoal/60 max-w-lg mx-auto uppercase tracking-widest text-[10px] font-semibold">Weekly insights into the world of botanical design</p>
+            <p className="text-charcoal max-w-lg mx-auto uppercase tracking-widest text-[10px] font-semibold">Weekly insights into the world of botanical design</p>
          </div>
          <Button variant="outline" className="border-charcoal px-16 py-8 rounded-none uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-charcoal hover:text-white transition-all">
            Subscribe to the Journal

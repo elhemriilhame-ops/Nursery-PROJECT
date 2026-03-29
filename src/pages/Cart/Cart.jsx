@@ -69,7 +69,7 @@ export default function Cart() {
                </div>
                
                <h2 className="text-3xl font-serif text-charcoal mb-4">Order Confirmed</h2>
-               <p className="text-charcoal/60 leading-relaxed mb-10 text-sm">
+               <p className="text-charcoal leading-relaxed mb-10 text-sm">
                  Thank you for your purchase. Your exquisite botanical selection is being carefully prepared by our artisans. An email receipt has been sent to you.
                </p>
                
@@ -96,7 +96,7 @@ export default function Cart() {
       <div className="container mx-auto px-6 py-16 text-center space-y-6">
          <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">Review</span>
          <h1 className="text-3xl md:text-5xl text-charcoal">Botanical Basket</h1>
-         <Link to="/shop/all" className="inline-flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/40 hover:text-charcoal transition-colors underline underline-offset-8 decoration-sage/30 hover:decoration-sage">
+         <Link to="/shop/all" className="inline-flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:text-charcoal transition-colors underline underline-offset-8 decoration-sage/30 hover:decoration-sage">
             <ArrowLeft size={14} /> <span>Continue Exploring</span>
          </Link>
       </div>
@@ -106,7 +106,7 @@ export default function Cart() {
         <div className="lg:col-span-2 space-y-8">
            {items.length === 0 ? (
              <div className="text-center py-24 space-y-8">
-               <p className="text-charcoal/60 font-sans italic">Your basket is currently empty.</p>
+               <p className="text-charcoal font-sans italic">Your basket is currently empty.</p>
                <Button asChild variant="outline" className="rounded-none border-charcoal/30 px-12 py-8 uppercase tracking-[0.2em] text-[10px] font-bold">
                   <Link to="/shop/all">Visit our collections</Link>
                </Button>
@@ -129,7 +129,7 @@ export default function Cart() {
                      <div className="flex-1 space-y-6 w-full">
                        <div className="flex justify-between items-start">
                          <div className="space-y-1">
-                            <span className="text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-bold">{item.category}</span>
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-charcoal font-bold">{item.category}</span>
                             <h3 className="text-2xl font-serif text-charcoal">{item.name}</h3>
                             <p className="text-[10px] uppercase font-bold tracking-widest text-sage mt-2">{item.size} Edition</p>
                          </div>
@@ -144,7 +144,7 @@ export default function Cart() {
                             <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
                             <button onClick={() => updateQuantity(item.id, item.size, 1)} className="px-3 hover:text-sage transition-colors"><Plus size={14} /></button>
                           </div>
-                          <span className="text-lg font-sans text-charcoal/80">{item.price * item.quantity} DH</span>
+                          <span className="text-lg font-sans text-charcoal">{item.price * item.quantity} DH</span>
                        </div>
                      </div>
                    </motion.div>
@@ -164,7 +164,7 @@ export default function Cart() {
                 <div className="space-y-6">
                    {/* Personal Message */}
                    <div className="space-y-2 group">
-                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                         <MessageSquare size={14} className="text-sage" />
                         <span>Add a personal message</span>
                      </label>
@@ -174,7 +174,7 @@ export default function Cart() {
                    {/* Grid for Date & Time */}
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2 group">
-                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                            <Clock size={14} className="text-sage" />
                            <span>Delivery Time Slot</span>
                         </label>
@@ -186,7 +186,7 @@ export default function Cart() {
                       </div>
 
                       <div className="space-y-2 group">
-                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                            <Calendar size={14} className="text-sage" />
                            <span>Delivery Date</span>
                         </label>
@@ -196,7 +196,7 @@ export default function Cart() {
 
                    {/* Recipient Info */}
                    <div className="space-y-2 group">
-                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                         <User size={14} className="text-sage" />
                         <span>Full Name And Address Of The Recipient *</span>
                      </label>
@@ -204,7 +204,7 @@ export default function Cart() {
                    </div>
 
                    <div className="space-y-2 group">
-                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                         <Phone size={14} className="text-sage" />
                         <span>Phone Number Of The Recipient *</span>
                      </label>
@@ -224,7 +224,7 @@ export default function Cart() {
                             <CheckCircle2 size={16} />
                             Agadir
                          </div>
-                         <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 border border-border text-charcoal/60 hover:text-charcoal hover:bg-parchment/10 hover:border-charcoal/30 transition-all text-[11px] uppercase tracking-widest font-black leading-none group bg-white shadow-sm outline-none">
+                         <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 border border-border text-charcoal hover:text-charcoal hover:bg-parchment/10 hover:border-charcoal/30 transition-all text-[11px] uppercase tracking-widest font-black leading-none group bg-white shadow-sm outline-none">
                             <MapPin size={16} className="group-hover:-translate-y-0.5 transition-transform" />
                             Change city
                          </button>
@@ -240,13 +240,13 @@ export default function Cart() {
                 <div className="border-b border-border pb-6 flex items-center justify-between">
                    <h3 className="text-2xl font-serif text-charcoal">Payment Method</h3>
                    <div className="flex gap-2">
-                     <span className="text-[10px] uppercase font-bold tracking-widest text-charcoal/40 flex items-center gap-1"><Lock size={12} /> Secure</span>
+                     <span className="text-[10px] uppercase font-bold tracking-widest text-charcoal flex items-center gap-1"><Lock size={12} /> Secure</span>
                    </div>
                 </div>
 
                 <div className="space-y-6">
                    <div className="space-y-2 group">
-                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                     <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                         <CreditCard size={14} className="text-sage" />
                         <span>Card Information *</span>
                      </label>
@@ -258,13 +258,13 @@ export default function Cart() {
 
                    <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2 group">
-                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                            <span>Expiry Date *</span>
                         </label>
                         <input type="text" placeholder="MM/YY" className="w-full bg-[#fbfbfb] border border-border p-4 text-sm focus:outline-none focus:border-sage/40 focus:ring-4 focus:ring-sage/5 transition-all text-charcoal font-medium outline-none placeholder:text-charcoal/20 tracking-widest" />
                       </div>
                       <div className="space-y-2 group">
-                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal/60 group-focus-within:text-sage transition-colors">
+                        <label className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-charcoal group-focus-within:text-sage transition-colors">
                            <span>CVC *</span>
                         </label>
                         <input type="text" placeholder="123" className="w-full bg-[#fbfbfb] border border-border p-4 text-sm focus:outline-none focus:border-sage/40 focus:ring-4 focus:ring-sage/5 transition-all text-charcoal font-medium outline-none placeholder:text-charcoal/20 tracking-widest" />
@@ -294,11 +294,11 @@ export default function Cart() {
               
               <div className="space-y-6 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-charcoal/60 uppercase tracking-widest text-[10px] font-bold">Subtotal</span>
+                  <span className="text-charcoal uppercase tracking-widest text-[10px] font-bold">Subtotal</span>
                   <span className="font-sans font-medium text-lg leading-none">{subtotal} DH</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-charcoal/60 uppercase tracking-widest text-[10px] font-bold">Exquisite Shipping</span>
+                  <span className="text-charcoal uppercase tracking-widest text-[10px] font-bold">Exquisite Shipping</span>
                   <span className="font-sans font-medium text-lg leading-none">{shipping} DH</span>
                 </div>
               </div>
@@ -320,13 +320,13 @@ export default function Cart() {
                        <span className="flex items-center justify-center"><ShieldCheck size={18} className="mr-3 group-hover:scale-110 transition-transform" /> Secure Finalization</span>
                     )}
                  </Button>
-                 <p className="text-[10px] text-center text-charcoal/40 uppercase tracking-widest leading-relaxed font-bold">Tax calculated at checkout if applicable.</p>
+                 <p className="text-[10px] text-center text-charcoal uppercase tracking-widest leading-relaxed font-bold">Tax calculated at checkout if applicable.</p>
               </div>
            </div>
 
            <div className="bg-parchment/60 p-8 text-center space-y-4 shadow-sm border border-border/50">
-              <p className="text-[10px] uppercase tracking-widest text-charcoal/60 font-bold italic">Need Botanical Advice?</p>
-              <button className="underline text-charcoal/40 text-[10px] uppercase font-bold tracking-widest hover:text-sage transition-colors">Chat with our Lead Florist</button>
+              <p className="text-[10px] uppercase tracking-widest text-charcoal font-bold italic">Need Botanical Advice?</p>
+              <button className="underline text-charcoal text-[10px] uppercase font-bold tracking-widest hover:text-sage transition-colors">Chat with our Lead Florist</button>
            </div>
         </div>
       </div>

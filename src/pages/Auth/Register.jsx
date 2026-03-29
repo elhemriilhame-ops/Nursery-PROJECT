@@ -12,10 +12,16 @@ import {
   LayoutDashboard,
   ShieldAlert,
   Store,
-  UserCheck
+  UserCheck,
+  CreditCard,
+  Phone,
+  MapPin,
+  Award,
+  Briefcase
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
+import { Button } from '@/components/ui/button';
 import { useAuth } from '../../context/AuthContext';
 
 const Register = () => {
@@ -23,8 +29,14 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    role: 'customer'
+    role: 'customer',
+    cin: '',
+    specialty: '',
+    phone: '',
+    location: '',
+    commercialRegister: ''
   });
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -37,6 +49,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess(false);
     setLoading(true);
 
     // MOCK REGISTER BYPASS (While MongoDB is offline)
@@ -46,16 +59,62 @@ const Register = () => {
         name: formData.name,
         email: formData.email,
         role: formData.role,
-        token: 'mock-jwt-token'
+        token: 'mock-jwt-token',
+        // Seller specific data
+        ...(formData.role === 'pépiniériste' && {
+          cin: formData.cin,
+          specialty: formData.specialty,
+          phone: formData.phone,
+          location: formData.location,
+          commercialRegister: formData.commercialRegister
+        })
       };
-      login(mockUser);
-      navigate('/');
+      // Instead of logging in right away, we show success and clear form
+      setSuccess(true);
+      setFormData({
+        name: '', email: '', password: '', role: 'customer',
+        cin: '', specialty: '', phone: '', location: '', commercialRegister: ''
+      });
       setLoading(false);
-    }, 1000);
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#FCFCFB] text-charcoal selection:bg-sage/20 selection:text-sage">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#FCFCFB] text-charcoal selection:bg-sage/20 selection:text-sage relative">
+      <AnimatePresence>
+        {success && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 30 }} 
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6, type: 'spring' }}
+              className="bg-white p-12 max-w-sm w-full flex flex-col items-center text-center shadow-2xl rounded-[2rem] border border-sage/10 relative"
+            >
+               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 relative">
+                 <UserCheck size={32} className="text-emerald-500 relative z-10" />
+               </div>
+               
+               <h2 className="text-2xl font-serif font-black text-slate-800 mb-2">Success!</h2>
+               <p className="text-slate-900 leading-relaxed mb-8 text-sm">
+                 Account Successfully Created.<br/>You can now proceed to login.
+               </p>
+               
+               <Button onClick={() => navigate('/login')} className="w-full bg-sage text-white hover:bg-sage/90 h-14 rounded-2xl font-bold shadow-lg shadow-sage/20 transition-all duration-300">
+                  Proceed to Login
+               </Button>
+               
+               <button onClick={() => setSuccess(false)} className="mt-4 text-xs font-bold text-slate-800 hover:text-slate-600 transition-colors uppercase tracking-widest">
+                  Close
+               </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Decorative Visual Side */}
       <div className="hidden lg:block relative p-12 h-full order-last lg:order-first">
@@ -72,16 +131,16 @@ const Register = () => {
               <Sprout size={48} />
             </motion.div>
             <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Join the <br /> nursery.</h2>
-            <p className="text-slate-400 max-w-sm text-lg italic tracking-tight">Share your blooms or discover rare plants from around the world.</p>
+            <p className="text-slate-800 max-w-sm text-lg italic tracking-tight">Share your blooms or discover rare plants from around the world.</p>
 
             <div className="mt-20 flex flex-col items-start gap-4">
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-400">
+              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
                 <ShieldCheck size={20} className="text-sage" /> Your privacy is protected
               </div>
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-400">
+              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
                 <ShieldCheck size={20} className="text-sage" /> Secure payments (Stripe)
               </div>
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-400">
+              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
                 <ShieldCheck size={20} className="text-sage" /> Customer support available
               </div>
             </div>
@@ -99,15 +158,15 @@ const Register = () => {
         >
           <div className="space-y-4">
             <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800 leading-tight">Create your <br /> profile.</h1>
-            <p className="text-slate-400 font-medium">Welcome! It's time to join us.</p>
+            <p className="text-slate-800 font-medium">Welcome! It's time to join us.</p>
           </div>
 
           <form onSubmit={handleRegister} className="space-y-5">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Full Name</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Full Name</label>
                 <div className="relative group">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
                     name="name"
                     value={formData.name}
@@ -120,9 +179,9 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Email</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Email</label>
                 <div className="relative group">
-                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
                     name="email"
                     type="email"
@@ -136,9 +195,9 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Password</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Password</label>
                 <div className="relative group">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sage transition-colors" size={18} />
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
                     name="password"
                     type="password"
@@ -153,26 +212,121 @@ const Register = () => {
 
               {/* Role Selection Toggle */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4">Your Role</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Your Role</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, role: 'customer' })}
                     className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'customer' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
                   >
-                    <UserCheck size={20} className={formData.role === 'customer' ? 'text-sage' : 'text-slate-300 group-hover:text-sage/40'} />
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'customer' ? 'text-sage' : 'text-slate-400'}`}>Customer</p>
+                    <UserCheck size={20} className={formData.role === 'customer' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
+                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'customer' ? 'text-sage' : 'text-slate-800'}`}>Customer</p>
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, role: 'pépiniériste' })}
                     className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'pépiniériste' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
                   >
-                    <Store size={20} className={formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-300 group-hover:text-sage/40'} />
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-400'}`}>Seller</p>
+                    <Store size={20} className={formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
+                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-800'}`}>Seller</p>
                   </button>
                 </div>
               </div>
+
+              {/* Dynamic Seller Fields */}
+              {formData.role === 'pépiniériste' && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="space-y-4 pt-4 border-t border-slate-100 overflow-hidden"
+                >
+                  <div className="space-y-4 pb-2">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-sage ml-2">Professional Details</h3>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">CIN *</label>
+                        <div className="relative group">
+                          <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <input
+                            name="cin"
+                            value={formData.cin}
+                            onChange={handleChange}
+                            required
+                            placeholder="AB123456"
+                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Phone *</label>
+                        <div className="relative group">
+                          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <input
+                            name="phone"
+                            type="tel"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            placeholder="0600000000"
+                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Specialty Marketplace *</label>
+                      <div className="relative group">
+                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                        <select
+                          name="specialty"
+                          value={formData.specialty}
+                          onChange={handleChange}
+                          required
+                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
+                        >
+                          <option value="" disabled>Select your specialty...</option>
+                          <option value="plants">Plants & Nursery</option>
+                          <option value="flowers">Flowers & Bouquets</option>
+                          <option value="oils">Botanical Oils & Care</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Location (Workplace) *</label>
+                      <div className="relative group">
+                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                        <input
+                          name="location"
+                          value={formData.location}
+                          onChange={handleChange}
+                          required
+                          placeholder="e.g. Nursery Agadir Center"
+                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Commercial Register or License *</label>
+                      <div className="relative group">
+                        <Award className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                        <input
+                          name="commercialRegister"
+                          value={formData.commercialRegister}
+                          onChange={handleChange}
+                          required
+                          placeholder="N° Registre de commerce / Patente..."
+                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {error && (
@@ -196,7 +350,7 @@ const Register = () => {
             </button>
           </form>
 
-          <p className="text-center text-slate-400 text-sm font-medium pt-4">
+          <p className="text-center text-slate-800 text-sm font-medium pt-4">
             Already a customer?{' '}
             <Link to="/login" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Sign in</Link>
           </p>

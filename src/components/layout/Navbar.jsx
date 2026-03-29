@@ -73,7 +73,7 @@ export default function Navbar() {
             {user ? (
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-end mr-2">
-                  <span className="text-[10px] font-bold text-charcoal/80 leading-none tracking-tight">{user.name}</span>
+                  <span className="text-[10px] font-bold text-charcoal leading-none tracking-tight">{user.name}</span>
                   {user.role === 'admin' && (
                     <Link to="/admin" className="text-[8px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
                   )}
@@ -87,7 +87,7 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-charcoal/60 hover:text-sage transition-all border border-sage/10 px-6 py-2.5 rounded-full hover:bg-sage/5">
+              <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-charcoal hover:text-sage transition-all border border-sage/10 px-6 py-2.5 rounded-full hover:bg-sage/5">
                 Sign In
               </Link>
             )}

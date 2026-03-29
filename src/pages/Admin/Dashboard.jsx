@@ -66,7 +66,7 @@ const Dashboard = () => {
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-sage/80 opacity-60">System Online</span>
           </div>
           <h1 className="text-4xl font-serif font-black text-slate-800 tracking-tight">Welcome, Admin.</h1>
-          <p className="text-slate-400 text-sm mt-1 max-w-sm">The centralized dashboard to manage your sales and the nursery community.</p>
+          <p className="text-slate-800 text-sm mt-1 max-w-sm">The centralized dashboard to manage your sales and the nursery community.</p>
         </div>
 
         <div className="flex items-center gap-4 relative z-10">
@@ -93,7 +93,7 @@ const Dashboard = () => {
               <stat.icon size={26} />
             </div>
             <div className="relative z-10 flex flex-col gap-1">
-              <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">{stat.label}</span>
+              <span className="text-slate-800 text-xs font-bold uppercase tracking-widest">{stat.label}</span>
               <div className="flex items-end gap-3">
                 <h3 className="text-3xl font-black text-slate-800 tracking-tighter">{stat.value}</h3>
                 <span className="flex items-center gap-1 text-emerald-500 text-[10px] font-black mb-1.5 bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -115,10 +115,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between mb-12">
             <div>
               <h3 className="text-2xl font-serif font-black text-slate-800">Quarterly Performance</h3>
-              <p className="text-xs text-slate-400 mt-1">Analysis of revenue generated from validated orders.</p>
+              <p className="text-xs text-slate-800 mt-1">Analysis of revenue generated from validated orders.</p>
             </div>
             <div className="flex bg-slate-50 p-1.5 rounded-2xl gap-2">
-              <button className="px-5 py-2 hover:bg-white hover:shadow-md rounded-xl text-xs font-bold text-slate-400 hover:text-sage transition-all">Sellers</button>
+              <button className="px-5 py-2 hover:bg-white hover:shadow-md rounded-xl text-xs font-bold text-slate-800 hover:text-sage transition-all">Sellers</button>
               <button className="px-5 py-2 bg-white shadow-md rounded-xl text-xs font-bold text-sage">Revenue</button>
             </div>
           </div>
@@ -140,7 +140,7 @@ const Dashboard = () => {
                </div>
              ))}
           </div>
-          <div className="flex justify-between mt-8 text-[11px] font-black text-slate-300 uppercase tracking-widest px-4 border-t border-slate-50 pt-6">
+          <div className="flex justify-between mt-8 text-[11px] font-black text-slate-700 uppercase tracking-widest px-4 border-t border-slate-50 pt-6">
             {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => (
               <span key={m}>{m}</span>
             ))}
@@ -229,14 +229,14 @@ const Dashboard = () => {
         <div className="p-10 flex items-center justify-between border-b border-slate-50">
           <div>
             <h3 className="text-2xl font-serif font-black text-slate-800">Latest Orders</h3>
-            <p className="text-xs text-slate-400 mt-1">Real-time monitoring of sales flow.</p>
+            <p className="text-xs text-slate-800 mt-1">Real-time monitoring of sales flow.</p>
           </div>
-          <button className="px-6 py-2.5 bg-slate-50 text-slate-400 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-sage/10 hover:text-sage transition-all">View All</button>
+          <button className="px-6 py-2.5 bg-slate-50 text-slate-800 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-sage/10 hover:text-sage transition-all">View All</button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+              <tr className="bg-slate-50/50 text-slate-800 text-[10px] font-black uppercase tracking-[0.2em]">
                 <th className="px-10 py-6">ORDER ID</th>
                 <th className="px-10 py-6">CUSTOMER</th>
                 <th className="px-10 py-6"> PRODUCT</th>
@@ -256,11 +256,11 @@ const Dashboard = () => {
                       </div>
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm text-slate-800 font-bold">{order.customer}</span>
-                        <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">{order.seller}</span>
+                        <span className="text-[10px] text-slate-700 font-bold uppercase tracking-wider">{order.seller}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="px-10 py-6 text-sm text-slate-400 font-medium italic">{order.product}</td>
+                  <td className="px-10 py-6 text-sm text-slate-800 font-medium italic">{order.product}</td>
                   <td className="px-10 py-6">
                     <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] border ${
                       order.status === 'Shipped' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
@@ -273,7 +273,7 @@ const Dashboard = () => {
                   </td>
                   <td className="px-10 py-6 text-sm font-black text-slate-800">{order.amount}</td>
                   <td className="px-10 py-6">
-                    <button className="p-3 hover:bg-white bg-slate-50 border border-transparent hover:border-slate-100 rounded-xl transition-all text-slate-400 hover:text-sage shadow-sm">
+                    <button className="p-3 hover:bg-white bg-slate-50 border border-transparent hover:border-slate-100 rounded-xl transition-all text-slate-800 hover:text-sage shadow-sm">
                       <MoreHorizontal size={18} />
                     </button>
                   </td>

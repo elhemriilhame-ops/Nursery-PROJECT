@@ -60,12 +60,12 @@ export function ProductCard({ id, name, price, image, category, description, fea
       {/* Info */}
       <div className="mt-8 space-y-4 px-1 text-center">
         <div className="space-y-1">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-bold">{category}</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-charcoal font-bold">{category}</span>
           <h3 className="text-xl font-serif text-charcoal group-hover:text-sage transition-colors duration-300">
             <Link to={`/product/${id}`}>{name}</Link>
           </h3>
         </div>
-        <p className="text-sm font-sans text-charcoal/60 tracking-wider">{price} DH</p>
+        <p className="text-sm font-sans text-charcoal tracking-wider">{price} DH</p>
       </div>
     </motion.div>
   );
