@@ -29,7 +29,7 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    role: 'customer',
+    role: '',
     cin: '',
     specialty: '',
     phone: '',
@@ -38,6 +38,7 @@ const Register = () => {
     vehicleType: ''
   });
   const [success, setSuccess] = useState(false);
+  const [showRoleModal, setShowRoleModal] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -61,6 +62,11 @@ const Register = () => {
         email: formData.email,
         role: formData.role,
         token: 'mock-jwt-token',
+        // Customer specific data
+        ...(formData.role === 'customer' && {
+          phone: formData.phone,
+          location: formData.location
+        }),
         // Seller specific data
         ...(formData.role === 'pépiniériste' && {
           cin: formData.cin,
@@ -80,11 +86,19 @@ const Register = () => {
       // Instead of logging in right away, we show success and clear form
       setSuccess(true);
       setFormData({
-        name: '', email: '', password: '', role: 'customer',
+        name: '', email: '', password: '', role: '',
         cin: '', specialty: '', phone: '', location: '', commercialRegister: '', vehicleType: ''
       });
       setLoading(false);
+      setShowRoleModal(false);
     }, 1500);
+  };
+
+  const handleInitialSubmit = (e) => {
+    e.preventDefault();
+    if (formData.role) {
+      setShowRoleModal(true);
+    }
   };
 
   return (
@@ -119,6 +133,103 @@ const Register = () => {
                <button onClick={() => setSuccess(false)} className="mt-4 text-xs font-bold text-slate-800 hover:text-slate-600 transition-colors uppercase tracking-widest">
                   Close
                </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showRoleModal && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }} 
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              className="bg-white p-8 max-w-lg w-full rounded-[2rem] shadow-2xl relative max-h-[90vh] overflow-y-auto border border-sage/10"
+            >
+               <h2 className="text-2xl font-serif font-black text-slate-800 mb-2 w-full text-center tracking-tight">
+                 Almost done!
+               </h2>
+               <p className="text-center text-slate-500 mb-8 text-sm font-medium">Please provide a few more details to set up your <span className="text-sage font-black uppercase tracking-widest">{formData.role}</span> profile.</p>
+
+               <form onSubmit={handleRegister} className="space-y-6">
+                 {formData.role === 'customer' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Phone *</label>
+                        <div className="relative group">
+                          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="0600000000" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Main Address *</label>
+                        <div className="relative group">
+                          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <input name="location" value={formData.location} onChange={handleChange} required placeholder="Number, rue, City name..." className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" />
+                        </div>
+                      </div>
+                    </div>
+                 )}
+
+                 {(formData.role === 'pépiniériste' || formData.role === 'livreur') && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="space-y-2">
+                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">CIN *</label>
+                          <div className="relative group"><CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="cin" value={formData.cin} onChange={handleChange} required placeholder="AB123456" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Phone *</label>
+                          <div className="relative group"><Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="0600000000" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
+                        </div>
+                      </div>
+
+                      {formData.role === 'pépiniériste' ? (
+                        <div className="space-y-2">
+                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Specialty Marketplace *</label>
+                          <div className="relative group">
+                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                            <select name="specialty" value={formData.specialty} onChange={handleChange} required className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm appearance-none cursor-pointer text-charcoal">
+                              <option value="" disabled>Select your specialty...</option><option value="plants">Plants & Nursery</option><option value="flowers">Flowers & Bouquets</option><option value="oils">Botanical Oils & Care</option>
+                            </select>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Vehicle Type *</label>
+                          <div className="relative group">
+                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                            <select name="vehicleType" value={formData.vehicleType || ''} onChange={handleChange} required className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm appearance-none cursor-pointer text-charcoal">
+                              <option value="" disabled>Select vehicle...</option><option value="moto">Motorcycle / Scooter</option><option value="car">Car (Hatchback/Sedan)</option><option value="van">Cargo Van</option><option value="truck">Refrigerated Truck</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Operating Zones (Location) *</label>
+                        <div className="relative group"><MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="location" value={formData.location} onChange={handleChange} required placeholder="e.g. Nursery Agadir Center" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Commercial Register or License *</label>
+                        <div className="relative group"><Award className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="commercialRegister" value={formData.commercialRegister} onChange={handleChange} required placeholder="N° Registre de commerce / Patente..." className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
+                      </div>
+                    </div>
+                 )}
+
+                 <div className="flex gap-4 pt-6 border-t border-slate-100 mt-8">
+                   <button type="button" onClick={() => setShowRoleModal(false)} className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Back</button>
+                   <Button type="submit" disabled={loading} className="w-full bg-sage text-white hover:bg-sage/90 py-4 h-auto rounded-2xl font-bold text-sm shadow-lg shadow-sage/20 transition-all duration-300">
+                     {loading ? 'Processing...' : 'Complete Setup'}
+                   </Button>
+                 </div>
+               </form>
             </motion.div>
           </motion.div>
         )}
@@ -169,10 +280,10 @@ const Register = () => {
             <p className="text-slate-800 font-medium">Welcome! It's time to join us.</p>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-5">
+          <form onSubmit={handleInitialSubmit} className="space-y-5">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Full Name</label>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Full Name</label>
                 <div className="relative group">
                   <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
@@ -180,6 +291,7 @@ const Register = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    autoComplete="off"
                     placeholder="e.g. John Doe"
                     className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
                   />
@@ -187,7 +299,7 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Email</label>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Email</label>
                 <div className="relative group">
                   <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
@@ -196,6 +308,7 @@ const Register = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
+                    autoComplete="new-email"
                     placeholder="your@email.com"
                     className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
                   />
@@ -203,7 +316,7 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Password</label>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Password</label>
                 <div className="relative group">
                   <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
                   <input
@@ -212,6 +325,7 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    autoComplete="new-password"
                     placeholder="••••••••••••"
                     className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
                   />
@@ -220,7 +334,7 @@ const Register = () => {
 
               {/* Role Selection Toggle */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Your Role</label>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Your Role</label>
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     type="button"
@@ -249,122 +363,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Dynamic Seller Fields */}
-              {(formData.role === 'pépiniériste' || formData.role === 'livreur') && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="space-y-4 pt-4 border-t border-slate-100 overflow-hidden"
-                >
-                  <div className="space-y-4 pb-2">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-sage ml-2">Professional Details</h3>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">CIN *</label>
-                        <div className="relative group">
-                          <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <input
-                            name="cin"
-                            value={formData.cin}
-                            onChange={handleChange}
-                            required
-                            placeholder="AB123456"
-                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Phone *</label>
-                        <div className="relative group">
-                          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <input
-                            name="phone"
-                            type="tel"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            required
-                            placeholder="0600000000"
-                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {formData.role === 'pépiniériste' ? (
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Specialty Marketplace *</label>
-                        <div className="relative group">
-                          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <select
-                            name="specialty"
-                            value={formData.specialty}
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
-                          >
-                            <option value="" disabled>Select your specialty...</option>
-                            <option value="plants">Plants & Nursery</option>
-                            <option value="flowers">Flowers & Bouquets</option>
-                            <option value="oils">Botanical Oils & Care</option>
-                          </select>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Vehicle Type *</label>
-                        <div className="relative group">
-                          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <select
-                            name="vehicleType"
-                            value={formData.vehicleType || ''}
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
-                          >
-                            <option value="" disabled>Select vehicle...</option>
-                            <option value="moto">Motorcycle / Scooter</option>
-                            <option value="car">Car (Hatchback/Sedan)</option>
-                            <option value="van">Cargo Van</option>
-                            <option value="truck">Refrigerated Truck</option>
-                          </select>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Operating Zones (Location) *</label>
-                      <div className="relative group">
-                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                        <input
-                          name="location"
-                          value={formData.location}
-                          onChange={handleChange}
-                          required
-                          placeholder="e.g. Nursery Agadir Center"
-                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Commercial Register or License *</label>
-                      <div className="relative group">
-                        <Award className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                        <input
-                          name="commercialRegister"
-                          value={formData.commercialRegister}
-                          onChange={handleChange}
-                          required
-                          placeholder="N° Registre de commerce / Patente..."
-                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
             </div>
 
             {error && (
@@ -378,14 +376,16 @@ const Register = () => {
               </motion.div>
             )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-sage text-white py-5 rounded-[1.5rem] font-bold shadow-xl shadow-sage/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 group"
-            >
-              {loading ? "Creating account..." : "Create Account"}
-              {!loading && <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />}
-            </button>
+            <div className="pt-4">
+              <Button 
+                type="submit" 
+                disabled={loading || !formData.role} 
+                className="w-full bg-sage text-white hover:bg-sage/90 h-14 rounded-2xl font-bold text-sm shadow-lg shadow-sage/20 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Processing...' : 'Create Account'}
+                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+              </Button>
+            </div>
           </form>
 
           <p className="text-center text-slate-800 text-sm font-medium pt-4">

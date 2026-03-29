@@ -31,23 +31,23 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         isScrolled
-          ? 'bg-white/80 backdrop-blur-md border-border py-4'
-          : 'bg-transparent border-transparent py-6'
+          ? 'bg-background/80 backdrop-blur-md border-border border-b py-4'
+          : 'bg-transparent py-6'
       )}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Mobile Menu Toggle */}
         <button
-          className="lg:hidden text-charcoal"
+          className={cn("lg:hidden", isScrolled ? "text-foreground" : "text-white")}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
         {/* Logo */}
-        <Link to="/" className="text-2xl font-serif tracking-tight text-charcoal absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
+        <Link to="/" className={cn("text-2xl font-serif tracking-tight absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
           Sunflowers
         </Link>
 
@@ -57,7 +57,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
-              className="text-xs uppercase tracking-[0.2em] font-sans font-medium text-charcoal/70 hover:text-charcoal transition-colors"
+              className={cn("text-xs uppercase tracking-[0.2em] font-sans font-medium hover:opacity-100 transition-all", isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/80 hover:text-white drop-shadow-md")}
             >
               {link.name}
             </Link>
@@ -66,33 +66,33 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center space-x-4 lg:space-x-6">
-          <button className="text-charcoal hover:scale-110 transition-transform">
+          <button className={cn("hover:scale-110 transition-transform", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
             <Search size={22} strokeWidth={1.5} />
           </button>
           <div className="hidden sm:flex items-center">
             {user ? (
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-end mr-2">
-                  <span className="text-[10px] font-bold text-charcoal leading-none tracking-tight">{user.name}</span>
+                  <span className={cn("text-[10px] font-bold leading-none tracking-tight", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>{user.name}</span>
                   {user.role === 'admin' && (
                     <Link to="/admin" className="text-[8px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
                   )}
                 </div>
                 <button
                   onClick={logout}
-                  className="text-charcoal hover:text-red-500 transition-colors"
+                  className={cn("hover:text-red-500 transition-colors", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}
                   title="Logout"
                 >
                   <User size={22} strokeWidth={1.5} />
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-charcoal hover:text-sage transition-all border border-sage/10 px-6 py-2.5 rounded-full hover:bg-sage/5">
+              <Link to="/login" className={cn("text-[10px] font-black uppercase tracking-[0.2em] transition-all px-6 py-2.5 rounded-full", isScrolled ? "text-foreground border border-sage/10 hover:text-sage hover:bg-sage/5" : "text-white border border-white/20 hover:bg-white/10 hover:border-white/40 drop-shadow-md")}>
                 Sign In
               </Link>
             )}
           </div>
-          <Link to="/cart" className="text-charcoal hover:scale-110 transition-transform relative">
+          <Link to="/cart" className={cn("hover:scale-110 transition-transform relative", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-2 bg-sage text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
