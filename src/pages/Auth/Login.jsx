@@ -60,6 +60,22 @@ const Login = () => {
       return;
     }
 
+    if (email.toLowerCase() === 'delivery@gmail.com') {
+      const mockDelivery = {
+        _id: 'mock-delivery-id',
+        name: 'Fast Track Carrier',
+        email: email,
+        role: 'livreur',
+        token: 'mock-jwt-token'
+      };
+      login(mockDelivery);
+      setEmail('');
+      setPassword('');
+      navigate('/delivery');
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', { 
         email, 

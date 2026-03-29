@@ -34,7 +34,8 @@ const Register = () => {
     specialty: '',
     phone: '',
     location: '',
-    commercialRegister: ''
+    commercialRegister: '',
+    vehicleType: ''
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -67,13 +68,20 @@ const Register = () => {
           phone: formData.phone,
           location: formData.location,
           commercialRegister: formData.commercialRegister
+        }),
+        // Delivery specific data
+        ...(formData.role === 'livreur' && {
+          cin: formData.cin,
+          phone: formData.phone,
+          location: formData.location,
+          vehicleType: formData.vehicleType
         })
       };
       // Instead of logging in right away, we show success and clear form
       setSuccess(true);
       setFormData({
         name: '', email: '', password: '', role: 'customer',
-        cin: '', specialty: '', phone: '', location: '', commercialRegister: ''
+        cin: '', specialty: '', phone: '', location: '', commercialRegister: '', vehicleType: ''
       });
       setLoading(false);
     }, 1500);
@@ -213,28 +221,36 @@ const Register = () => {
               {/* Role Selection Toggle */}
               <div className="space-y-3">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Your Role</label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, role: 'customer' })}
-                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'customer' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
+                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'customer' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
                   >
-                    <UserCheck size={20} className={formData.role === 'customer' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'customer' ? 'text-sage' : 'text-slate-800'}`}>Customer</p>
+                    <UserCheck size={18} className={formData.role === 'customer' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
+                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'customer' ? 'text-sage' : 'text-slate-800'}`}>Customer</p>
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, role: 'pépiniériste' })}
-                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'pépiniériste' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
+                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'pépiniériste' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
                   >
-                    <Store size={20} className={formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-800'}`}>Seller</p>
+                    <Store size={18} className={formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
+                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-800'}`}>Seller</p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: 'livreur' })}
+                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'livreur' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
+                  >
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={formData.role === 'livreur' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'}><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'livreur' ? 'text-sage' : 'text-slate-800'}`}>Delivery</p>
                   </button>
                 </div>
               </div>
 
               {/* Dynamic Seller Fields */}
-              {formData.role === 'pépiniériste' && (
+              {(formData.role === 'pépiniériste' || formData.role === 'livreur') && (
                 <motion.div 
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
@@ -276,27 +292,49 @@ const Register = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Specialty Marketplace *</label>
-                      <div className="relative group">
-                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                        <select
-                          name="specialty"
-                          value={formData.specialty}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
-                        >
-                          <option value="" disabled>Select your specialty...</option>
-                          <option value="plants">Plants & Nursery</option>
-                          <option value="flowers">Flowers & Bouquets</option>
-                          <option value="oils">Botanical Oils & Care</option>
-                        </select>
+                    {formData.role === 'pépiniériste' ? (
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Specialty Marketplace *</label>
+                        <div className="relative group">
+                          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <select
+                            name="specialty"
+                            value={formData.specialty}
+                            onChange={handleChange}
+                            required
+                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
+                          >
+                            <option value="" disabled>Select your specialty...</option>
+                            <option value="plants">Plants & Nursery</option>
+                            <option value="flowers">Flowers & Bouquets</option>
+                            <option value="oils">Botanical Oils & Care</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Vehicle Type *</label>
+                        <div className="relative group">
+                          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
+                          <select
+                            name="vehicleType"
+                            value={formData.vehicleType || ''}
+                            onChange={handleChange}
+                            required
+                            className="w-full pl-11 pr-4 py-3.5 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-xs shadow-sm appearance-none cursor-pointer text-charcoal"
+                          >
+                            <option value="" disabled>Select vehicle...</option>
+                            <option value="moto">Motorcycle / Scooter</option>
+                            <option value="car">Car (Hatchback/Sedan)</option>
+                            <option value="van">Cargo Van</option>
+                            <option value="truck">Refrigerated Truck</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Location (Workplace) *</label>
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 ml-4">Operating Zones (Location) *</label>
                       <div className="relative group">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
                         <input
