@@ -86,6 +86,10 @@
     color: var(--charcoal);
   }
 
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+
   .bg-parchment {
     background-color: var(--parchment);
   }

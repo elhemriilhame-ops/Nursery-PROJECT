@@ -13,6 +13,7 @@ import Register from './pages/Auth/Register';
 import AdminLayout from './pages/Admin/AdminLayout';
 import Dashboard from './pages/Admin/Dashboard';
 import Customers from './pages/Admin/Customers';
+import Deliveries from './pages/Admin/Deliveries';
 
 function AppContent() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function AppContent() {
             <Route path="products" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Catalogue Management (Coming Soon)</div>} />
             <Route path="sellers" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Our Sellers (Coming Soon)</div>} />
             <Route path="orders" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">Order History (Coming Soon)</div>} />
+            <Route path="deliveries" element={<Deliveries />} />
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">System Configuration (Coming Soon)</div>} />
           </Route>

@@ -2,9 +2,22 @@ import { useParams, Link } from 'react-router-dom';
 import { FLOWERS, PLANTS, OILS } from '@/data/mockData';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronRight, Heart, Share2, Ruler, ShieldCheck, Truck } from 'lucide-react';
+import { 
+  ShoppingBag, 
+  ChevronRight, 
+  Heart, 
+  Ruler, 
+  ShieldCheck, 
+  Truck,
+  Sun,
+  ThermometerSun,
+  Waves,
+  Droplet,
+  Layers,
+  Sparkles,
+  Info
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { useCart } from '@/context/CartContext';
 
@@ -71,6 +84,80 @@ export default function ProductDetail() {
             </p>
           </div>
 
+          {/* Plant Care Advanced Section - MOVED BEFORE SIZE */}
+          {product.care && (
+            <div className="bg-[#fbfcfa] border border-sage/10 rounded-[2.5rem] p-10 space-y-8 shadow-sm">
+                <div className="flex items-center gap-3">
+                   <div className="bg-sage/10 p-2 rounded-full">
+                      <Info size={16} className="text-sage" />
+                   </div>
+                   <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal/40 italic">Botanical Care Guide</h3>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <Sun size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Light</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.light}</p>
+                      </div>
+                   </div>
+
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <ThermometerSun size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Temperature</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.temperature}</p>
+                      </div>
+                   </div>
+
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <Waves size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Humidity</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.humidity}</p>
+                      </div>
+                   </div>
+
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <Droplet size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Watering</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.watering}</p>
+                      </div>
+                   </div>
+
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <Layers size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Soil Type</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.soil}</p>
+                      </div>
+                   </div>
+
+                   <div className="space-y-3 group cursor-default">
+                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
+                         <Sparkles size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-1">
+                         <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Compatibility</p>
+                         <p className="text-xs font-bold text-charcoal/80">{product.care.sensitivity}</p>
+                      </div>
+                   </div>
+                </div>
+            </div>
+          )}
+
           {/* Size Options */}
           <div className="space-y-6">
             <div className="flex justify-between items-center text-[10px] uppercase font-bold tracking-widest">
@@ -119,18 +206,18 @@ export default function ProductDetail() {
           {/* Value Props */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border">
             <div className="flex items-start space-x-4">
-              <Truck size={24} className="text-sage mt-1" strokeWidth={1} />
-              <div>
-                <h4 className="text-[10px] uppercase font-bold tracking-widest">Careful Delivery</h4>
-                <p className="text-xs text-charcoal/60 mt-2 font-sans">Delivered by our specialized team within 24-48 hours. Guaranteed freshness.</p>
-              </div>
+               <Truck size={24} className="text-sage mt-1" strokeWidth={1} />
+               <div>
+                  <h4 className="text-[10px] uppercase font-bold tracking-widest">Careful Delivery</h4>
+                  <p className="text-xs text-charcoal/60 mt-2 font-sans">Delivered by our specialized team within 24-48 hours. Guaranteed freshness.</p>
+               </div>
             </div>
             <div className="flex items-start space-x-4">
-              <ShieldCheck size={24} className="text-sage mt-1" strokeWidth={1} />
-              <div>
-                <h4 className="text-[10px] uppercase font-bold tracking-widest">Premium Card Included</h4>
-                <p className="text-xs text-charcoal/60 mt-2 font-sans">Each order includes a hand-written botanical card of your choice.</p>
-              </div>
+               <ShieldCheck size={24} className="text-sage mt-1" strokeWidth={1} />
+               <div>
+                  <h4 className="text-[10px] uppercase font-bold tracking-widest">Premium Card Included</h4>
+                  <p className="text-xs text-charcoal/60 mt-2 font-sans">Each order includes a hand-written botanical card of your choice.</p>
+               </div>
             </div>
           </div>
         </div>

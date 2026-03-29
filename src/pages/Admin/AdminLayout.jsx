@@ -13,7 +13,8 @@ import {
   X,
   ShieldCheck,
   Store,
-  User
+  User,
+  Truck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -32,6 +33,7 @@ const AdminLayout = () => {
     { name: 'Catalogue', icon: Package, path: '/admin/products' },
     { name: 'Sellers', icon: Store, path: '/admin/sellers' },
     { name: 'Orders', icon: ShoppingCart, path: '/admin/orders' },
+    { name: 'Deliveries', icon: Truck, path: '/admin/deliveries' },
     { name: 'Customers', icon: Users, path: '/admin/customers' },
     { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];

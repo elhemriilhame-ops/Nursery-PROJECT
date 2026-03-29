@@ -14,7 +14,11 @@ import {
   Store,
   Clock,
   ArrowRightCircle,
-  PlusSquare
+  PlusSquare,
+  Truck,
+  MapPin,
+  CheckCircle2,
+  UserCheck
 } from 'lucide-react';
 
 const Dashboard = () => {
