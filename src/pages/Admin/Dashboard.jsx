@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingUp, 
   ShoppingBag, 
@@ -18,10 +18,19 @@ import {
   Truck,
   MapPin,
   CheckCircle2,
-  UserCheck
+  UserCheck,
+  X,
+  AlertCircle
 } from 'lucide-react';
 
 const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSellerApproved, setIsSellerApproved] = useState(false);
+  const [productType, setProductType] = useState('flowers'); // default
+  
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
   const stats = [
     { label: 'Revenue', value: '45,290 DH', change: '+12.5%', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
     { label: 'Active Orders', value: '1,248', change: '+5.2%', icon: ShoppingBag, color: 'text-sage', bg: 'bg-sage/10' },
@@ -54,8 +63,153 @@ const Dashboard = () => {
       initial="hidden" 
       animate="visible" 
       variants={containerVariants}
-      className="space-y-10 pb-20"
+      className="space-y-10 pb-20 relative"
     >
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-white rounded-[2rem] shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+            >
+               <div className="sticky top-0 bg-white/90 backdrop-blur pb-4 pt-8 px-8 border-b border-slate-100 flex items-center justify-between z-10">
+                 <div>
+                   <h2 className="text-2xl font-serif font-black text-slate-800">Add New Product</h2>
+                   <p className="text-slate-500 text-xs mt-1">Fill out the details below. Fields dynamically adjust based on category.</p>
+                 </div>
+                 <button onClick={handleClose} className="p-3 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full transition-colors">
+                   <X size={20} />
+                 </button>
+               </div>
+
+               <div className="p-8 space-y-6">
+                 {/* Main Details */}
+                 <div className="space-y-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-sage border-b border-slate-100 pb-2">Core Information</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-slate-600">Product Name *</label>
+                        <input type="text" placeholder="e.g. Signature Monstera" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sage/20 outline-none text-sm" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-slate-600">Price (DH) *</label>
+                        <input type="number" placeholder="120" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sage/20 outline-none text-sm" />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-slate-600">Product Type *</label>
+                        <select 
+                          value={productType}
+                          onChange={(e) => setProductType(e.target.value)}
+                          className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sage/20 outline-none text-sm"
+                        >
+                           <option value="flowers">Flowers & Bouquets</option>
+                           <option value="plants">Indoor Plants & Trees</option>
+                           <option value="oils">Essential Oils</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-slate-600">Image URL</label>
+                        <input type="text" placeholder="/assets/image.png" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sage/20 outline-none text-sm" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-600">Description</label>
+                      <textarea rows="3" placeholder="A delicate arrangement of premium..." className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sage/20 outline-none text-sm resize-none" />
+                    </div>
+                 </div>
+
+                 {/* Conditional Fields: Flowers */}
+                 {productType === 'flowers' && (
+                   <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4">
+                      <h3 className="text-[10px] font-black uppercase tracking-widest text-sage border-b border-slate-100 pb-2">Flower Details</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Occasion</label>
+                          <input type="text" placeholder="e.g. Weddings, Birthday" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Primary Color</label>
+                          <input type="text" placeholder="e.g. White, Pink" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                      </div>
+                   </motion.div>
+                 )}
+
+                 {/* Conditional Fields: Plants */}
+                 {productType === 'plants' && (
+                   <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4">
+                      <h3 className="text-[10px] font-black uppercase tracking-widest text-sage border-b border-slate-100 pb-2">Care Instructions</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Light</label>
+                          <input type="text" placeholder="Bright indirect light" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Temperature</label>
+                          <input type="text" placeholder="18°C - 24°C" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Humidity</label>
+                          <input type="text" placeholder="High (60%+)" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Watering</label>
+                          <input type="text" placeholder="Once every 10 days" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Soil</label>
+                          <input type="text" placeholder="Peat-based potting mix" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600">Sensitivity</label>
+                          <input type="text" placeholder="Toxic to pets" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm" />
+                        </div>
+                      </div>
+                   </motion.div>
+                 )}
+
+                 <div className="pt-6 border-t border-slate-100 flex gap-4 justify-end">
+                    <button onClick={handleClose} className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Cancel</button>
+                    <button onClick={handleClose} className="px-8 py-4 bg-sage text-white rounded-2xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-sage/20 hover:bg-sage/90">Publish Product</button>
+                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Seller Approval Alert */}
+      {!isSellerApproved && (
+        <motion.div variants={itemVariants} className="bg-amber-50 border border-amber-200 p-6 lg:p-8 rounded-[2rem] flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden group">
+           <div className="absolute top-0 right-0 w-40 h-40 bg-amber-400/10 rounded-full blur-[60px] translate-x-1/2 -translate-y-1/2" />
+           <div className="flex items-start sm:items-center gap-4 relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0">
+                 <AlertCircle size={24} className="text-amber-600" />
+              </div>
+              <div>
+                 <h4 className="text-xl font-serif font-black text-amber-900 tracking-tight">Pending Approval: Nourplant</h4>
+                 <p className="text-sm font-medium text-amber-800">New seller profile created. They are requesting access to manage 'Plants' catalog on the marketplace.</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-amber-600/70 mt-1">ID: SL-4922 • Location: Agadir</p>
+              </div>
+           </div>
+           <div className="flex items-center gap-3 relative z-10 w-full sm:w-auto">
+             <button className="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-white border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-widest hover:bg-amber-100 transition-colors">Reject</button>
+             <button onClick={() => setIsSellerApproved(true)} className="flex-1 sm:flex-none px-6 py-3 rounded-2xl bg-amber-600 shadow-lg shadow-amber-600/20 text-white text-xs font-bold uppercase tracking-widest hover:bg-amber-700 transition-colors">Approve Profile</button>
+           </div>
+        </motion.div>
+      )}
+
       {/* Dynamic Welcome & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 relative overflow-hidden group">
          <div className="absolute top-0 right-0 w-64 h-64 bg-sage/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:bg-sage/10 transition-colors duration-700" />
@@ -74,7 +228,10 @@ const Dashboard = () => {
             <ArrowRightCircle size={18} />
             Export CSV
           </button>
-          <button className="px-6 py-3 bg-sage text-white rounded-2xl text-sm font-bold shadow-xl shadow-sage/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 py-3 bg-sage text-white rounded-2xl text-sm font-bold shadow-xl shadow-sage/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+          >
             <PlusSquare size={18} />
             New Product
           </button>
@@ -110,9 +267,9 @@ const Dashboard = () => {
         {/* Main Performance Section */}
         <motion.div 
           variants={itemVariants}
-          className="lg:col-span-2 p-10 bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] relative"
+          className="lg:col-span-2 p-6 lg:p-10 bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] relative"
         >
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-12 gap-4">
             <div>
               <h3 className="text-2xl font-serif font-black text-slate-800">Quarterly Performance</h3>
               <p className="text-xs text-slate-800 mt-1">Analysis of revenue generated from validated orders.</p>
@@ -150,7 +307,7 @@ const Dashboard = () => {
         {/* Categories Distribution */}
         <motion.div 
           variants={itemVariants}
-          className="p-10 bg-slate-900 rounded-[2.5rem] text-white shadow-3xl shadow-black/20 relative overflow-hidden group border border-slate-100/10"
+          className="p-6 lg:p-10 bg-slate-900 rounded-[2.5rem] text-white shadow-3xl shadow-black/20 relative overflow-hidden group border border-slate-100/10"
         >
            <div className="absolute top-0 right-0 w-64 h-64 bg-sage/20 rounded-full -translate-x-1/2 -translate-y-1/2 blur-[80px] pointer-events-none" />
            
@@ -226,7 +383,7 @@ const Dashboard = () => {
         variants={itemVariants}
         className="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] overflow-hidden"
       >
-        <div className="p-10 flex items-center justify-between border-b border-slate-50">
+        <div className="p-6 lg:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-50">
           <div>
             <h3 className="text-2xl font-serif font-black text-slate-800">Latest Orders</h3>
             <p className="text-xs text-slate-800 mt-1">Real-time monitoring of sales flow.</p>
@@ -234,7 +391,7 @@ const Dashboard = () => {
           <button className="px-6 py-2.5 bg-slate-50 text-slate-800 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-sage/10 hover:text-sage transition-all">View All</button>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left whitespace-nowrap min-w-[800px]">
             <thead>
               <tr className="bg-slate-50/50 text-slate-800 text-[10px] font-black uppercase tracking-[0.2em]">
                 <th className="px-10 py-6">ORDER ID</th>

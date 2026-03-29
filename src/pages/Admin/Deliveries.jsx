@@ -66,7 +66,7 @@ const Deliveries = () => {
       </div>
 
       {/* Overview Statistics (Compact) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           { label: 'Total Shipments', value: '124', icon: Package, color: 'text-slate-800' },
           { label: 'On the road', value: '12', icon: Truck, color: 'text-blue-500' },
@@ -86,8 +86,8 @@ const Deliveries = () => {
       </div>
 
       {/* Logged In Delivery Profiles */}
-      <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] relative overflow-hidden">
-         <div className="flex items-center justify-between mb-8">
+      <div className="bg-white rounded-[2.5rem] p-6 lg:p-10 border border-slate-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)] relative overflow-hidden">
+         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
                <h3 className="text-2xl font-serif font-black text-slate-800">Active Delivery Profiles</h3>
                <p className="text-xs text-slate-800 mt-1">Personnel currently logged into the delivery network.</p>
@@ -158,7 +158,7 @@ const Deliveries = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left whitespace-nowrap min-w-[800px]">
             <thead className="bg-[#FCFCFB] border-b border-slate-50">
               <tr>
                 <th className="px-8 py-5 text-[10px] font-black tracking-widest text-slate-800 uppercase">Tracking & Status</th>

@@ -15,11 +15,15 @@ import Dashboard from './pages/Admin/Dashboard';
 import Customers from './pages/Admin/Customers';
 import Deliveries from './pages/Admin/Deliveries';
 
+import SellerLayout from './pages/Seller/SellerLayout';
+import SellerDashboard from './pages/Seller/SellerDashboard';
+
 function AppContent() {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
+  const isSellerPath = location.pathname.startsWith('/seller');
   const isAuthPath = location.pathname === '/login' || location.pathname === '/register';
-  const isMinimalLayout = isAdminPath || isAuthPath;
+  const isMinimalLayout = isAdminPath || isSellerPath || isAuthPath;
 
   return (
     <div className="flex flex-col min-h-screen selection:bg-sage/20 selection:text-sage">
@@ -45,6 +49,15 @@ function AppContent() {
             <Route path="deliveries" element={<Deliveries />} />
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<div className="p-20 text-center font-serif text-3xl italic text-sage opacity-40 uppercase tracking-[0.2em] border border-sage/5 rounded-[3rem] m-10 bg-sage/5">System Configuration (Coming Soon)</div>} />
+          </Route>
+
+          {/* Seller Dashboard Routes */}
+          <Route path="/seller" element={<SellerLayout />}>
+            <Route index element={<SellerDashboard />} />
+            <Route path="products" element={<div className="p-20 text-center font-serif text-3xl italic text-amber-600 opacity-40 uppercase tracking-[0.2em] border border-amber-600/5 rounded-[3rem] m-10 bg-amber-600/5">My Inventory (Coming Soon)</div>} />
+            <Route path="orders" element={<div className="p-20 text-center font-serif text-3xl italic text-amber-600 opacity-40 uppercase tracking-[0.2em] border border-amber-600/5 rounded-[3rem] m-10 bg-amber-600/5">Fulfillment Orders (Coming Soon)</div>} />
+            <Route path="invoices" element={<div className="p-20 text-center font-serif text-3xl italic text-amber-600 opacity-40 uppercase tracking-[0.2em] border border-amber-600/5 rounded-[3rem] m-10 bg-amber-600/5">Invoices & Fees (Coming Soon)</div>} />
+            <Route path="settings" element={<div className="p-20 text-center font-serif text-3xl italic text-amber-600 opacity-40 uppercase tracking-[0.2em] border border-amber-600/5 rounded-[3rem] m-10 bg-amber-600/5">Store Settings (Coming Soon)</div>} />
           </Route>
 
           <Route path="*" element={<div className="pt-40 text-center h-screen font-serif text-3xl italic text-sage opacity-40">Blooming in progress... (Coming Soon)</div>} />
