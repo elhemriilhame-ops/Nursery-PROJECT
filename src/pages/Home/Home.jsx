@@ -3,11 +3,13 @@ import { HeroSection } from './HeroSection';
 import { FeaturedBoutique } from './FeaturedBoutique';
 import { CategoryPreview } from './CategoryPreview';
 import { PlantGuidesTeaser } from './PlantGuidesTeaser';
+import { SellersMap } from '@/components/ui/SellersMap';
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full">
       <HeroSection />
+      <SellersMap />
       
       <div className="container mx-auto px-6 space-y-32 my-32">
         <section>
