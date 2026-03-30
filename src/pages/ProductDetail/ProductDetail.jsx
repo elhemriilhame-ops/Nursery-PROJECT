@@ -96,8 +96,8 @@ export default function ProductDetail() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <Sun size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-amber-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-amber-100/50 group-hover:border-amber-200 transition-colors">
+                         <Sun size={20} className="text-amber-500" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Light</p>
@@ -106,8 +106,8 @@ export default function ProductDetail() {
                    </div>
 
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <ThermometerSun size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-orange-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-orange-100/50 group-hover:border-orange-200 transition-colors">
+                         <ThermometerSun size={20} className="text-orange-500" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Temperature</p>
@@ -116,8 +116,8 @@ export default function ProductDetail() {
                    </div>
 
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <Waves size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-cyan-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-cyan-100/50 group-hover:border-cyan-200 transition-colors">
+                         <Waves size={20} className="text-cyan-500" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Humidity</p>
@@ -126,8 +126,8 @@ export default function ProductDetail() {
                    </div>
 
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <Droplet size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-blue-100/50 group-hover:border-blue-200 transition-colors">
+                         <Droplet size={20} className="text-blue-500" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Watering</p>
@@ -136,8 +136,8 @@ export default function ProductDetail() {
                    </div>
 
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <Layers size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-stone-100 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-stone-200 group-hover:border-stone-300 transition-colors">
+                         <Layers size={20} className="text-stone-600" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Soil Type</p>
@@ -146,8 +146,8 @@ export default function ProductDetail() {
                    </div>
 
                    <div className="space-y-3 group cursor-default">
-                      <div className="bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-border group-hover:border-sage/30 transition-colors">
-                         <Sparkles size={20} className="text-sage/60 group-hover:text-sage transition-colors" strokeWidth={1.5} />
+                      <div className="bg-purple-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-purple-100/50 group-hover:border-purple-200 transition-colors">
+                         <Sparkles size={20} className="text-purple-500" strokeWidth={2} />
                       </div>
                       <div className="space-y-1">
                          <p className="text-[9px] font-black uppercase tracking-widest text-charcoal/30">Compatibility</p>
@@ -198,9 +198,9 @@ export default function ProductDetail() {
               <ShoppingBag size={18} className="mr-3 group-hover:rotate-12 transition-transform" />
               Add to Boutique Basket
             </Button>
-            <Button size="icon" variant="outline" className="w-16 h-16 rounded-none border-border group">
-               <Heart size={20} className="text-charcoal group-hover:fill-sage group-hover:text-sage transition-all" />
-            </Button>
+            <button className="w-16 h-16 flex items-center justify-center border border-border hover:bg-parchment/50 hover:border-charcoal/30 transition-all duration-300 group shrink-0">
+               <Heart size={20} className="text-charcoal group-hover:fill-[#FF4B4B] group-hover:text-[#FF4B4B] transition-all duration-300" />
+            </button>
           </div>
 
           {/* Value Props */}

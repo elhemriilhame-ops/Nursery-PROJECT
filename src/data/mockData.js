@@ -2,7 +2,7 @@ export const FLOWERS = [
   {
     id: 'f1',
     name: 'Eternal Blanc Bouquet',
-    price: 85,
+    price: 450,
     image: '/flower-white-roses.png',
     category: 'Bouquets',
     description: 'A delicate arrangement of premium white roses, ranunculus, and eucalyptus. Perfect for weddings or elegant home decor.',
@@ -13,7 +13,7 @@ export const FLOWERS = [
   {
     id: 'f2',
     name: 'Provence Lavender Bundle',
-    price: 45,
+    price: 180,
     image: 'https://omghitched.com/wp-content/uploads/2024/11/image-16.jpeg', 
     category: 'Dried Flowers',
     description: 'Fragrant dried lavender from the heart of Provence, tied with a silk ribbon.',
@@ -23,7 +23,7 @@ export const FLOWERS = [
   {
     id: 'f3',
     name: 'Midnight Blush',
-    price: 95,
+    price: 550,
     image: '/flower-midnight-blush.png',
     category: 'Bouquets',
     description: 'Deep red roses mixed with soft pink peonies for a romantic, high-contrast look.',
@@ -33,7 +33,7 @@ export const FLOWERS = [
   {
     id: 'f4',
     name: 'Rose Petal Tulip Bouquet',
-    price: 75,
+    price: 380,
     image: '/flower-tulip.jpg',
     category: 'Bouquets',
     description: 'A dreamy arrangement of fresh pink tulips, elegantly wrapped in blush tissue and tied with a silk satin ribbon. A tender gesture for any occasion.',
@@ -44,7 +44,7 @@ export const FLOWERS = [
   {
     id: 'f5',
     name: 'Lily & Rose Harmony',
-    price: 110,
+    price: 650,
     image: '/flower-lily.jpg',
     category: 'Bouquets',
     description: 'A captivating mix of ivory and blush Oriental lilies paired with delicate miniature roses. Arranged in a decorative glass vase for a refined, long-lasting display.',
@@ -54,7 +54,7 @@ export const FLOWERS = [
   {
     id: 'f6',
     name: 'Soleil Bouquet',
-    price: 90,
+    price: 480,
     image: '/flower-sunrose.jpg',
     category: 'Bouquets',
     description: "Bold sunflowers and passionate red roses intertwined with baby's breath and lush greenery, presented in a luxe black-and-gold wrap. A statement of warmth and elegance.",
@@ -64,7 +64,7 @@ export const FLOWERS = [
   {
     id: 'f7',
     name: 'Crystal Bell Blossoms',
-    price: 80,
+    price: 420,
     image: '/flower-bellpink.jpg',
     category: 'Rare Blooms',
     description: 'Ethereal pink bell-shaped flowers adorned with morning dew droplets, cascading like nature\'s own chandelier. A truly otherworldly and poetic arrangement.',
@@ -75,7 +75,7 @@ export const FLOWERS = [
   {
     id: 'f8',
     name: 'Lavender & Daisy Field Bouquet',
-    price: 55,
+    price: 220,
     image: '/flower-lavender-daisy.jpg',
     category: 'Dried Flowers',
     description: 'A rustic-chic bundle of fragrant purple lavender and wild white daisies, hand-tied with a delicate lace ribbon. Countryside elegance at its finest.',
@@ -88,7 +88,7 @@ export const PLANTS = [
   {
     id: 'p1',
     name: 'Signature Monstera Deliciosa',
-    price: 120,
+    price: 450,
     image: '/plant-1.png',
     category: 'Indoor Plants',
     description: 'A healthy, mature Monstera in a signature clay pot. Statement piece for any modern living room.',
@@ -105,7 +105,7 @@ export const PLANTS = [
   {
     id: 'p2',
     name: 'Olive Tree (Petite)',
-    price: 65,
+    price: 280,
     image: '/plant-1.png',
     category: 'Trees',
     description: 'A symbol of peace, our petite olive trees are perfect for sunny corners.',
@@ -121,7 +121,7 @@ export const PLANTS = [
   {
     id: 'p3',
     name: 'Jade Plant (Crassula)',
-    price: 48,
+    price: 150,
     image: '/plant-jade.jpg',
     category: 'Indoor Plants',
     description: 'A compact and resilient jade plant in a matte blush ceramic pot. Known as a symbol of good fortune, it thrives in bright indirect light with minimal care.',
@@ -138,7 +138,7 @@ export const PLANTS = [
   {
     id: 'p4',
     name: 'Desert Bloom Cactus Garden',
-    price: 72,
+    price: 320,
     image: '/plant-cactus.jpg',
     category: 'Succulents',
     description: 'A curated mix of sculptural cacti with delicate white blooms, planted in a handcrafted concrete vessel. Effortlessly low-maintenance and architecturally bold.',
@@ -154,7 +154,7 @@ export const PLANTS = [
   {
     id: 'p5',
     name: 'Bird of Paradise (Grande)',
-    price: 195,
+    price: 850,
     image: '/plant-bird-of-paradise.jpg',
     category: 'Indoor Plants',
     description: 'A majestic floor-standing Bird of Paradise with broad, glossy tropical leaves. A dramatic statement piece for any high-ceilinged or sun-drenched living space.',
@@ -174,7 +174,7 @@ export const OILS = [
   {
     id: 'o1',
     name: 'Pure Lavender Essential Oil',
-    price: 28,
+    price: 120,
     image: '/oil-1.png',
     category: 'Relaxation',
     description: '100% pure steam-distilled French lavender. Calming and restorative.',
@@ -183,7 +183,7 @@ export const OILS = [
   {
     id: 'o2',
     name: 'Eucalyptus & Mint Elixir',
-    price: 32,
+    price: 145,
     image: '/oil-1.png',
     category: 'Focus',
     description: 'Refreshing blend to clear the mind and boost productivity.'
@@ -205,7 +205,7 @@ export const DELIVERIES = [
     time: '14:30 - 16:00',
     status: 'In Transit',
     items: 'Eternal Blanc × 2, Monstera × 1',
-    total: '290 DH'
+    total: '1350 DH'
   },
   {
     id: 'DEL-1025',
@@ -215,7 +215,7 @@ export const DELIVERIES = [
     time: '10:00 - 11:30',
     status: 'Scheduled',
     items: 'Midnight Blush × 1, Olive Tree × 2',
-    total: '225 DH'
+    total: '1110 DH'
   },
   {
     id: 'DEL-1026',
@@ -225,7 +225,7 @@ export const DELIVERIES = [
     time: '09:00 - 10:30',
     status: 'Delivered',
     items: 'Lavender Field × 3, Jade Plant × 1',
-    total: '213 DH'
+    total: '810 DH'
   },
   {
     id: 'DEL-1027',
@@ -235,7 +235,7 @@ export const DELIVERIES = [
     time: '16:30 - 18:00',
     status: 'Processing',
     items: 'Soleil Bouquet × 1, Monstera × 2',
-    total: '330 DH'
+    total: '1380 DH'
   }
 ];
 

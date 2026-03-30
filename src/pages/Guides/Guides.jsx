@@ -24,23 +24,31 @@ export default function Guides() {
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
            viewport={{ once: true }}
-           className="relative group h-[60vh] md:h-[80vh] overflow-hidden flex items-end shadow-2xl"
+           className="relative group h-[60vh] md:h-[80vh] overflow-hidden flex items-center shadow-2xl rounded-sm"
          >
            <div 
-             className="absolute inset-0 bg-cover bg-fixed grayscale-[0.5] group-hover:grayscale-[0.1] transition-all duration-1000 scale-[1.02] group-hover:scale-100" 
+             className="absolute inset-0 bg-cover bg-center grayscale-[0.5] group-hover:grayscale-[0.1] transition-all duration-1000 scale-[1.02] group-hover:scale-100" 
              style={{ backgroundImage: 'url("/hero.png")' }}
            />
-           <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent opacity-80" />
+           {/* Proper left-aligned strong gradient overlay and general dark tint to protect all text contrast */}
+           <div className="absolute inset-0 bg-black/30" />
+           <div className="absolute inset-0 bg-gradient-to-r from-charcoal/90 via-charcoal/70 to-transparent" />
            
-           <div className="relative z-10 p-12 md:p-24 space-y-8 max-w-3xl">
-             <div className="space-y-4">
-               <span className="text-[10px] uppercase font-bold tracking-[0.5em] text-sage">Editor's Pick</span>
-               <h2 className="text-4xl md:text-6xl text-white font-serif leading-tight">Bringing the Mediterranean <br />Wild into your Home</h2>
-               <p className="text-white/70 max-w-lg font-sans font-light">
+           <div className="relative z-10 p-12 md:p-24 space-y-10 max-w-3xl">
+             <div className="space-y-6">
+               <span className="inline-block bg-sage text-white text-[10px] uppercase font-bold tracking-[0.5em] px-4 py-2">
+                 Editor's Pick
+               </span>
+               <h2 className="text-4xl md:text-6xl text-white font-serif leading-[1.1] drop-shadow-md">
+                 Bringing the Mediterranean <br />Wild into your Home
+               </h2>
+               <p className="text-white/90 max-w-lg font-sans font-normal text-lg leading-relaxed drop-shadow">
                  Our lead florist, Julian Thorne, shares his journey of sourcing and styling wild wildflowers for modern minimalist interiors.
                </p>
              </div>
-             <Button variant="outline" className="rounded-none border-white text-white hover:bg-white hover:text-charcoal px-12 py-8 uppercase tracking-[0.2em] text-[10px] font-bold transition-all duration-500">
+             
+             {/* Fixed Button: Solid White with Dark Text to avoid white-on-white clash */}
+             <Button className="rounded-none bg-white text-charcoal hover:bg-sage hover:text-white px-12 py-8 uppercase tracking-[0.2em] text-[11px] font-bold transition-all duration-500 shadow-xl border-none">
                Read The Masterclass
              </Button>
            </div>

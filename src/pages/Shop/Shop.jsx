@@ -39,9 +39,9 @@ export default function Shop() {
 
   const occasions = ["New Baby", "Get Well", "Thank You", "Cheer Up", "Birthday", "Weddings", "Big Moments"];
   const priceRanges = [
-    { label: "Under 50 DH", min: 0, max: 49 },
-    { label: "50 - 100 DH", min: 50, max: 100 },
-    { label: "Over 100 DH", min: 101, max: 1000 }
+    { label: "Under 250 DH", min: 0, max: 249 },
+    { label: "250 - 500 DH", min: 250, max: 500 },
+    { label: "Over 500 DH", min: 501, max: 2000 }
   ];
   const colors = ["White", "Pink", "Red", "Yellow", "Lavender"];
 
@@ -52,17 +52,19 @@ export default function Shop() {
     else if (category === 'oils') list = [...OILS];
     else list = [...FLOWERS, ...PLANTS, ...OILS];
 
-    // Filter by occasion if in flowers category
+    // Category specific filters
     if (category === 'flowers') {
       if (selectedOccasion) {
         list = list.filter(p => p.occasion === selectedOccasion);
       }
-      if (selectedPrice) {
-        list = list.filter(p => p.price >= selectedPrice.min && p.price <= selectedPrice.max);
-      }
       if (selectedColor) {
         list = list.filter(p => p.color === selectedColor);
       }
+    }
+
+    // Global filters
+    if (selectedPrice) {
+      list = list.filter(p => p.price >= selectedPrice.min && p.price <= selectedPrice.max);
     }
 
     // Sorting logic
