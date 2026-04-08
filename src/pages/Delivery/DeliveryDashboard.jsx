@@ -1,181 +1,130 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, animate } from 'framer-motion';
+import { useOutletContext } from 'react-router-dom';
 import { 
-  MapPin, 
-  Phone, 
   Navigation, 
-  Clock, 
   Package, 
-  CheckCircle2, 
-  User,
-  Radio,
-  Eye
+  CheckSquare, 
+  MapPin, 
+  Clock, 
+  Calendar,
+  Truck,
+  ArrowRightCircle,
+  MoreVertical,
+  Search,
+  ChevronRight
 } from 'lucide-react';
 
 const DeliveryDashboard = () => {
-  const [acceptedOrders, setAcceptedOrders] = useState([]);
+  const { isDarkMode } = useOutletContext();
 
-  // Mock Available Orders near the driver's location
-  const availableOrders = [
-    { id: '#ORD-8821', customer: 'Ayoub El Amri', phone: '0600-112233', from: 'OASIS Nursery', location: '12 Avenue Hassan II, Agadir', distance: '2.4 km', time: '10 min', items: 2, pay: '25 DH' },
-    { id: '#ORD-8822', customer: 'Maha Khatib', phone: '0611-334455', from: 'Nourplant Seller', location: 'Hay Charaf Sector 8, Agadir', distance: '4.1 km', time: '16 min', items: 5, pay: '40 DH' },
-    { id: '#ORD-8823', customer: 'Yassine T.', phone: '0622-667788', from: 'Premium Flowers', location: 'Marina Agadir Bloc C', distance: '1.2 km', time: '5 min', items: 1, pay: '20 DH' },
+  const stats = [
+    { label: 'TODAY MISSIONS', value: 8, icon: Navigation, color: '#3B82F6' },
+    { label: 'COMPLETED', value: 5, icon: CheckSquare, color: '#2DD4BF' },
+    { label: 'PENDING', value: 3, icon: Clock, color: '#FACC15' },
+    { label: 'TOTAL KMS', value: 42, icon: MapPin, color: '#A78BFA' },
   ];
 
-  const handleAccept = (order) => {
-    setAcceptedOrders([...acceptedOrders, order.id]);
-  };
-
-  const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
-  const itemVariants = { hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5 } } };
+  const activeRoutes = [
+    { id: 'RT-101', customer: 'Sarah B.', address: 'Hay Mohammadi, Agadir', status: 'In Transit', time: '14:30' },
+    { id: 'RT-102', customer: 'Ahmed L.', address: 'Dakhla, Agadir', status: 'Pending', time: '16:00' },
+  ];
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-8 pb-20 relative">
-
-      {/* Hero Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-blue-600 text-white p-6 lg:p-10 rounded-[2.5rem] shadow-xl shadow-blue-500/20 relative overflow-hidden group">
-         <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-         
-         <div className="relative z-10 space-y-2">
-            <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full mb-2">
-               <Radio size={14} className="animate-pulse" />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">GPS Sync Active</span>
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-serif font-black tracking-tight">Zone: Agadir</h1>
-            <p className="text-blue-100 text-sm max-w-md font-medium">Looking for nearby botanical orders. Accept orders below to begin navigation.</p>
-         </div>
-
-         <div className="relative z-10 bg-white/10 backdrop-blur border border-white/20 p-5 rounded-3xl flex items-center gap-6 w-full md:w-auto">
-            <div className="space-y-1 text-center border-r border-white/20 pr-6">
-               <p className="text-[10px] uppercase font-bold tracking-widest text-blue-200">Earned Today</p>
-               <p className="font-black text-2xl tracking-tighter">180 DH</p>
-            </div>
-            <div className="space-y-1 text-center">
-               <p className="text-[10px] uppercase font-bold tracking-widest text-blue-200">Completed</p>
-               <p className="font-black text-2xl tracking-tighter">6 / 10</p>
-            </div>
-         </div>
+    <div className="space-y-8 pb-10">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className={`text-4xl font-serif font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Dispatch Console</h1>
+          <p className={`text-[13px] font-black mt-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-500'}`}>Live tracking and route management for Carrier Unit 04.</p>
+        </div>
+        <div className={`flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100 shadow-sm'}`}>
+           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+           <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>System Online</span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Available Orders List */}
-        <motion.div variants={itemVariants} className="lg:col-span-8 space-y-6">
-           <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-              <h2 className="text-2xl font-serif font-black text-slate-800 flex items-center gap-3">
-                 <Radio className="text-blue-600" /> Live Radar
-              </h2>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{availableOrders.length - acceptedOrders.length} Opportunities</span>
-           </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+            className={`group p-8 rounded-[2.5rem] border shadow-sm hover:shadow-2xl transition-all duration-500 relative overflow-hidden
+              ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100'}`}
+          >
+            <div className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundColor: stat.color, boxShadow: `0 0 20px ${stat.color}` }} />
+            <div className={`p-4 rounded-2xl w-fit mb-6 transition-transform group-hover:scale-110 ${isDarkMode ? 'bg-white/10' : 'bg-slate-50'}`} style={{ color: stat.color }}>
+              <stat.icon size={26} />
+            </div>
+            <div className="space-y-1">
+              <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>{stat.label}</p>
+              <h3 className={`text-3xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{stat.value}</h3>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-           <div className="space-y-4">
-              <AnimatePresence>
-                 {availableOrders.filter(o => !acceptedOrders.includes(o.id)).map(order => (
-                    <motion.div 
-                      key={order.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
-                      className="bg-white p-6 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
-                    >
-                       <div className="space-y-4 flex-grow">
-                          <div className="flex items-start justify-between">
-                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
-                                   <Package size={22} />
-                                </div>
-                                <div>
-                                   <h3 className="font-bold text-lg text-slate-800">{order.customer}</h3>
-                                   <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase">{order.id} • {order.items} Items</p>
-                                </div>
-                             </div>
-                             <div className="text-right">
-                                <p className="font-black text-xl text-emerald-600">{order.pay}</p>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Payout</p>
-                             </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
-                             <div className="flex items-start gap-3">
-                                <MapPin size={16} className="text-slate-400 mt-1" />
-                                <div>
-                                   <p className="text-xs font-bold text-slate-800 uppercase tracking-widest">To: {order.location}</p>
-                                   <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mt-1">From: {order.from}</p>
-                                </div>
-                             </div>
-                             <div className="flex items-center gap-3">
-                                <Clock size={16} className="text-slate-400" />
-                                <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">{order.distance} • ~{order.time}</span>
-                             </div>
-                             <div className="flex items-center gap-3 md:col-span-2 mt-1">
-                                <Phone size={16} className="text-slate-400" />
-                                <span className="text-xs font-bold text-slate-800 tracking-widest bg-slate-100 px-3 py-1 rounded-full">{order.phone}</span>
-                             </div>
-                          </div>
-                       </div>
-                       
-                       <button 
-                         onClick={() => handleAccept(order)}
-                         className="w-full sm:w-auto px-8 py-5 bg-blue-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-95 transition-all text-center shrink-0"
-                       >
-                         Accept Order
-                       </button>
-                    </motion.div>
-                 ))}
-              </AnimatePresence>
-
-              {(availableOrders.length - acceptedOrders.length) === 0 && (
-                <div className="p-12 text-center bg-white border border-slate-200 border-dashed rounded-[2rem] text-slate-400 font-bold uppercase tracking-widest">
-                   No more orders in your zone nearby.
+      {/* Main Map Simulation / Active Routes */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
+          className={`lg:col-span-2 p-1 rounded-[3rem] border shadow-sm relative overflow-hidden h-[500px]
+            ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-100 border-slate-200'}`}
+        >
+          {/* Mock Map Background */}
+          <div className={`absolute inset-0 opacity-20 ${isDarkMode ? 'grayscale' : 'sepia'}`} 
+               style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          
+          <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
+             <div className="p-4 bg-white dark:bg-[#141414] rounded-3xl shadow-2xl border dark:border-white/10 flex items-center gap-4 relative z-10 animate-bounce">
+                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/40">
+                   <Truck size={20} />
                 </div>
-              )}
-           </div>
+                <div className="pr-2">
+                   <p className={`text-xs font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Current Location</p>
+                   <p className={`text-[9px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>En Route to RT-101</p>
+                </div>
+             </div>
+             <p className={`text-[11px] font-black uppercase tracking-[0.3em] opacity-30 mt-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Live Navigation Active</p>
+          </div>
         </motion.div>
 
-        {/* Live Map / Future Feature Widget */}
-        <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6">
-           <div className="bg-slate-900 text-white rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group">
-              <div className="absolute inset-0 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity duration-1000">
-                 {/* Fake Map Grid Background */}
-                 <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                       <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="5,5"/>
-                       </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
-                 </svg>
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                 <div className="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center border border-blue-500/30">
-                    <Eye size={28} />
-                 </div>
-                 <div className="space-y-2">
-                    <h3 className="font-serif font-black text-2xl tracking-tight">Live Tracking</h3>
-                    <p className="text-slate-400 text-xs font-medium leading-relaxed">
-                       When you accept an order, the customer will be able to watch your live location via GPS directly on their checkout page. 
-                       <br/><br/>
-                       <span className="text-blue-400 font-bold uppercase tracking-widest text-[9px]">Ensuring ultimate transparency.</span>
-                    </p>
-                 </div>
-              </div>
-           </div>
-
-           {/* Active accepted orders mini view */}
-           <div className="bg-white border text-center border-slate-200 rounded-[2rem] p-6 shadow-sm">
-               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 mb-4">My Dashboard Log</h4>
-               <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle2 size={24} />
-               </div>
-               <p className="font-black text-3xl text-slate-800">{acceptedOrders.length}</p>
-               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Orders Accepted Today</p>
-           </div>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
+          className={`rounded-[3rem] border shadow-sm p-8 flex flex-col ${isDarkMode ? 'bg-[#141414] border-white/10 text-white' : 'bg-white border-slate-100 text-slate-800'}`}
+        >
+          <h3 className="text-xl font-serif font-black italic mb-8">Next Deliveries</h3>
+          <div className="space-y-6">
+             {activeRoutes.map((route, i) => (
+                <div key={i} className={`p-6 rounded-[2rem] border transition-all hover:scale-[1.02] cursor-pointer
+                  ${isDarkMode ? 'bg-white/5 border-white/10 hover:border-blue-500/40' : 'bg-slate-50 border-slate-100 hover:border-sage'}`}>
+                   <div className="flex justify-between items-start mb-4">
+                      <span className={`text-[11px] font-black uppercase tracking-widest ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>{route.id}</span>
+                      <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest
+                        ${route.status === 'In Transit' ? 'bg-blue-500/10 text-blue-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                        {route.status}
+                      </span>
+                   </div>
+                   <p className="text-sm font-black mb-1">{route.customer}</p>
+                   <div className="flex items-start gap-2 mb-4 opacity-70">
+                      <MapPin size={14} className="shrink-0 mt-0.5" />
+                      <p className="text-[11px] leading-relaxed font-bold">{route.address}</p>
+                   </div>
+                   <div className="pt-4 border-t border-white/5 flex items-center gap-2">
+                      <Clock size={14} className="text-blue-400" />
+                      <span className="text-[10px] font-black opacity-50">ETA: {route.time}</span>
+                   </div>
+                </div>
+             ))}
+          </div>
+          <button className="mt-auto w-full py-5 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+             OPTIMIZE MY ROUTE
+             <Navigation size={14} fill="currentColor" />
+          </button>
         </motion.div>
-
       </div>
-
-    </motion.div>
+    </div>
   );
 };
 

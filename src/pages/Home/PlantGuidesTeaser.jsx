@@ -39,9 +39,11 @@ export function PlantGuidesTeaser() {
             Our head botanists have compiled a library of essential guides to help you create an indoor sanctuary that thrives. Discover the secrets of light, water, and earth.
           </p>
           
-          <Button variant="outline" className="rounded-none border-charcoal/30 px-10 py-8 uppercase tracking-[0.2em] text-[10px] hover:bg-charcoal hover:text-white transition-all duration-500">
-             Read the Guides
-          </Button>
+          <Link to="/guides">
+            <Button variant="outline" className="rounded-none border-charcoal/30 px-10 py-8 uppercase tracking-[0.2em] text-[10px] hover:bg-charcoal hover:text-white transition-all duration-500">
+               Read the Guides
+            </Button>
+          </Link>
         </div>
       </motion.div>
     </section>

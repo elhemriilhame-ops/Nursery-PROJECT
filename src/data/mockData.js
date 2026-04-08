@@ -257,3 +257,52 @@ export const GUIDES = [
     date: 'March 10, 2026'
   }
 ];
+
+export const SELLER_ORDERS = [
+  {
+    id: 'ORD-9901',
+    customer: 'Lina Benani',
+    product: 'Signature Monstera',
+    quantity: 1,
+    status: 'Pending',
+    date: 'Apr 08, 2026',
+    total: '450 DH',
+    location: 'Marrakech'
+  },
+  {
+    id: 'ORD-9902',
+    customer: 'Karim Tazi',
+    product: 'Pure Lavender Oil',
+    quantity: 3,
+    status: 'Shipped',
+    date: 'Apr 07, 2026',
+    total: '360 DH',
+    location: 'Casablanca'
+  },
+  {
+    id: 'ORD-9903',
+    customer: 'Driss Alaoui',
+    product: 'Eternal Blanc',
+    quantity: 2,
+    status: 'Processing',
+    date: 'Apr 08, 2026',
+    total: '900 DH',
+    location: 'Rabat'
+  },
+  {
+    id: 'ORD-9904',
+    customer: 'Salma El Fassi',
+    product: 'Olive Tree',
+    quantity: 1,
+    status: 'Delivered',
+    date: 'Apr 05, 2026',
+    total: '280 DH',
+    location: 'Agadir'
+  }
+];
+
+export const SELLER_PRODUCTS_DEMO = [
+  { _id: 'dm1', name: 'Atlas Cedar Tree', price: 1200, category: 'Trees', type: 'Plants', stock: 12, image: '/plant-1.png', featured: true },
+  { _id: 'dm2', name: 'White Serenity Lily', price: 350, category: 'Bouquets', type: 'Flowers', stock: 45, image: '/flower-white-roses.png', featured: false },
+  { _id: 'dm3', name: 'Desert Rose', price: 180, category: 'Succulents', type: 'Plants', stock: 8, image: '/plant-jade.jpg', featured: true },
+];
