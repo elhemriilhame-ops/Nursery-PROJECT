@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { MapPin, Star, Clock, ShieldCheck, X, ArrowRight, Sparkles } from 'lucide-react';
+import { MapPin, Star, Clock, ShieldCheck, X, ArrowRight, Sparkles, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -31,7 +32,7 @@ const sellers = [
     coordinates: [31.6295, -8.0083],
     title: 'Marrakech Royal Blooms',
     description: 'Bespoke floral arrangements for luxury Riads and events. Famous for our Midnight Blush roses and traditional scent extraction.',
-    image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800',
+    image: '/seller-marrakech.jpg',
     rating: 4.8,
     reviews: 256,
     responseTime: '< 1 hour',
@@ -49,7 +50,7 @@ const sellers = [
     coordinates: [33.5731, -7.5898],
     title: 'CasaGreen Atelier',
     description: 'The largest selection of rare tropical indoor plants in Morocco. Our modern nursery serves the entire Atlantic coast.',
-    image: 'https://images.unsplash.com/photo-1592150621344-82839b6fc3e2?auto=format&fit=crop&q=80&w=800',
+    image: '/seller-casablanca.jpg',
     rating: 5.0,
     reviews: 89,
     responseTime: '< 30 mins',
@@ -67,7 +68,7 @@ const sellers = [
     coordinates: [35.7595, -5.8339],
     title: 'Tangier Coastal Nursery',
     description: 'Elevated Mediterranean landscape design and coastal-hardy plants. Serving the Strait since 2012.',
-    image: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=800',
+    image: '/seller-tangier.jpg',
     rating: 4.7,
     reviews: 142,
     responseTime: '< 4 hours',
@@ -91,8 +92,17 @@ function MapUpdater({ activeCoords }) {
 
 export function SellersMap() {
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
   const [activeSeller, setActiveSeller] = useState(sellers[0]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const scrollRef = useRef(null);
+
+  const scrollCatalogue = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = direction === 'left' ? -350 : 350;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   const themeColors = {
     accent: isDarkMode ? '#10b981' : '#7C9082',
@@ -275,61 +285,99 @@ export function SellersMap() {
                 <X size={24} />
               </button>
 
-              <div className="h-full overflow-y-auto no-scrollbar pb-20">
-                <div className="relative h-[45vh] w-full">
-                  <img src={activeSeller.image} alt={activeSeller.title} className="w-full h-full object-cover" />
-                  <div className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent ${isDarkMode ? 'from-[#0D0D0D]' : 'from-white'}`} />
-                  <div className="absolute bottom-12 left-12 space-y-3">
-                     <div className="flex items-center gap-3">
-                        <ShieldCheck className="text-emerald-500" size={20} />
-                        <span className="text-white text-[10px] uppercase tracking-[0.4em] font-black drop-shadow-lg">Elite Partner</span>
-                     </div>
-                     <h2 className="text-5xl text-white font-serif font-black tracking-tight leading-none italic drop-shadow-2xl">{activeSeller.title}</h2>
+                <div className="h-full overflow-y-auto no-scrollbar flex flex-col pt-20">
+                  {/* Hero Image Section */}
+                  <div className="relative h-[45vh] w-full shrink-0">
+                    <img src={activeSeller.image} alt={activeSeller.title} className="w-full h-full object-cover" />
+                    <div className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent ${isDarkMode ? 'from-[#0D0D0D]' : 'from-white'}`} />
+                    <div className="absolute bottom-12 left-12 space-y-3">
+                       <div className="flex items-center gap-3">
+                          <ShieldCheck className="text-emerald-500" size={20} />
+                          <span className="text-white text-[10px] uppercase tracking-[0.4em] font-black drop-shadow-lg">Elite Partner</span>
+                       </div>
+                       <h2 className="text-5xl text-white font-serif font-black tracking-tight leading-none italic drop-shadow-2xl">{activeSeller.title}</h2>
+                    </div>
                   </div>
-                </div>
 
-                <div className="p-12 space-y-16">
-                  <div className={`flex items-center justify-between border-b pb-12 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-50'}`}>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex gap-1 text-amber-500">
-                        {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+                  {/* Identity & Bio Section */}
+                  <div className="p-12 lg:p-16 space-y-16">
+                    <div className={`flex items-center justify-between border-b pb-12 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-50'}`}>
+                      <div className="flex flex-col gap-3">
+                        <div className="flex gap-1 text-amber-500">
+                          {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
+                        </div>
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>IDENTIFIED ARTISAN • {activeSeller.reviews}+ REVIEWS</span>
                       </div>
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>TRUST SCORE: {activeSeller.reviews}+ REVIEWS</span>
+                      <div className="flex flex-col items-end gap-2 text-right">
+                        <Clock size={20} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/60' : 'text-slate-500'}`}>FAST RESPONDER</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2 text-right">
-                      <Clock size={20} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/60' : 'text-slate-500'}`}>Response: {activeSeller.responseTime}</span>
+
+                    <div className="space-y-6 max-w-2xl">
+                       <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>Identity Profile</h4>
+                       <p className={`text-2xl font-serif italic leading-relaxed ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{activeSeller.description}</p>
+                    </div>
+
+                    {/* Horizontal Product Catalogue */}
+                    <div className="space-y-10">
+                       <div className="flex items-center justify-between">
+                          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] opacity-40 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Boutique Catalogue</h4>
+                          <div className="flex items-center gap-4">
+                             <div className={`h-[1px] w-24 ${isDarkMode ? 'bg-white/10' : 'bg-slate-100'}`} />
+                             <span className="text-[9px] font-black uppercase tracking-widest opacity-20 italic">Swipe to browse</span>
+                          </div>
+                       </div>
+
+                       <div className="relative group/catalog">
+                          {/* Navigation Arrows (Flish) */}
+                          <button 
+                            onClick={() => scrollCatalogue('left')}
+                            className="absolute -left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 text-white backdrop-blur-xl opacity-0 group-hover/catalog:opacity-100 transition-all duration-300 -translate-x-4 group-hover/catalog:translate-x-0"
+                          >
+                            <ChevronRight className="rotate-180" size={24} />
+                          </button>
+                          
+                          <button 
+                            onClick={() => scrollCatalogue('right')}
+                            className="absolute -right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 text-white backdrop-blur-xl opacity-0 group-hover/catalog:opacity-100 transition-all duration-300 translate-x-4 group-hover/catalog:translate-x-0"
+                          >
+                            <ChevronRight size={24} />
+                          </button>
+
+                          <div 
+                            ref={scrollRef}
+                            className="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth"
+                          >
+                            {activeSeller.products.map((product) => (
+                              <div key={product.id} className="min-w-[280px] space-y-6 group">
+                                <div className={`aspect-square rounded-[2rem] overflow-hidden border transition-all duration-700 ${isDarkMode ? 'border-white/5 bg-white/5' : 'border-slate-100 bg-slate-50 shadow-sm'}`}>
+                                   <img src={product.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                </div>
+                                <div className="space-y-1 pr-4">
+                                   <p className="text-[10px] font-black uppercase tracking-widest opacity-30">Selection</p>
+                                   <h5 className={`text-lg font-serif italic font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{product.name}</h5>
+                                   <p className="text-sm font-black text-amber-500">{product.price} DH</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="pt-10">
+                      <button 
+                        onClick={() => {
+                          setIsProfileOpen(false);
+                          navigate('/shop/all');
+                        }}
+                        className={`w-full py-8 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-4 active:scale-95 shadow-2xl
+                        ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-slate-900 text-white shadow-slate-900/10'}`}>
+                        Enter Boutique Atelier <ArrowRight size={20} />
+                      </button>
                     </div>
                   </div>
-
-                  <div className="space-y-10">
-                    <div className="grid grid-cols-2 gap-4 h-80">
-                       <div className="col-span-1 rounded-[2.5rem] overflow-hidden">
-                          <img src={activeSeller.products[0].image} className="w-full h-full object-cover" />
-                       </div>
-                       <div className="col-span-1 grid grid-rows-2 gap-4">
-                          {activeSeller.products.slice(1, 3).map((p, i) => (
-                             <div key={i} className="rounded-[2rem] overflow-hidden">
-                                <img src={p.image} className="w-full h-full object-cover" />
-                             </div>
-                          ))}
-                       </div>
-                    </div>
-
-                    <div className="space-y-6">
-                      <h4 className={`text-[10px] uppercase tracking-[0.4em] font-black ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>About the Artisan</h4>
-                      <p className={`text-2xl font-serif italic leading-relaxed ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                        {activeSeller.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <button className={`w-full py-8 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-4 shadow-2xl hover:scale-[1.02]
-                    ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-slate-900 text-white shadow-slate-900/10'}`}>
-                    Enter Boutique Atelier <ArrowRight size={20} />
-                  </button>
                 </div>
-              </div>
             </motion.div>
           </div>
         )}
