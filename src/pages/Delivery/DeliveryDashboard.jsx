@@ -12,7 +12,8 @@ import {
   ArrowRightCircle,
   MoreVertical,
   Search,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
 const DeliveryDashboard = () => {

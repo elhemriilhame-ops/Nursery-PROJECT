@@ -8,11 +8,13 @@ import {
   Leaf, 
   Flower2, 
   ShieldCheck,
-  LayoutDashboard
+  LayoutDashboard,
+  Sparkles
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,208 +22,221 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Import login from context
+  const { login } = useAuth();
+  const { isDarkMode } = useTheme();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // MOCK LOGIN BYPASS (While MongoDB is offline)
+    // MOCK LOGIN BYPASS
     if (email === 'admin@sunflower.io' || email === 'admin@garden.com') {
-      const mockUser = {
-        _id: 'mock-admin-id',
-        name: 'Admin Sunflower',
-        email: email,
-        role: 'admin',
-        token: 'mock-jwt-token'
-      };
-      login(mockUser);
-      setEmail('');
-      setPassword('');
+      const mockAdmin = { _id: 'admin', name: 'Admin', role: 'admin', token: 'mock' };
+      login(mockAdmin);
       navigate('/admin');
-      setLoading(false);
       return;
     }
 
     if (email.toLowerCase() === 'nourplant@gmail.com') {
-      const mockSeller = {
-        _id: 'mock-seller-id',
-        name: 'Nourplant Seller',
-        email: email,
-        role: 'pépiniériste',
-        token: 'mock-jwt-token'
-      };
+      const mockSeller = { _id: 'seller', name: 'Nourplant', role: 'pépiniériste', token: 'mock' };
       login(mockSeller);
-      setEmail('');
-      setPassword('');
-      navigate('/seller');
-      setLoading(false);
+      navigate('/seller/dashboard');
       return;
     }
 
     if (email.toLowerCase() === 'delivery@gmail.com') {
-      const mockDelivery = {
-        _id: 'mock-delivery-id',
-        name: 'Fast Track Carrier',
-        email: email,
-        role: 'livreur',
-        token: 'mock-jwt-token'
-      };
+      const mockDelivery = { _id: 'delivery', name: 'Carrier', role: 'livreur', token: 'mock' };
       login(mockDelivery);
-      setEmail('');
-      setPassword('');
-      navigate('/delivery');
-      setLoading(false);
+      navigate('/delivery/dashboard');
       return;
     }
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { 
-        email, 
-        password 
-      });
-      
+      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       login(data);
-      
-      setEmail('');
-      setPassword('');
-
-      // Redirect based on role
       if (data.role === 'admin') navigate('/admin');
       else if (data.role === 'pépiniériste') navigate('/seller/dashboard');
+      else if (data.role === 'livreur') navigate('/delivery/dashboard');
       else navigate('/');
-      
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials');
-      setEmail(''); // Force empty on error as requested
-      setPassword('');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#FCFCFB] text-charcoal selection:bg-sage/20 selection:text-sage">
+    <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-colors duration-700
+      ${isDarkMode ? 'bg-[#050505]' : 'bg-[#FCFCFB]'}`}>
       
-      {/* Decorative Visual Side */}
+      {/* Visual Experience Side */}
       <div className="hidden lg:block relative p-12 h-full">
-         <div className="absolute inset-0 bg-sage/5 rounded-[3rem] m-8 overflow-hidden">
-            <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-sage/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-[100px]" />
-            <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-sage/5 rounded-full translate-x-1/4 translate-y-1/4 blur-[100px]" />
+         <div className={`absolute inset-0 rounded-[4rem] m-8 overflow-hidden border transition-all duration-700
+           ${isDarkMode ? 'bg-white/5 border-white/5 shadow-black' : 'bg-sage/5 border-slate-100 shadow-slate-100/50'}`}>
             
-            <div className="relative h-full flex flex-col items-center justify-center p-20 text-center">
+            {/* Ambient Aura */}
+            <div className={`absolute top-0 right-0 w-[45rem] h-[45rem] rounded-full -translate-x-1/2 -translate-y-1/2 blur-[100px] transition-colors
+              ${isDarkMode ? 'bg-emerald-500/10' : 'bg-sage/10'}`} />
+            <div className={`absolute bottom-0 left-0 w-[45rem] h-[45rem] rounded-full translate-x-1/4 translate-y-1/4 blur-[100px] transition-colors
+              ${isDarkMode ? 'bg-emerald-500/5' : 'bg-sage/5'}`} />
+            
+            <div className="relative h-full flex flex-col items-center justify-center p-24 text-center space-y-12">
               <motion.div 
                 initial={{ scale: 0.8, opacity: 0 }} 
                 animate={{ scale: 1, opacity: 1 }}
-                className="w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center text-sage mb-8"
+                className={`w-28 h-28 rounded-[2.5rem] shadow-2xl flex items-center justify-center transition-all duration-700
+                  ${isDarkMode ? 'bg-[#141414] text-emerald-500 border border-white/5' : 'bg-white text-sage'}`}
               >
-                <Leaf size={48} />
+                <Leaf size={52} strokeWidth={1.5} />
               </motion.div>
-              <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Your botanical <br/> portal.</h2>
-              <p className="text-slate-800 max-w-sm text-lg italic">Log in to manage your inventory or discover our latest blooms.</p>
+
+              <div className="space-y-6">
+                <h2 className={`text-6xl font-serif font-black italic tracking-tighter leading-[0.9] transition-colors
+                  ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  Botanical <br/> Portal.
+                </h2>
+                <p className={`max-w-xs mx-auto text-lg font-serif italic transition-colors
+                  ${isDarkMode ? 'text-white/40' : 'text-slate-600'}`}>
+                  "Unlock your inventory and discover the season's rarest blooms."
+                </p>
+              </div>
               
-              <div className="mt-20 grid grid-cols-2 gap-6 w-full max-w-md">
-                 <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
-                    <p className="font-serif font-black text-2xl text-sage tracking-tighter">4.9/5</p>
-                    <p className="text-[10px] font-black uppercase text-slate-700 tracking-widest mt-1">Satisfaction</p>
-                 </div>
-                 <div className="p-6 bg-white rounded-[2rem] shadow-sm border border-slate-100/50">
-                    <p className="font-serif font-black text-2xl text-sage tracking-tighter">24/7</p>
-                    <p className="text-[10px] font-black uppercase text-slate-700 tracking-widest mt-1">Support</p>
-                 </div>
+              <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+                 <StatCard value="4.9/5" label="HARVEST TRUST" isDark={isDarkMode} />
+                 <StatCard value="24/7" label="CONCIERGE" isDark={isDarkMode} />
+              </div>
+
+              {/* Decorative elements */}
+              <div className="absolute top-12 left-12 opacity-5">
+                 <Flower2 size={120} className={isDarkMode ? 'text-white' : 'text-sage'} />
               </div>
             </div>
          </div>
       </div>
 
-      {/* Form Side */}
+      {/* Logic Side */}
       <div className="flex items-center justify-center p-8 lg:p-24 relative overflow-hidden">
-        
         <motion.div 
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="w-full max-w-md space-y-10"
+          className="w-full max-w-md space-y-12 relative z-10"
         >
-          <div className="space-y-4">
-            <Link to="/" className="inline-flex items-center gap-2 text-sage/60 hover:text-sage text-xs font-black uppercase tracking-widest transition-all group mb-4">
-              <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-              Back to home
+          <div className="space-y-6">
+            <Link to="/" className={`inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all group
+              ${isDarkMode ? 'text-white/40 hover:text-emerald-500' : 'text-slate-400 hover:text-sage'}`}>
+              <ArrowRight size={16} className="rotate-180 group-hover:-translate-x-2 transition-transform" />
+              ATELIER ENTRANCE
             </Link>
-            <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800">It's a pleasure to <br/> see you again.</h1>
-            <p className="text-slate-800 font-medium">Enter your credentials to continue your experience.</p>
+            <div className="space-y-3">
+               <h1 className={`text-5xl font-serif font-black italic tracking-tighter leading-none transition-colors
+                 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Welcome <br/> Back.</h1>
+               <div className={`h-1 w-20 rounded-full ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-sage'}`} />
+            </div>
+            <p className={`font-serif italic text-lg ${isDarkMode ? 'text-white/40' : 'text-slate-600'}`}>Identify yourself to access the boutique.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-5">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Email</label>
-                <div className="relative group">
-                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
-                  <input 
-                    type="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoComplete="new-email"
-                    placeholder="admin@garden.com"
-                    className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Password</label>
-                <div className="relative group">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
-                  <input 
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    placeholder="••••••••"
-                    className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
-                  />
-                </div>
-              </div>
+          <form onSubmit={handleLogin} className="space-y-8">
+            <div className="space-y-6">
+              <AuthInput 
+                icon={Mail} 
+                label="Identity" 
+                type="email" 
+                value={email} 
+                onChange={setEmail} 
+                placeholder="email@sunflower.io"
+                isDark={isDarkMode}
+              />
+              <AuthInput 
+                icon={Lock} 
+                label="Secret" 
+                type="password" 
+                value={password} 
+                onChange={setPassword} 
+                placeholder="••••••••"
+                isDark={isDarkMode}
+              />
             </div>
 
-            {error && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-red-50 text-red-600 p-4 rounded-2xl text-xs font-bold flex items-center gap-3 border border-red-100"
-              >
-                <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                {error}
-              </motion.div>
-            )}
+            <AnimatePresence>
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="bg-rose-500/10 text-rose-500 p-5 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-4 border border-rose-500/20"
+                >
+                  <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_red]" />
+                  {error}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-sage text-white py-5 rounded-[1.5rem] font-bold shadow-xl shadow-sage/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 group"
+              className={`w-full py-6 rounded-[2rem] font-black tracking-[0.4em] uppercase text-[11px] shadow-2xl transition-all flex items-center justify-center gap-4 group active:scale-95
+                ${isDarkMode 
+                   ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+                   : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}
             >
-              {loading ? "Loading..." : "Sign In"}
-              {!loading && <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />}
+              {loading ? "AUTHENTICATING..." : "ENTER PORTAL"}
+              {!loading && <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" /> }
             </button>
           </form>
 
-          <p className="text-center text-slate-800 text-sm font-medium pt-4">
-            New to Sunflowers?{' '}
-            <Link to="/register" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Create a profile</Link>
+          <p className={`text-center text-sm font-medium pt-8 transition-colors ${isDarkMode ? 'text-white/30' : 'text-slate-500'}`}>
+            New Prospect?{' '}
+            <Link to="/register" className={`font-black uppercase tracking-widest text-[10px] underline underline-offset-8 transition-colors
+              ${isDarkMode ? 'text-emerald-500 hover:text-white' : 'text-sage hover:text-slate-900'}`}>Create Profile</Link>
           </p>
         </motion.div>
 
-        {/* Floating Accents */}
-        <div className="absolute top-10 right-10 flex gap-4 text-slate-100 pointer-events-none">
-           <ShieldCheck size={80} strokeWidth={1} className="opacity-10" />
-           <Flower2 size={60} strokeWidth={1} className="opacity-5 rotate-12" />
+        {/* Floating Icons */}
+        <div className="absolute top-20 right-20 flex gap-8 opacity-5 pointer-events-none">
+           <ShieldCheck size={100} strokeWidth={1} className={isDarkMode ? 'text-white' : 'text-slate-900'} />
+           <Sparkles size={80} strokeWidth={1} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
         </div>
       </div>
     </div>
   );
 };
+
+function StatCard({ value, label, isDark }) {
+  return (
+    <div className={`p-8 rounded-[2.5rem] border shadow-2xl transition-all duration-700
+      ${isDark ? 'bg-white/5 border-white/5 text-white' : 'bg-white border-slate-100/50 text-slate-900'}`}>
+       <p className={`font-serif font-black text-3xl italic tracking-tighter ${isDark ? 'text-emerald-500' : 'text-sage'}`}>{value}</p>
+       <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40 mt-2">{label}</p>
+    </div>
+  );
+}
+
+function AuthInput({ icon: Icon, label, type, value, onChange, placeholder, isDark }) {
+  return (
+    <div className="space-y-3 group">
+      <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors
+        ${isDark ? 'text-white/30 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-sage'}`}>
+        {label}
+      </label>
+      <div className="relative">
+        <Icon className={`absolute left-6 top-1/2 -translate-y-1/2 transition-colors duration-500
+          ${isDark ? 'text-white/20 group-focus-within:text-emerald-500' : 'text-slate-300 group-focus-within:text-sage'}`} 
+          size={18} strokeWidth={2} />
+        <input 
+          type={type} 
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required
+          placeholder={placeholder}
+          className={`w-full pl-16 pr-8 py-5 rounded-[1.5rem] border outline-none transition-all font-black text-xs shadow-inner tracking-widest
+            ${isDark 
+               ? 'bg-white/5 border-white/5 text-white placeholder:text-white/10 focus:bg-white/10' 
+               : 'bg-slate-50 border-slate-100 text-slate-900 focus:bg-white focus:border-sage/20'}`}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default Login;

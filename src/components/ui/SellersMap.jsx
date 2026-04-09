@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { MapPin, Star, Clock, ShieldCheck, X, ArrowRight } from 'lucide-react';
+import { MapPin, Star, Clock, ShieldCheck, X, ArrowRight, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 
-// Enhanced mock sellers data with images and ratings
 const sellers = [
   {
     id: 1,
@@ -80,59 +81,75 @@ const sellers = [
   }
 ];
 
-// Custom map interaction component to auto-pan when a seller is selected
 function MapUpdater({ activeCoords }) {
   const map = useMap();
   useEffect(() => {
-    map.flyTo(activeCoords, 8, { animate: true, duration: 1.5 });
+    map.flyTo(activeCoords, 8, { animate: true, duration: 2 });
   }, [activeCoords, map]);
   return null;
 }
 
 export function SellersMap() {
+  const { isDarkMode } = useTheme();
   const [activeSeller, setActiveSeller] = useState(sellers[0]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const themeColors = {
+    accent: isDarkMode ? '#10b981' : '#7C9082',
+    bg: isDarkMode ? '#090909' : '#FCFCFB',
+    card: isDarkMode ? '#141414' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#141414'
+  };
 
   const createCustomIcon = (isActive) => {
     return L.divIcon({
       className: 'bg-transparent border-0',
       html: `<div style="
-        background-color: ${isActive ? '#7C9082' : '#2D3430'}; 
+        background-color: ${isActive ? themeColors.accent : '#2D3430'}; 
         color: white; 
-        border-radius: 50%; 
-        width: 44px; 
-        height: 44px; 
+        border-radius: 12px; 
+        width: 48px; 
+        height: 48px; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-        border: 2px solid white; 
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-        transform: ${isActive ? 'scale(1.3) translateY(-8px)' : 'scale(1)'};
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        border: 2px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'white'}; 
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        transform: ${isActive ? 'scale(1.2) rotate(45deg)' : 'scale(1)'};
         z-index: ${isActive ? 1000 : 1};
       ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+        <div style="transform: rotate(${isActive ? '-45deg' : '0deg'}); transition: transform 0.6s;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
       </div>`,
-      iconSize: [44, 44],
-      iconAnchor: [22, 44],
+      iconSize: [48, 48],
+      iconAnchor: [24, 48],
     });
   };
 
   return (
-    <div className="w-full bg-parchment dark:bg-background py-24 border-t border-border relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-16 items-start">
+    <div className={`w-full py-32 relative overflow-hidden transition-colors duration-700 ${isDarkMode ? 'bg-[#090909]' : 'bg-[#FCFCFB]'}`}>
+      
+      {/* Decorative background elements */}
+      {isDarkMode && (
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+      )}
+
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <div className="flex flex-col lg:flex-row gap-20 items-stretch">
           
-          {/* Map Section */}
-          <div className="w-full lg:w-[55%] rounded-[2.5rem] overflow-hidden relative shadow-2xl h-[500px] md:h-[650px] border border-black/5 group z-10">
+          {/* Map Container */}
+          <div className={`w-full lg:w-[60%] rounded-[3.5rem] overflow-hidden relative shadow-2xl h-[550px] md:h-[700px] border transition-all duration-700
+            ${isDarkMode ? 'border-white/5 shadow-black' : 'border-slate-100 shadow-slate-200/50'}`}>
             <MapContainer 
               center={[31.7917, -7.0926]} 
               zoom={6} 
               scrollWheelZoom={false}
-              style={{ height: '100%', width: '100%', zIndex: 1 }}
+              style={{ height: '100%', width: '100%', zIndex: 1, filter: isDarkMode ? 'invert(100%) hue-rotate(180deg) brightness(85%) contrast(110%)' : 'none' }}
             >
               <TileLayer
-                attribution='&copy; Google Maps'
+                attribution='&copy; Google'
                 url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
               />
               <MapUpdater activeCoords={activeSeller.coordinates} />
@@ -151,182 +168,172 @@ export function SellersMap() {
               ))}
             </MapContainer>
             
-            <div className="absolute bottom-6 left-6 z-[400] bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow text-[10px] text-charcoal uppercase tracking-[0.2em] font-medium border border-black/5">
-              Interactive Map
+            <div className={`absolute bottom-8 left-8 z-[400] backdrop-blur-xl px-6 py-3 rounded-2xl shadow-2xl text-[10px] uppercase tracking-[0.3em] font-black border transition-all
+              ${isDarkMode ? 'bg-black/60 border-white/10 text-emerald-400' : 'bg-white/90 border-slate-100 text-slate-900'}`}>
+              Interactive Radar
             </div>
           </div>
 
-          {/* Description & Card Side Section */}
-          <div className="w-full lg:w-[45%] lg:sticky lg:top-24 space-y-12">
+          {/* Seller Details Side */}
+          <div className="w-full lg:w-[40%] flex flex-col justify-center space-y-12 py-10">
             <div className="space-y-6">
-              <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-black">Trusted Partners</span>
-              <h2 className="text-5xl lg:text-7xl font-serif text-foreground leading-[1] tracking-tighter uppercase italic">
-                Artisan <br/> <span className="not-italic">Boutiques</span>
+              <div className="flex items-center gap-3">
+                 <Sparkles className={isDarkMode ? 'text-emerald-500' : 'text-sage'} size={18} />
+                 <span className={`text-[10px] uppercase tracking-[0.4em] font-black transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>
+                    Trusted Artisans
+                 </span>
+              </div>
+              <h2 className={`text-6xl lg:text-8xl font-serif leading-[0.85] tracking-tighter uppercase italic transition-colors
+                ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                Artisan <br/> <span className="not-italic opacity-80">Network</span>
               </h2>
-              <p className="text-foreground/70 font-sans text-xl max-w-md">
-                Connecting you directly with the finest pépiniéristes across the Kingdom.
+              <p className={`font-sans text-xl leading-relaxed max-w-sm transition-colors
+                ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>
+                We bridge the gap between historic nurseries and modern botanical collectors.
               </p>
             </div>
 
-            <div className={`transition-all duration-500 ease-out border-l-2 border-sage/20 pl-8 space-y-8 ${isProfileOpen ? 'translate-x-2' : ''}`}>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="px-3 py-1 bg-sage/10 text-sage text-[9px] uppercase tracking-widest font-black rounded-lg">Certified Seller</div>
-                  <div className="flex items-center gap-1 text-amber-500">
-                    <Star size={14} fill="currentColor" />
-                    <span className="text-sm font-bold text-foreground">{activeSeller.rating}</span>
-                  </div>
+            <motion.div 
+              key={activeSeller.id}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className={`p-10 rounded-[3rem] border shadow-2xl space-y-8 transition-all duration-700 relative overflow-hidden group/card
+                ${isDarkMode ? 'bg-[#141414] border-white/10 text-white shadow-black' : 'bg-white border-slate-100 text-slate-800'}`}
+            >
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover/card:opacity-10 transition-opacity">
+                 <MapPin size={120} />
+              </div>
+
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center justify-between">
+                   <div className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all
+                     ${isDarkMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-sage/10 text-sage border-sage/20'}`}>
+                      Diamond Tier
+                   </div>
+                   <div className="flex items-center gap-1.5 text-amber-500">
+                      <Star size={16} fill="currentColor" />
+                      <span className="text-sm font-black">{activeSeller.rating}</span>
+                   </div>
                 </div>
-                <h3 className="text-3xl font-bold font-serif text-foreground">{activeSeller.title}</h3>
-                <p className="text-foreground/80 leading-relaxed font-sans text-lg italic">
+                <h3 className="text-4xl font-black font-serif tracking-tighter italic">{activeSeller.title}</h3>
+                <p className={`text-lg leading-relaxed font-serif italic transition-colors
+                  ${isDarkMode ? 'text-white/80' : 'text-slate-600'}`}>
                   "{activeSeller.description}"
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-foreground/40 uppercase tracking-[0.2em] text-[9px] font-bold">
-                    <MapPin size={12} />
-                    Location
-                  </div>
-                  <p className="text-sm font-serif font-bold text-foreground">{activeSeller.location}</p>
+              <div className="grid grid-cols-2 gap-8 relative z-10">
+                <div className="space-y-1">
+                  <p className={`text-[10px] uppercase tracking-widest font-black opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Location</p>
+                  <p className="text-sm font-black tracking-tight">{activeSeller.location}</p>
                 </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-foreground/40 uppercase tracking-[0.2em] text-[9px] font-bold">
-                    <ShieldCheck size={12} />
-                    Specialty
-                  </div>
-                  <p className="text-sm font-serif font-bold text-foreground">{activeSeller.specialty}</p>
+                <div className="space-y-1">
+                  <p className={`text-[10px] uppercase tracking-widest font-black opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Main Craft</p>
+                  <p className="text-sm font-black tracking-tight">{activeSeller.specialty}</p>
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-6 relative z-10">
                 <button 
                   onClick={() => setIsProfileOpen(true)}
-                  className="group flex items-center space-x-6 text-charcoal dark:text-foreground"
+                  className={`w-full py-6 rounded-2xl flex items-center justify-center gap-4 transition-all duration-500 hover:scale-[1.02] active:scale-95 shadow-xl
+                    ${isDarkMode ? 'bg-white text-black shadow-white/5' : 'bg-slate-900 text-white shadow-slate-900/10'}`}
                 >
-                  <div className="w-16 h-16 rounded-full bg-charcoal dark:bg-white text-white dark:text-charcoal flex items-center justify-center group-hover:bg-sage dark:group-hover:bg-sage dark:group-hover:text-white transition-all duration-500 transform group-hover:scale-110">
-                    <ArrowRight size={24} />
-                  </div>
-                  <span className="uppercase tracking-[0.3em] text-[10px] font-black group-hover:text-sage transition-colors">View Artisan Card</span>
+                  <span className="uppercase tracking-[0.3em] text-[10px] font-black">Open Artisan Profile</span>
+                  <ArrowRight size={18} />
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Slide-over Artisan Card Modal */}
-      <div className={`fixed inset-0 z-[1000] flex justify-end transition-all duration-700 ${isProfileOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-        <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-700 ${isProfileOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsProfileOpen(false)} />
-        
-        <div className={`relative w-full max-w-2xl bg-white dark:bg-zinc-900 h-full shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.23, 1, 0.32, 1)] ${isProfileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <button 
-            onClick={() => setIsProfileOpen(false)}
-            className="absolute top-8 right-8 z-50 w-12 h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur flex items-center justify-center text-white transition-all active:scale-90"
-          >
-            <X size={24} />
-          </button>
+      {/* Slide-over Profile */}
+      <AnimatePresence>
+        {isProfileOpen && (
+          <div className="fixed inset-0 z-[1000] flex justify-end">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setIsProfileOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md" 
+            />
+            
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+              className={`relative w-full max-w-2xl h-full shadow-2xl overflow-hidden border-l transition-colors duration-700
+                ${isDarkMode ? 'bg-[#0D0D0D] border-white/5' : 'bg-white border-slate-100'}`}
+            >
+              <button 
+                onClick={() => setIsProfileOpen(false)}
+                className={`absolute top-10 right-10 z-50 w-14 h-14 rounded-full flex items-center justify-center transition-all bg-black/20 hover:bg-black/40 text-white backdrop-blur-xl`}
+              >
+                <X size={24} />
+              </button>
 
-          <div className="h-full overflow-y-auto no-scrollbar pb-12">
-            {/* Hero Image Section */}
-            <div className="relative h-[40vh] w-full">
-              <img src={activeSeller.image} alt={activeSeller.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
-              <div className="absolute bottom-10 left-10 space-y-2">
-                 <div className="flex items-center gap-2 mb-2">
-                    <ShieldCheck className="text-white" size={20} />
-                    <span className="text-white text-[10px] uppercase tracking-[0.3em] font-black">Certified SunFlowers Partner</span>
-                 </div>
-                 <h2 className="text-4xl text-white font-serif uppercase tracking-tight leading-none italic">{activeSeller.title}</h2>
-              </div>
-            </div>
-
-            {/* Info Section */}
-            <div className="p-10 space-y-12">
-              <div className="flex items-center justify-between border-b border-border pb-8">
-                <div className="flex items-center gap-3">
-                  <div className="flex gap-0.5 text-amber-500">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill={i < Math.floor(activeSeller.rating) ? "currentColor" : "none"} strokeWidth={i < Math.floor(activeSeller.rating) ? 0 : 2} />
-                    ))}
-                  </div>
-                  <span className="text-lg font-bold text-white">({activeSeller.reviews} Reviews)</span>
-                </div>
-                <div className="flex items-center gap-3 text-white/60">
-                  <Clock size={18} className="text-white/60" />
-                  <span className="text-sm font-semibold uppercase tracking-widest">Responds in {activeSeller.responseTime}</span>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-black">The Artisan Story</h4>
-                <p className="text-xl leading-relaxed font-sans text-white font-medium italic">
-                  {activeSeller.description}
-                </p>
-              </div>
-
-              {/* Dynamic Boutique Catalog Section */}
-              <div className="space-y-8">
-                <div className="flex items-center justify-between">
-                   <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-black">Boutique Catalog</h4>
-                   <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Swipe to Browse</span>
-                </div>
-
-                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4 snap-x snap-mandatory">
-                  {activeSeller.products.map((product) => (
-                    <div key={product.id} className="min-w-[220px] snap-start group/prod">
-                       <div className="relative aspect-[4/5] rounded-3xl overflow-hidden mb-4 shadow-lg border border-border/50">
-                          <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover/prod:scale-110" />
-                          <div className="absolute top-4 right-4 bg-black/80 backdrop-blur px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest text-white">
-                            {product.price} DH
-                          </div>
-                          <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/prod:opacity-100 transition-opacity flex items-center justify-center">
-                             <div className="w-12 h-12 rounded-full bg-white text-charcoal flex items-center justify-center translate-y-4 group-hover/prod:translate-y-0 transition-transform">
-                                <ArrowRight size={20} />
-                             </div>
-                          </div>
-                       </div>
-                       <h5 className="font-serif text-lg text-white font-bold tracking-tight">{product.name}</h5>
-                       <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Limited Edition</p>
-                    </div>
-                  ))}
-                  
-                  {/* View All Card */}
-                  <div className="min-w-[220px] snap-start flex items-center justify-center border-2 border-dashed border-white/20 rounded-3xl group cursor-pointer hover:border-sage transition-colors">
-                     <div className="text-center space-y-3">
-                        <div className="w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-                           <ArrowRight size={24} />
-                        </div>
-                        <span className="block text-[10px] uppercase tracking-[0.2em] font-black text-white">View Full Boutique</span>
+              <div className="h-full overflow-y-auto no-scrollbar pb-20">
+                <div className="relative h-[45vh] w-full">
+                  <img src={activeSeller.image} alt={activeSeller.title} className="w-full h-full object-cover" />
+                  <div className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent ${isDarkMode ? 'from-[#0D0D0D]' : 'from-white'}`} />
+                  <div className="absolute bottom-12 left-12 space-y-3">
+                     <div className="flex items-center gap-3">
+                        <ShieldCheck className="text-emerald-500" size={20} />
+                        <span className="text-white text-[10px] uppercase tracking-[0.4em] font-black drop-shadow-lg">Elite Partner</span>
                      </div>
+                     <h2 className="text-5xl text-white font-serif font-black tracking-tight leading-none italic drop-shadow-2xl">{activeSeller.title}</h2>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-white/5 p-8 rounded-[2rem] border border-white/10 space-y-8">
-                <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-black">Quick Stats</h4>
-                <div className="grid grid-cols-2 gap-8">
-                   <div className="space-y-1">
-                      <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Available Stock</div>
-                      <div className="text-2xl font-serif font-bold text-white">450+ Specimens</div>
-                   </div>
-                   <div className="space-y-1">
-                      <div className="text-xs text-white/40 uppercase tracking-widest font-bold">Partner Since</div>
-                      <div className="text-2xl font-serif font-bold text-white">2021</div>
-                   </div>
+                <div className="p-12 space-y-16">
+                  <div className={`flex items-center justify-between border-b pb-12 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-50'}`}>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex gap-1 text-amber-500">
+                        {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+                      </div>
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>TRUST SCORE: {activeSeller.reviews}+ REVIEWS</span>
+                    </div>
+                    <div className="flex flex-col items-end gap-2 text-right">
+                      <Clock size={20} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/60' : 'text-slate-500'}`}>Response: {activeSeller.responseTime}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-10">
+                    <div className="grid grid-cols-2 gap-4 h-80">
+                       <div className="col-span-1 rounded-[2.5rem] overflow-hidden">
+                          <img src={activeSeller.products[0].image} className="w-full h-full object-cover" />
+                       </div>
+                       <div className="col-span-1 grid grid-rows-2 gap-4">
+                          {activeSeller.products.slice(1, 3).map((p, i) => (
+                             <div key={i} className="rounded-[2rem] overflow-hidden">
+                                <img src={p.image} className="w-full h-full object-cover" />
+                             </div>
+                          ))}
+                       </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <h4 className={`text-[10px] uppercase tracking-[0.4em] font-black ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>About the Artisan</h4>
+                      <p className={`text-2xl font-serif italic leading-relaxed ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                        {activeSeller.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button className={`w-full py-8 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-4 shadow-2xl hover:scale-[1.02]
+                    ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-slate-900 text-white shadow-slate-900/10'}`}>
+                    Enter Boutique Atelier <ArrowRight size={20} />
+                  </button>
                 </div>
               </div>
-
-              <div className="pt-4">
-                <button className="w-full bg-charcoal dark:bg-white text-white dark:text-charcoal px-12 py-6 uppercase tracking-[0.3em] font-black text-xs hover:bg-sage dark:hover:bg-sage dark:hover:text-white transition-all duration-500 rounded-2xl shadow-2xl flex items-center justify-center gap-4">
-                  Shop this Boutique <ArrowRight size={18} />
-                </button>
-              </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

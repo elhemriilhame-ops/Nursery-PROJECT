@@ -10,18 +10,15 @@ import {
   MapPin, 
   Calendar, 
   ChevronUp, 
-  ChevronDown as ChevronDownIcon 
+  ChevronDown as ChevronDownIcon,
+  Sparkles 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Shop() {
   const { category } = useParams();
+  const { isDarkMode } = useTheme();
   const [sortBy, setSortBy] = useState('Featured');
   
   // Filter states
@@ -85,76 +82,101 @@ export default function Shop() {
   }, [category]);
 
   return (
-    <div className="pt-24 min-h-screen bg-parchment/10 mb-32">
-      <div className="container mx-auto px-6 py-16 text-center space-y-6">
-        <span className="text-[10px] uppercase tracking-[0.4em] text-sage font-bold">Discover</span>
-        <h1 className="text-3xl md:text-5xl text-charcoal">{categoryTitle}</h1>
-        <p className="text-charcoal max-w-2xl mx-auto font-sans font-light italic text-sm leading-relaxed">
+    <div className={`pt-24 min-h-screen transition-colors duration-700 ${isDarkMode ? 'bg-[#090909]' : 'bg-[#FCFCFB]'}`}>
+      
+      {/* Page Header */}
+      <div className="container mx-auto px-6 py-20 text-center space-y-6">
+        <div className="flex items-center justify-center gap-3">
+           <Sparkles className={isDarkMode ? 'text-emerald-500' : 'text-sage'} size={18} />
+           <span className={`text-[10px] font-black uppercase tracking-[0.45em] transition-colors
+             ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>Discover Collection</span>
+        </div>
+        <h1 className={`text-4xl md:text-6xl font-serif font-black tracking-tight italic transition-colors
+          ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+          {categoryTitle}
+        </h1>
+        <p className={`max-w-2xl mx-auto font-serif italic text-lg leading-relaxed transition-colors
+          ${isDarkMode ? 'text-white/60' : 'text-slate-600'}`}>
           Hand-picked and curated for the minimalist aesthetic. Elevate your space with our premium botanical selections.
         </p>
       </div>
 
       <div className="container mx-auto px-6">
         {category === 'flowers' ? (
-          <div className="flex flex-col lg:flex-row gap-12 py-8">
-             <aside className="w-full lg:w-72 space-y-8 shrink-0">
-                <div className="bg-[#FFF5F7] p-6 rounded-[1.5rem] space-y-4 shadow-sm border border-pink-100/50">
-                   <h3 className="text-xl font-serif font-black text-slate-800 tracking-tight">Delivery details</h3>
-                   <div className="space-y-4">
-                      <div className="space-y-1.5">
-                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-800 ml-1">Delivery zip code</label>
+          <div className="flex flex-col lg:flex-row gap-16 py-8">
+             <aside className="w-full lg:w-80 space-y-10 shrink-0">
+                
+                {/* Delivery details Card */}
+                <div className={`p-8 rounded-[2.5rem] space-y-6 transition-all duration-700 border shadow-2xl
+                   ${isDarkMode ? 'bg-[#141414] border-white/5 shadow-black' : 'bg-[#FFF5F7] border-pink-100/50 shadow-pink-100/20'}`}>
+                   <h3 className={`text-2xl font-serif font-black tracking-tight italic transition-colors
+                     ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Delivery Pulse</h3>
+                   <div className="space-y-6">
+                      <div className="space-y-2">
+                         <label className={`text-[9px] font-black uppercase tracking-[0.2em] ml-1 transition-colors
+                           ${isDarkMode ? 'text-emerald-500' : 'text-slate-800'}`}>Target zip code</label>
                          <div className="relative">
-                            <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-700" />
+                            <MapPin size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-slate-700'}`} />
                             <input 
                               type="text" 
                               value={zipCode}
                               onChange={(e) => setZipCode(e.target.value)}
                               placeholder="Type zip code..."
-                              className="w-full pl-10 pr-4 py-3 bg-white rounded-xl border-none shadow-inner text-xs focus:ring-2 focus:ring-pink-200 outline-none transition-all"
+                              className={`w-full pl-12 pr-6 py-4 rounded-2xl border-none text-[11px] font-bold outline-none transition-all
+                                ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-white text-slate-950 shadow-inner'}`}
                             />
                          </div>
                       </div>
-                      <div className="space-y-1.5">
-                         <label className="text-[9px] font-bold uppercase tracking-widest text-slate-800 ml-1">Delivery date</label>
-                         <div className="relative cursor-pointer">
-                            <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-700 pointer-events-none" />
+                      <div className="space-y-2">
+                         <label className={`text-[9px] font-black uppercase tracking-[0.2em] ml-1 transition-colors
+                           ${isDarkMode ? 'text-emerald-500' : 'text-slate-800'}`}>Mission date</label>
+                         <div className="relative">
+                            <Calendar size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none ${isDarkMode ? 'text-white/40' : 'text-slate-700'}`} />
                             <select 
                               value={deliveryDate}
                               onChange={(e) => setDeliveryDate(e.target.value)}
-                              className="w-full pl-10 pr-10 py-3 bg-white rounded-xl border-none shadow-inner text-xs focus:ring-2 focus:ring-pink-200 outline-none appearance-none cursor-pointer"
+                              className={`w-full pl-12 pr-10 py-4 rounded-2xl border-none text-[11px] font-bold outline-none appearance-none cursor-pointer transition-all
+                                ${isDarkMode ? 'bg-white/5 text-white focus:bg-white/10' : 'bg-white text-slate-950 shadow-inner'}`}
                             >
-                               <option value="">Select date</option>
-                               <option value="today">Today</option>
-                               <option value="tomorrow">Tomorrow</option>
-                               <option value="later">Pick a date</option>
+                               <option value="" className={isDarkMode ? 'bg-zinc-900' : ''}>Select date</option>
+                               <option value="today" className={isDarkMode ? 'bg-zinc-900' : ''}>Today (Express)</option>
+                               <option value="tomorrow" className={isDarkMode ? 'bg-zinc-900' : ''}>Tomorrow</option>
+                               <option value="later" className={isDarkMode ? 'bg-zinc-900' : ''}>Schedule Picking</option>
                             </select>
                          </div>
                       </div>
                    </div>
                 </div>
 
-                <div className="space-y-6">
-                   <div className="space-y-2">
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sage italic">{products.length} bouquets found</p>
+                {/* Filters Section */}
+                <div className="space-y-8">
+                   <div className="space-y-3">
+                      <p className={`text-[10px] font-black uppercase tracking-[0.2em] italic transition-colors
+                        ${isDarkMode ? 'text-emerald-400' : 'text-sage'}`}>
+                        {products.length} specimens available
+                      </p>
                       <button 
                         onClick={() => setIsFiltersVisible(!isFiltersVisible)}
-                        className="flex items-center justify-between w-full group"
+                        className="flex items-center justify-between w-full group py-2"
                       >
-                         <h2 className="text-2xl font-serif font-black text-slate-800 tracking-tighter uppercase group-hover:text-sage transition-colors">FILTER</h2>
-                         <ChevronDownIcon size={24} className={`text-slate-200 transition-transform duration-500 ${isFiltersVisible ? 'rotate-180' : ''}`} />
+                         <h2 className={`text-3xl font-serif font-black tracking-tighter uppercase italic transition-colors
+                           ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>FILTERS</h2>
+                         <div className={`p-2 rounded-xl transition-all ${isDarkMode ? 'bg-white/5 text-emerald-500' : 'bg-slate-100 text-slate-400'}`}>
+                            <ChevronDownIcon size={20} className={`transition-transform duration-500 ${isFiltersVisible ? 'rotate-180' : ''}`} />
+                         </div>
                       </button>
                    </div>
 
                    {isFiltersVisible && (
-                     <div className="space-y-6 animate-in slide-in-from-top-4 duration-500 pb-10">
+                     <div className="space-y-8 animate-in slide-in-from-top-4 duration-500 pb-16">
                         {/* Occasion Section */}
-                        <div className="border-t border-slate-100 pt-6">
+                        <div className={`border-t pt-8 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
                            <button 
                              onClick={() => setIsOccasionOpen(!isOccasionOpen)}
                              className="w-full flex items-center justify-between group py-1"
                            >
-                              <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Occasion</span>
-                              {isOccasionOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
+                              <span className={`text-lg font-black tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Occasion</span>
+                              {isOccasionOpen ? <ChevronUp size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} /> : <ChevronDownIcon size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} />}
                            </button>
                            {isOccasionOpen && (
                               <div className="mt-4 flex flex-wrap gap-2">
@@ -162,10 +184,10 @@ export default function Shop() {
                                    <button
                                      key={occ}
                                      onClick={() => setSelectedOccasion(selectedOccasion === occ ? null : occ)}
-                                     className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 ${
+                                     className={`px-5 py-2.5 rounded-2xl text-[10px] font-black border transition-all duration-300 uppercase tracking-widest ${
                                        selectedOccasion === occ 
-                                         ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         ? (isDarkMode ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-white border-slate-800')
+                                         : (isDarkMode ? 'bg-white/5 text-white/60 border-white/5 hover:border-emerald-500/40 hover:text-emerald-400' : 'bg-white text-slate-800 border-slate-100')
                                      }`}
                                    >
                                      {occ}
@@ -176,13 +198,13 @@ export default function Shop() {
                         </div>
 
                         {/* Price Range Section */}
-                        <div className="border-t border-slate-100 pt-6">
+                        <div className={`border-t pt-8 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
                            <button 
                              onClick={() => setIsPriceOpen(!isPriceOpen)}
                              className="w-full flex items-center justify-between group py-1"
                            >
-                              <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Price Range</span>
-                              {isPriceOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
+                              <span className={`text-lg font-black tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Price Tier</span>
+                              {isPriceOpen ? <ChevronUp size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} /> : <ChevronDownIcon size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} />}
                            </button>
                            {isPriceOpen && (
                               <div className="mt-4 flex flex-wrap gap-2">
@@ -190,10 +212,10 @@ export default function Shop() {
                                    <button
                                      key={range.label}
                                      onClick={() => setSelectedPrice(selectedPrice?.label === range.label ? null : range)}
-                                     className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 ${
+                                     className={`px-5 py-2.5 rounded-2xl text-[10px] font-black border transition-all duration-300 uppercase tracking-widest ${
                                        selectedPrice?.label === range.label 
-                                         ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         ? (isDarkMode ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-white border-slate-800')
+                                         : (isDarkMode ? 'bg-white/5 text-white/60 border-white/5 hover:border-emerald-500/40 hover:text-emerald-400' : 'bg-white text-slate-800 border-slate-100')
                                      }`}
                                    >
                                      {range.label}
@@ -204,27 +226,27 @@ export default function Shop() {
                         </div>
 
                         {/* Color Palette Section */}
-                        <div className="border-t border-slate-100 pt-6">
+                        <div className={`border-t pt-8 transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
                            <button 
                              onClick={() => setIsColorOpen(!isColorOpen)}
                              className="w-full flex items-center justify-between group py-1"
                            >
-                              <span className="text-lg font-bold text-slate-800 tracking-tight group-hover:text-sage transition-colors">Color Palette</span>
-                              {isColorOpen ? <ChevronUp size={18} className="text-slate-800" /> : <ChevronDownIcon size={18} className="text-slate-800" />}
+                              <span className={`text-lg font-black tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Chromatics</span>
+                              {isColorOpen ? <ChevronUp size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} /> : <ChevronDownIcon size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} />}
                            </button>
                            {isColorOpen && (
-                              <div className="mt-4 flex flex-wrap gap-2">
+                              <div className="mt-4 grid grid-cols-2 gap-2">
                                  {colors.map(color => (
                                    <button
                                      key={color}
                                      onClick={() => setSelectedColor(selectedColor === color ? null : color)}
-                                     className={`px-4 py-2 rounded-full text-[12px] font-bold border transition-all duration-300 flex items-center gap-2 ${
+                                     className={`px-4 py-3 rounded-2xl text-[10px] font-black border transition-all duration-300 flex items-center gap-3 uppercase tracking-widest ${
                                        selectedColor === color 
-                                         ? 'bg-slate-800 text-white border-slate-800 shadow-md scale-105' 
-                                         : 'bg-white text-slate-800 border-slate-100 hover:border-sage/40 hover:bg-sage/5 hover:text-sage font-medium'
+                                         ? (isDarkMode ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-white border-slate-800')
+                                         : (isDarkMode ? 'bg-white/5 text-white/60 border-white/5 hover:border-emerald-500/40 hover:text-emerald-400' : 'bg-white text-slate-800 border-slate-100')
                                      }`}
                                    >
-                                     <div className={`w-2 h-2 rounded-full border border-slate-200`} style={{ backgroundColor: color.toLowerCase() }} />
+                                     <div className={`w-3 h-3 rounded-full border shadow-sm`} style={{ backgroundColor: color.toLowerCase() }} />
                                      {color}
                                    </button>
                                  ))}
@@ -240,9 +262,9 @@ export default function Shop() {
                               setSelectedPrice(null);
                               setSelectedColor(null);
                             }}
-                            className="w-full py-2 text-[10px] font-black uppercase tracking-[0.2em] text-red-400 hover:text-red-600 transition-colors border border-red-50 rounded-xl hover:bg-red-50"
+                            className="w-full py-4 text-[9px] font-black uppercase tracking-[0.3em] text-red-500 hover:text-red-400 transition-all border border-red-500/10 rounded-2xl hover:bg-red-500/5 mt-8"
                           >
-                            Reset Selected Filters
+                            Reset Laboratory Filters
                           </button>
                         )}
                      </div>
@@ -252,17 +274,18 @@ export default function Shop() {
 
              <div className="flex-grow">
                {products.length === 0 ? (
-                 <div className="h-96 flex flex-col items-center justify-center space-y-4 border-2 border-dashed border-slate-100 rounded-[3rem] text-slate-700">
-                    <Filter size={48} strokeWidth={1} />
-                    <p className="font-serif italic text-xl">No matching blooms found.</p>
+                 <div className={`h-[60vh] flex flex-col items-center justify-center space-y-6 border-2 border-dashed rounded-[4rem] transition-all
+                   ${isDarkMode ? 'border-white/5 text-white/40 bg-white/[0.02]' : 'border-slate-100 text-slate-700 bg-slate-50'}`}>
+                    <Filter size={64} strokeWidth={1} className={isDarkMode ? 'opacity-20' : 'opacity-40'} />
+                    <p className="font-serif italic text-2xl tracking-tight">No matching blooms in our current harvest.</p>
                     <button onClick={() => {
                       setSelectedOccasion(null);
                       setSelectedPrice(null);
                       setSelectedColor(null);
-                    }} className="text-xs font-black uppercase tracking-widest text-sage underline underline-offset-4">Reset all filters</button>
+                    }} className="text-[10px] font-black uppercase tracking-widest text-emerald-500 underline underline-offset-[12px] hover:text-emerald-400">Return to Origin</button>
                  </div>
                ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-20 pb-32">
+                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-24 pb-32">
                    {products.map((p) => (
                      <ProductCard key={p.id} {...p} />
                    ))}
@@ -271,7 +294,7 @@ export default function Shop() {
              </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-32 pt-12 pb-32">
             {products.map((p) => (
               <ProductCard key={p.id} {...p} />
             ))}

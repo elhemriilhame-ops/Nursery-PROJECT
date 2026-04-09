@@ -12,7 +12,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Truck,
-  ArrowRightCircle
+  ArrowRightCircle,
+  LogOut
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer

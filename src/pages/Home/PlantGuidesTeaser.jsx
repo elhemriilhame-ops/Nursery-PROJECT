@@ -1,49 +1,80 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useTheme } from '@/context/ThemeContext';
+import { BookOpen, Sparkles } from 'lucide-react';
 
 export function PlantGuidesTeaser() {
+  const { isDarkMode } = useTheme();
+
   return (
-    <section className="relative flex flex-col md:flex-row items-center py-24">
+    <section className="relative flex flex-col md:flex-row items-center py-32 overflow-visible">
+      
       {/* Visual Part */}
-      <div className="w-full md:w-2/3 h-[70vh] relative overflow-hidden group">
+      <div className={`w-full md:w-2/3 h-[75vh] relative overflow-hidden group rounded-[3.5rem] shadow-2xl transition-all duration-700
+        ${isDarkMode ? 'border-white/5 shadow-black' : 'border-slate-100 shadow-slate-200'}`}>
         <motion.div
-           whileHover={{ scale: 1.05 }}
-           transition={{ duration: 1.5 }}
-           className="w-full h-full bg-cover bg-center grayscale-[0.2] group-hover:grayscale-0 transition-all"
+           whileHover={{ scale: 1.1 }}
+           transition={{ duration: 1.5, ease: "easeOut" }}
+           className={`w-full h-full bg-cover bg-center transition-all duration-1000
+             ${isDarkMode ? 'brightness-75 group-hover:brightness-100' : 'grayscale-[0.2] group-hover:grayscale-0'}`}
            style={{ backgroundImage: 'url("/plant-1.png")' }}
         />
-        {/* Subtle texture or accent */}
-        <div className="absolute top-10 left-10 w-40 h-40 border-l border-t border-white/30 pointer-events-none" />
+        
+        {/* Animated Accent Frames */}
+        <div className={`absolute top-12 left-12 w-48 h-48 border-l-2 border-t-2 transition-all duration-500
+          ${isDarkMode ? 'border-emerald-500/20 group-hover:border-emerald-500/50' : 'border-sage/20 group-hover:border-sage'}`} />
+        
+        {/* Floating Interactive Badge (Dark Mode only) */}
+        {isDarkMode && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-500 hover:scale-110">
+             <Sparkles className="text-emerald-500" size={32} />
+          </div>
+        )}
       </div>
 
       {/* Content Part (Overlapping slightly on desktop) */}
       <motion.div 
-        initial={{ opacity: 0, x: 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full md:w-1/2 md:-ml-24 z-10 bg-white p-12 lg:p-20 shadow-2xl border border-border"
+        className={`w-full md:w-1/2 md:-ml-32 z-10 p-12 lg:p-24 rounded-[3.5rem] border shadow-[0_35px_80px_rgba(0,0,0,0.15)] transition-all duration-700
+          ${isDarkMode ? 'bg-[#141414] border-white/10 text-white shadow-black' : 'bg-white border-slate-100 text-slate-800'}`}
       >
-        <div className="space-y-8">
-          <div className="space-y-2">
-            <span className="text-[10px] uppercase font-bold tracking-[0.4em] text-sage">The Botanist's Journal</span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">Mastering the Art of <br />Greenery</h2>
+        <div className="space-y-10 relative">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className={`text-[10px] font-black uppercase tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>
+                The Botanist's Journal
+              </span>
+              <BookOpen size={14} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+            </div>
+            <h2 className={`text-4xl md:text-5xl lg:text-6xl font-serif font-black tracking-tighter leading-[0.9] italic`}>
+              Mastering the <br />Art of <span className={isDarkMode ? 'text-emerald-400' : 'text-sage'}>Greenery</span>
+            </h2>
           </div>
           
-          <p className="text-charcoal leading-relaxed max-w-md font-sans font-light italic">
+          <p className={`leading-relaxed max-w-md font-serif text-lg italic transition-colors
+            ${isDarkMode ? 'text-white' : 'text-slate-600'}`}>
             "Every plant tells a story. From the way it reaches for the sun to the delicate patterns on its leaves."
           </p>
           
-          <p className="text-charcoal/70 leading-relaxed max-w-md font-sans">
+          <p className={`leading-relaxed max-w-sm text-sm font-bold transition-colors
+            ${isDarkMode ? 'text-white/60' : 'text-slate-500'}`}>
             Our head botanists have compiled a library of essential guides to help you create an indoor sanctuary that thrives. Discover the secrets of light, water, and earth.
           </p>
           
-          <Link to="/guides">
-            <Button variant="outline" className="rounded-none border-charcoal/30 px-10 py-8 uppercase tracking-[0.2em] text-[10px] hover:bg-charcoal hover:text-white transition-all duration-500">
-               Read the Guides
-            </Button>
-          </Link>
+          <div className="pt-6">
+            <Link to="/guides">
+              <Button className={`group px-12 py-8 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] shadow-2xl transition-all hover:scale-105 active:scale-95
+                ${isDarkMode 
+                  ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+                  : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}>
+                 Explore The Archives
+              </Button>
+            </Link>
+          </div>
         </div>
       </motion.div>
     </section>

@@ -298,11 +298,33 @@ export const SELLER_ORDERS = [
     date: 'Apr 05, 2026',
     total: '280 DH',
     location: 'Agadir'
+  },
+  {
+    id: 'ORD-9905',
+    customer: 'Youssef Mansouri',
+    product: 'Desert Bloom Cactus',
+    quantity: 1,
+    status: 'Shipped',
+    date: 'Apr 09, 2026',
+    total: '320 DH',
+    location: 'Tangier'
+  },
+  {
+    id: 'ORD-9906',
+    customer: 'Meriem Rahmouni',
+    product: 'Provence Lavender Bundle',
+    quantity: 5,
+    status: 'Processing',
+    date: 'Apr 09, 2026',
+    total: '900 DH',
+    location: 'Fes'
   }
 ];
 
 export const SELLER_PRODUCTS_DEMO = [
-  { _id: 'dm1', name: 'Atlas Cedar Tree', price: 1200, category: 'Trees', type: 'Plants', stock: 12, image: '/plant-1.png', featured: true },
-  { _id: 'dm2', name: 'White Serenity Lily', price: 350, category: 'Bouquets', type: 'Flowers', stock: 45, image: '/flower-white-roses.png', featured: false },
-  { _id: 'dm3', name: 'Desert Rose', price: 180, category: 'Succulents', type: 'Plants', stock: 8, image: '/plant-jade.jpg', featured: true },
+  { _id: 'dm1', name: 'Atlas Cedar Tree', price: 1200, category: 'Trees', type: 'Plants', stock: 12, image: '/plant-1.png', featured: true, description: 'A majestic conifer native to the Atlas Mountains. Highly resilient and statuesque.' },
+  { _id: 'dm2', name: 'White Serenity Lily', price: 350, category: 'Bouquets', type: 'Flowers', stock: 45, image: '/flower-white-roses.png', featured: false, description: 'Elegant white lilies paired with seasonal greenery for a peaceful atmosphere.' },
+  { _id: 'dm3', name: 'Desert Rose', price: 180, category: 'Succulents', type: 'Plants', stock: 8, image: '/plant-jade.jpg', featured: true, description: 'Stunning succulent that blooms with vibrant pink flowers even in dry conditions.' },
+  { _id: 'dm4', name: 'Moroccan Mint Pot', price: 80, category: 'Indoor Plants', type: 'Plants', stock: 100, image: '/plant-1.png', featured: false, description: 'Fresh, aromatic mint ready for tea or culinary use. Easy to grow indoors.' },
+  { _id: 'dm5', name: 'Argan Leaf Extract Oil', price: 250, category: 'Aromatherapy', type: 'Oils', stock: 15, image: '/oil-1.png', featured: true, description: 'Rare extract from Argan leaves, known for its soothing and antioxidant properties.' },
 ];

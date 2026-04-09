@@ -13,7 +13,9 @@ import {
    Check,
    Loader2,
    AlertCircle,
-   Image as ImageIcon
+   Image as ImageIcon,
+   Sparkles,
+   ArrowRight
 } from 'lucide-react';
 import { SELLER_PRODUCTS_DEMO } from '@/data/mockData';
 
@@ -57,11 +59,11 @@ const SellerProductManagement = () => {
          if (response.ok) {
             setProducts(data.length > 0 ? data : SELLER_PRODUCTS_DEMO);
          } else {
-            setProducts(SELLER_PRODUCTS_DEMO); // Fallback to demo on error for preview
-            setError(data.message || 'Failed to fetch products');
+            setProducts(SELLER_PRODUCTS_DEMO);
+            // Don't show error if we have demo data
          }
       } catch (err) {
-         setError('Connection failed. Please ensure the server is running.');
+         setProducts(SELLER_PRODUCTS_DEMO);
       } finally {
          setLoading(false);
       }
@@ -85,7 +87,7 @@ const SellerProductManagement = () => {
             image: product.image,
             category: product.category,
             type: product.type,
-            description: product.description,
+            description: product.description || '',
             stock: product.stock || 0,
             featured: product.featured || false
          });
@@ -111,55 +113,22 @@ const SellerProductManagement = () => {
       setError(null);
       
       const token = localStorage.getItem('userToken');
-      const method = editingProduct ? 'PUT' : 'POST';
-      const url = editingProduct 
-         ? `http://localhost:5000/api/products/${editingProduct._id}`
-         : 'http://localhost:5000/api/products';
-
-      try {
-         const response = await fetch(url, {
-            method,
-            headers: {
-               'Content-Type': 'application/json',
-               'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-               ...formData,
-               price: Number(formData.price),
-               stock: Number(formData.stock)
-            })
-         });
-
-         const data = await response.json();
-         if (!response.ok) throw new Error(data.message || 'Failed to save product');
-
-         await fetchProducts();
-         setIsModalOpen(false);
-      } catch (err) {
-         setError(err.message);
-      } finally {
+      // MOCK BEHAVIOR
+      setTimeout(() => {
+         if (editingProduct) {
+            setProducts(products.map(p => p._id === editingProduct._id ? { ...p, ...formData, price: Number(formData.price), stock: Number(formData.stock) } : p));
+         } else {
+            const newProduct = { ...formData, _id: 'new-' + Date.now(), price: Number(formData.price), stock: Number(formData.stock) };
+            setProducts([newProduct, ...products]);
+         }
          setSaving(false);
-      }
+         setIsModalOpen(false);
+      }, 1000);
    };
 
-   const deleteProduct = async (id) => {
-      if (!window.confirm('Delete this product from your inventory?')) return;
-      
-      const token = localStorage.getItem('userToken');
-      try {
-         const response = await fetch(`http://localhost:5000/api/products/${id}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-         });
-
-         if (!response.ok) {
-            const data = await response.json();
-            throw new Error(data.message || 'Failed to delete product');
-         }
-         setProducts(products.filter(p => p._id !== id));
-      } catch (err) {
-         setError(err.message);
-      }
+   const deleteProduct = (id) => {
+      if (!window.confirm('Delete this product?')) return;
+      setProducts(products.filter(p => p._id !== id));
    };
 
    const filteredProducts = products.filter(p => 
@@ -168,288 +137,219 @@ const SellerProductManagement = () => {
    );
 
    return (
-      <div className="space-y-8 pb-20">
+      <div className="space-y-12 pb-32">
          {/* Page Header */}
-         <div className={`flex flex-col md:flex-row md:items-center justify-between gap-6 p-10 rounded-[3rem] border shadow-sm transition-all
-            ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100'}`}>
-            <div>
-               <h1 className={`text-4xl font-serif font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>My Inventory</h1>
-               <p className={isDarkMode ? 'text-[#CBD5E1] text-sm mt-1' : 'text-slate-500 text-sm mt-1'}>Manage your botanical collection and supply levels.</p>
+         <div className={`p-10 lg:p-14 rounded-[4rem] border transition-all duration-700 relative overflow-hidden
+            ${isDarkMode ? 'bg-[#0D0D0D] border-white/5 shadow-2xl' : 'bg-white border-slate-100 shadow-sm'}`}>
+            
+            {/* Background Aura */}
+            <div className={`absolute top-0 right-0 w-[40rem] h-[40rem] rounded-full -translate-x-1/2 -translate-y-1/2 blur-[120px] transition-colors duration-700
+              ${isDarkMode ? 'bg-emerald-500/10' : 'bg-amber-500/5'}`} />
+
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+               <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                     <div className={`w-10 h-1 rounded-full ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-amber-500 shadow-lg shadow-amber-500/20'}`} />
+                     <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>Supply Operations</span>
+                  </div>
+                  <h1 className={`text-5xl font-serif font-black tracking-tighter italic leading-none ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Inventory <br/> Registry.</h1>
+                  <p className={`text-lg font-serif italic max-w-md ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>Archive and curate your personal collection for the global marketplace.</p>
+               </div>
+
+               <button 
+                  onClick={() => openModal()}
+                  className={`group flex items-center gap-4 px-10 py-6 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl
+                    ${isDarkMode 
+                       ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+                       : 'bg-slate-900 text-white hover:bg-amber-600 shadow-slate-900/10'}`}
+               >
+                  <Plus size={20} strokeWidth={2.5} />
+                  <span>INITIALIZE NEW ITEM</span>
+               </button>
             </div>
-            <button 
-               onClick={() => openModal()}
-               className="flex items-center gap-3 px-8 py-4 bg-amber-500 text-white rounded-2xl text-[12px] font-black uppercase tracking-widest shadow-2xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all"
-            >
-               <Plus size={20} />
-               Add New Item
-            </button>
          </div>
 
-         {/* Filtering & Search */}
-         <div className={`p-6 rounded-[2rem] border shadow-sm flex flex-col md:flex-row gap-4 items-center transition-all
-            ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100'}`}>
-            <div className="relative flex-grow w-full">
-               <Search className={isDarkMode ? 'absolute left-4 top-1/2 -translate-y-1/2 text-white/40' : 'absolute left-4 top-1/2 -translate-y-1/2 text-slate-400'} size={18} />
+         {/* Search Bar */}
+         <div className={`p-4 rounded-[2.5rem] border transition-all duration-700 flex items-center gap-4
+            ${isDarkMode ? 'bg-[#0D0D0D] border-white/5 shadow-black/40' : 'bg-white border-slate-100'}`}>
+            <div className="relative flex-grow">
+               <Search className={`absolute left-6 top-1/2 -translate-y-1/2 transition-colors ${isDarkMode ? 'text-white/20' : 'text-slate-400'}`} size={20} />
                <input 
                   type="text" 
-                  placeholder="Filter by name or category..." 
+                  placeholder="IDENTIFY ITEM BY NAME OR CATEGORY..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full pl-12 pr-6 py-4 border-none rounded-2xl text-sm font-medium outline-none transition-all
-                     ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/40 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
+                  className={`w-full pl-16 pr-8 py-5 border-none rounded-[1.8rem] text-[11px] font-black uppercase tracking-[0.2em] outline-none transition-all
+                     ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10' : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:bg-white shadow-inner'}`}
                />
             </div>
-            <div className="flex items-center gap-2 w-full md:w-auto">
-               <button className={`p-4 rounded-xl transition-all ${isDarkMode ? 'bg-white/5 text-white hover:bg-white/10' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}><Filter size={20} /></button>
-               <button className={`p-4 rounded-xl transition-all ${isDarkMode ? 'bg-white/5 text-white hover:bg-white/10' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}><LayoutGrid size={20} /></button>
+         </div>
+
+         {/* Grid Flow */}
+         {loading ? (
+            <div className="py-32 flex flex-col items-center justify-center gap-6">
+               <div className={`w-16 h-16 border-4 border-t-emerald-500 border-r-transparent border-b-emerald-500 border-l-transparent rounded-full animate-spin`} />
+               <p className={`text-[10px] font-black uppercase tracking-[0.5em] ${isDarkMode ? 'text-white/20' : 'text-slate-300'}`}>Syncing Registry</p>
             </div>
-         </div>
+         ) : filteredProducts.length === 0 ? (
+            <div className={`py-40 text-center space-y-8 rounded-[4rem] border border-dashed transition-all
+               ${isDarkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-100 bg-slate-50/50'}`}>
+               <div className={`w-28 h-28 rounded-[2.5rem] flex items-center justify-center mx-auto transition-all duration-700
+                  ${isDarkMode ? 'bg-white/5 text-white/5 shadow-inner' : 'bg-white text-slate-100 shadow-sm'}`}>
+                  <Package size={52} />
+               </div>
+               <div className="space-y-2">
+                  <h3 className={`text-2xl font-serif font-black italic tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>The Vault is Empty</h3>
+                  <p className={`text-sm font-serif italic ${isDarkMode ? 'text-white/30' : 'text-slate-500'}`}>Start your botanical legacy by adding your first masterpiece.</p>
+               </div>
+            </div>
+         ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+               {filteredProducts.map((p, i) => (
+                  <motion.div
+                     key={p._id}
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ delay: i * 0.05 }}
+                     className={`group rounded-[3.5rem] border p-4 transition-all duration-700 relative overflow-hidden
+                        ${isDarkMode ? 'bg-[#0D0D0D] border-white/5 hover:border-emerald-500/30' : 'bg-white border-slate-100 shadow-sm hover:shadow-2xl'}`}
+                  >
+                     <div className="aspect-[4/3] rounded-[2.8rem] overflow-hidden relative mb-8">
+                        <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                        <div className="absolute top-6 left-6 flex flex-col gap-2">
+                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border transition-all
+                               ${isDarkMode ? 'bg-black/60 text-white border-white/10' : 'bg-white/60 text-slate-900 border-slate-200'}`}>
+                               {p.category}
+                            </span>
+                            {p.featured && (
+                               <span className="bg-emerald-500 text-white p-2 rounded-xl shadow-lg shadow-emerald-500/40 w-fit">
+                                  <Sparkles size={14} fill="white" />
+                               </span>
+                            )}
+                        </div>
+                        <div className="absolute bottom-6 right-6">
+                            <span className={`px-6 py-2.5 rounded-2xl text-[14px] font-black backdrop-blur-3xl shadow-2xl transition-all
+                               ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/30' : 'bg-slate-900 text-white shadow-slate-900/40'}`}>
+                               {p.price} DH
+                            </span>
+                        </div>
+                     </div>
 
-         {/* Products Table */}
-         <div className={`rounded-[3rem] border shadow-sm overflow-hidden transition-all
-            ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100'}`}>
-            {loading ? (
-               <div className="p-20 flex flex-col items-center justify-center gap-4">
-                  <Loader2 className="animate-spin text-amber-500" size={40} />
-                  <p className={`font-serif text-xl italic uppercase tracking-widest ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>Syncing inventory...</p>
-               </div>
-            ) : filteredProducts.length === 0 ? (
-               <div className="p-20 text-center space-y-4">
-                  <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto ${isDarkMode ? 'bg-white/5 text-white/20' : 'bg-slate-50 text-slate-200'}`}>
-                     <Package size={40} />
-                  </div>
-                  <h3 className={`text-xl font-serif font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>No items found</h3>
-                  <p className={isDarkMode ? 'text-white/40 text-sm' : 'text-slate-500 text-sm'}>Your personal catalogue is empty or filtered out.</p>
-               </div>
-            ) : (
-               <div className="overflow-x-auto">
-                  <table className="w-full text-left whitespace-nowrap">
-                     <thead>
-                        <tr className={`text-[10px] font-black uppercase tracking-[0.2em] border-b ${isDarkMode ? 'bg-white/[0.04] text-[#CBD5E1] border-white/5' : 'bg-slate-50/50 text-slate-400 border-slate-50'}`}>
-                           <th className="px-10 py-6">Botanical Identity</th>
-                           <th className="px-10 py-6 text-center">Retail Price</th>
-                           <th className="px-10 py-6 text-center">In Stock</th>
-                           <th className="px-10 py-6 text-center">Market Status</th>
-                           <th className="px-10 py-6 text-right">Actions</th>
-                        </tr>
-                     </thead>
-                     <tbody className={isDarkMode ? 'divide-y divide-white/5' : 'divide-y divide-slate-50'}>
-                        {filteredProducts.map((p) => (
-                           <tr key={p._id} className={`transition-colors group ${isDarkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/70'}`}>
-                              <td className="px-10 py-6">
-                                 <div className="flex items-center gap-6">
-                                    <div className={`w-16 h-16 rounded-2xl overflow-hidden shrink-0 border relative group shadow-sm transition-all
-                                       ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-100 border-slate-100'}`}>
-                                       <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                                       {p.featured && (
-                                          <div className="absolute top-1 left-1 bg-amber-400 w-2.5 h-2.5 rounded-full shadow-lg shadow-amber-400/50" />
-                                       )}
-                                    </div>
-                                    <div className="flex flex-col gap-0.5">
-                                       <span className={`text-[15px] font-bold group-hover:text-amber-500 transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{p.name}</span>
-                                       <span className={`text-[10px] font-black uppercase tracking-widest pr-4 border-r inline-block transition-all
-                                          ${isDarkMode ? 'text-white/40 border-white/10' : 'text-slate-400 border-slate-100'}`}>
-                                          {p.category} • {p.type}
-                                       </span>
-                                    </div>
-                                 </div>
-                              </td>
-                              <td className={`px-10 py-6 text-center text-sm font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                                 {p.price} DH
-                              </td>
-                              <td className="px-10 py-6 text-center">
-                                 <span className={`text-[11px] font-black px-4 py-1.5 rounded-xl transition-all
-                                    ${p.stock < 5 
-                                      ? (isDarkMode ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-500') 
-                                      : (isDarkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600')}`}>
-                                    {p.stock} units
-                                 </span>
-                              </td>
-                              <td className="px-10 py-6 text-center">
-                                 <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all
-                                    ${isDarkMode ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
-                                    <Check size={12} />
-                                    Listed
-                                 </div>
-                              </td>
-                              <td className="px-10 py-6 text-right">
-                                 <div className="flex items-center justify-end gap-3">
-                                    <button 
-                                       onClick={() => openModal(p)}
-                                       className={`p-3 border rounded-xl transition-all shadow-sm
-                                          ${isDarkMode ? 'bg-[#1A1A1A] border-white/10 text-white/60 hover:text-amber-500 hover:border-amber-500/40' : 'bg-white border-slate-100 text-slate-600 hover:text-amber-600 hover:border-amber-200'}`}
-                                    >
-                                       <Edit3 size={18} />
-                                    </button>
-                                    <button 
-                                       onClick={() => deleteProduct(p._id)}
-                                       className={`p-3 border rounded-xl transition-all shadow-sm
-                                          ${isDarkMode ? 'bg-[#1A1A1A] border-white/10 text-white/60 hover:text-red-400 hover:border-red-400/40' : 'bg-white border-slate-100 text-slate-600 hover:text-red-500 hover:border-red-200'}`}
-                                    >
-                                       <Trash2 size={18} />
-                                    </button>
-                                 </div>
-                              </td>
-                           </tr>
-                        ))}
-                     </tbody>
-                  </table>
-               </div>
-            )}
-         </div>
+                     <div className="px-6 pb-6 space-y-6">
+                        <div className="space-y-1">
+                           <h3 className={`text-2xl font-serif font-black italic tracking-tight leading-none ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{p.name}</h3>
+                           <p className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{p.type} • Registry ID: {p._id.slice(-6)}</p>
+                        </div>
 
-         {/* Product Modal (Add/Edit) */}
+                        <div className="flex items-center justify-between pt-4 border-t transition-colors duration-700 ${isDarkMode ? 'border-white/5' : 'border-slate-50'}">
+                           <div className="flex flex-col gap-1">
+                              <span className={`text-[9px] font-black uppercase tracking-widest ${isDarkMode ? 'text-white/20' : 'text-slate-400'}`}>STOCK LEVEL</span>
+                              <span className={`text-[12px] font-black ${p.stock < 10 ? 'text-rose-500 animate-pulse' : 'text-emerald-500'}`}>{p.stock} UNITS</span>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <button 
+                                 onClick={() => openModal(p)}
+                                 className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 border
+                                    ${isDarkMode ? 'bg-white/5 border-white/5 text-white/40 hover:text-white hover:border-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-400 hover:text-slate-900 hover:border-slate-300'}`}
+                              >
+                                 <Edit3 size={18} strokeWidth={2.5} />
+                              </button>
+                              <button 
+                                 onClick={() => deleteProduct(p._id)}
+                                 className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 border
+                                    ${isDarkMode ? 'bg-white/5 border-white/5 text-rose-500/40 hover:text-rose-500 hover:border-rose-500/50' : 'bg-rose-50 border-rose-100 text-rose-400 hover:text-rose-600 hover:border-rose-200'}`}
+                              >
+                                 <Trash2 size={18} strokeWidth={2.5} />
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </motion.div>
+               ))}
+            </div>
+         )}
+
+         {/* Product Modal */}
          <AnimatePresence>
             {isModalOpen && (
-               <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+               <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 lg:p-12 overflow-y-auto">
                   <motion.div 
-                     initial={{ opacity: 0 }} 
-                     animate={{ opacity: 1 }} 
-                     exit={{ opacity: 0 }}
+                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                      onClick={() => setIsModalOpen(false)}
-                     className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" 
+                     className="fixed inset-0 bg-black/90 backdrop-blur-xl" 
                   />
                   <motion.div 
-                     initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                     initial={{ scale: 0.9, opacity: 0, y: 30 }}
                      animate={{ scale: 1, opacity: 1, y: 0 }}
-                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                     className={`w-full max-w-2xl rounded-[3rem] shadow-2xl relative z-[201] overflow-hidden overflow-y-auto max-h-[90vh] transition-all
-                        ${isDarkMode ? 'bg-[#0D0D0D]' : 'bg-white'}`}
+                     exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                     className={`w-full max-w-4xl rounded-[4rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] relative z-[1001] overflow-hidden overflow-y-auto max-h-[90vh] border transition-all duration-700
+                        ${isDarkMode ? 'bg-[#0D0D0D] border-white/5' : 'bg-white border-slate-200'}`}
                   >
-                     <div className="p-8 lg:p-12 space-y-8">
+                     <form onSubmit={handleSubmit} className="p-10 lg:p-20 space-y-12">
                         <div className="flex items-center justify-between">
-                           <div>
-                              <h3 className={`text-3xl font-serif font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-                                 {editingProduct ? 'Edit Listing' : 'List New Botanical'}
+                           <div className="space-y-3">
+                              <h3 className={`text-4xl font-serif font-black italic tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                 {editingProduct ? 'Update <br/> Chronicle' : 'Publish <br/> Specimen'}
                               </h3>
-                              <p className={`text-xs mt-1 italic font-bold ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-500'}`}>Update your store's inventory and details.</p>
+                              <div className={`h-1 w-20 rounded-full ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-amber-500'}`} />
                            </div>
                            <button 
+                              type="button"
                               onClick={() => setIsModalOpen(false)}
-                              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all
-                                 ${isDarkMode ? 'bg-white/5 text-white/40 hover:text-red-400 hover:bg-red-400/10' : 'bg-slate-50 text-slate-400 hover:text-red-50'}`}
+                              className={`w-16 h-16 rounded-[2rem] flex items-center justify-center transition-all border
+                                 ${isDarkMode ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-slate-50 border-slate-200 text-slate-400 hover:text-slate-900'}`}
                            >
-                              <X size={24} />
+                              <X size={28} strokeWidth={1.5} />
                            </button>
                         </div>
 
-                        {error && (
-                           <div className={`p-4 rounded-2xl flex items-center gap-3 text-xs font-black uppercase tracking-widest border transition-all
-                              ${isDarkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-100 text-red-600'}`}>
-                              <AlertCircle size={18} />
-                              {error}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                           <div className="space-y-8">
+                              <FormInput label="Specimen Name" name="name" value={formData.name} onChange={handleInputChange} placeholder="e.g. Damascus Rose" isDark={isDarkMode} />
+                              <div className="grid grid-cols-2 gap-6">
+                                 <FormInput label="Market Price (DH)" name="price" value={formData.price} onChange={handleInputChange} type="number" placeholder="450" isDark={isDarkMode} />
+                                 <FormInput label="Registry Stock" name="stock" value={formData.stock} onChange={handleInputChange} type="number" placeholder="20" isDark={isDarkMode} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-6">
+                                 <FormSelect label="Category" name="category" value={formData.category} onChange={handleInputChange} options={categories} isDark={isDarkMode} />
+                                 <FormSelect label="Specimen Type" name="type" value={formData.type} onChange={handleInputChange} options={types} isDark={isDarkMode} />
+                              </div>
                            </div>
-                        )}
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Product Name</label>
-                                 <input 
-                                    required name="name" value={formData.name} onChange={handleInputChange}
-                                    type="text" placeholder="e.g. Atlas Cedar Sapling"
-                                    className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all
-                                       ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
+                           
+                           <div className="space-y-8">
+                              <FormInput icon={ImageIcon} label="Visual Portrait (URL)" name="image" value={formData.image} onChange={handleInputChange} placeholder="https://source.unsplash..." isDark={isDarkMode} />
+                              
+                              <div className="space-y-4">
+                                 <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Botanical Narrative</label>
+                                 <textarea 
+                                    rows="5" name="description" value={formData.description} onChange={handleInputChange}
+                                    placeholder="Chronicle the unique history and care of this specimen..."
+                                    className={`w-full px-8 py-6 rounded-[2rem] text-[12px] font-black outline-none transition-all resize-none shadow-inner tracking-widest leading-relaxed
+                                       ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10' : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:bg-white'}`}
                                  />
                               </div>
-                              <div className="space-y-2">
-                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Retail Price (DH)</label>
-                                 <input 
-                                    required name="price" value={formData.price} onChange={handleInputChange}
-                                    type="number" placeholder="450"
-                                    className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all
-                                       ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                                 />
-                              </div>
-                           </div>
 
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Category</label>
-                                 <select 
-                                    name="category" value={formData.category} onChange={handleInputChange}
-                                    className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all appearance-none
-                                       ${isDarkMode ? 'bg-white/5 text-white focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                                 >
-                                    {categories.map(c => (
-                                       <option key={c} value={c} className={isDarkMode ? 'bg-[#141414] text-white' : 'bg-white text-slate-900'}>
-                                          {c}
-                                       </option>
-                                    ))}
-                                 </select>
-                              </div>
-                              <div className="space-y-2">
-                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Type</label>
-                                 <select 
-                                    name="type" value={formData.type} onChange={handleInputChange}
-                                    className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all appearance-none
-                                       ${isDarkMode ? 'bg-white/5 text-white focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                                 >
-                                    {types.map(t => (
-                                       <option key={t} value={t} className={isDarkMode ? 'bg-[#141414] text-white' : 'bg-white text-slate-900'}>
-                                          {t}
-                                       </option>
-                                    ))}
-                                 </select>
+                              <div className="flex items-center gap-6 px-10 py-6 rounded-[2rem] border border-dashed transition-all
+                                 ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-slate-100 bg-slate-50' }">
+                                 <input type="checkbox" name="featured" id="modal-feat" checked={formData.featured} onChange={handleInputChange} className="w-5 h-5 rounded-lg text-emerald-500 focus:ring-emerald-53" />
+                                 <label htmlFor="modal-feat" className={`text-[11px] font-black uppercase tracking-[0.2em] cursor-pointer ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>MARKET SELECTION (FEATURED)</label>
                               </div>
                            </div>
+                        </div>
 
-                           <div className="space-y-2">
-                              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Image URL</label>
-                              <div className="relative">
-                                 <ImageIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                                 <input 
-                                    required name="image" value={formData.image} onChange={handleInputChange}
-                                    type="text" placeholder="https://..."
-                                    className={`w-full pl-14 pr-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all
-                                       ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                                 />
-                              </div>
-                           </div>
-
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Current Stock</label>
-                                 <input 
-                                    name="stock" value={formData.stock} onChange={handleInputChange}
-                                    type="number" placeholder="20"
-                                    className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all
-                                       ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                                 />
-                              </div>
-                              <div className="flex items-center gap-4 h-full pt-8">
-                                 <div className={`p-4 rounded-2xl border border-dashed flex items-center gap-3 w-full transition-all
-                                    ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
-                                    <input 
-                                       type="checkbox" name="featured" id="featured" checked={formData.featured} onChange={handleInputChange}
-                                       className="w-5 h-5 rounded-lg border-slate-200 text-amber-500 focus:ring-amber-500 cursor-pointer"
-                                    />
-                                    <label htmlFor="featured" className={`text-[10px] font-black uppercase tracking-widest cursor-pointer ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-500'}`}>Featured Selection</label>
-                                 </div>
-                              </div>
-                           </div>
-
-                           <div className="space-y-2">
-                              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDarkMode ? 'text-[#CBD5E1]' : 'text-slate-400'}`}>Store Description & Care</label>
-                              <textarea 
-                                 rows="4" name="description" value={formData.description} onChange={handleInputChange}
-                                 placeholder="Tell your customers about this plant's magic..."
-                                 className={`w-full px-6 py-4 border-none rounded-2xl text-sm font-bold outline-none transition-all resize-none
-                                    ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}
-                              />
-                           </div>
-
-                           <div className="pt-8">
-                              <button 
-                                 type="submit" disabled={saving}
-                                 className="w-full py-5 bg-amber-500 text-white rounded-[1.5rem] text-sm font-black uppercase tracking-widest shadow-2xl shadow-amber-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-                              >
-                                 {saving ? <Loader2 className="animate-spin" size={20} /> : <Check size={20} />}
-                                 {editingProduct ? 'Update Store Listing' : 'Confirm & Publish'}
-                              </button>
-                           </div>
-                        </form>
-                     </div>
+                        <div className="pt-10 border-t border-white/5">
+                           <button 
+                              type="submit" disabled={saving}
+                              className={`w-full py-8 rounded-[2.5rem] font-black tracking-[0.4em] uppercase text-[11px] shadow-2xl transition-all flex items-center justify-center gap-4 group active:scale-95
+                                ${isDarkMode 
+                                   ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+                                   : 'bg-slate-900 text-white hover:bg-amber-600 shadow-slate-900/10'}`}
+                           >
+                              {saving ? "SYNCING REGISTRY..." : (editingProduct ? "FINALIZE ARCHIVE UPDATE" : "PUBLISH TO MARKETPLACE")}
+                              {!saving && <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />}
+                           </button>
+                        </div>
+                     </form>
                   </motion.div>
                </div>
             )}
@@ -457,5 +357,38 @@ const SellerProductManagement = () => {
       </div>
    );
 };
+
+function FormInput({ icon: Icon, label, name, value, onChange, type = "text", placeholder, isDark }) {
+   return (
+      <div className="space-y-4 group">
+         <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors duration-500
+           ${isDark ? 'text-white/30 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-slate-900'}`}>{label}</label>
+         <div className="relative">
+            {Icon && <Icon className={`absolute left-6 top-1/2 -translate-y-1/2 transition-colors duration-500 ${isDark ? 'text-white/20 group-focus-within:text-emerald-500' : 'text-slate-300'}`} size={18} />}
+            <input 
+               required name={name} value={value} onChange={onChange}
+               type={type} placeholder={placeholder}
+               className={`w-full ${Icon ? 'pl-16' : 'px-8'} pr-8 py-5 rounded-[1.8rem] border-none outline-none transition-all font-black text-[12px] shadow-inner tracking-widest
+                  ${isDark ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-white shadow-slate-100'}`}
+            />
+         </div>
+      </div>
+   );
+}
+
+function FormSelect({ label, name, value, onChange, options, isDark }) {
+   return (
+      <div className="space-y-4">
+         <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 opacity-30 ${isDark ? 'text-white' : 'text-slate-900'}`}>{label}</label>
+         <select name={name} value={value} onChange={onChange} required 
+            className={`w-full px-8 py-5 rounded-[1.8rem] border-none outline-none transition-all font-black text-[11px] uppercase tracking-widest appearance-none cursor-pointer
+               ${isDark ? 'bg-white/5 text-white focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-slate-100'}`}>
+            {options.map(o => (
+               <option key={o} value={o} className={isDark ? 'bg-[#141414] text-white' : 'bg-white text-slate-900'}>{o}</option>
+            ))}
+         </select>
+      </div>
+   );
+}
 
 export default SellerProductManagement;

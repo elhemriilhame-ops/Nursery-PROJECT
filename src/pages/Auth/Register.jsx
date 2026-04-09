@@ -17,12 +17,15 @@ import {
   Phone,
   MapPin,
   Award,
-  Briefcase
+  Briefcase,
+  Sparkles,
+  Truck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -42,7 +45,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Import login from context
+  const { login } = useAuth();
+  const { isDarkMode } = useTheme();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,36 +58,8 @@ const Register = () => {
     setSuccess(false);
     setLoading(true);
 
-    // MOCK REGISTER BYPASS (While MongoDB is offline)
+    // MOCK REGISTER BYPASS
     setTimeout(() => {
-      const mockUser = {
-        _id: 'mock-user-' + Date.now(),
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-        token: 'mock-jwt-token',
-        // Customer specific data
-        ...(formData.role === 'customer' && {
-          phone: formData.phone,
-          location: formData.location
-        }),
-        // Seller specific data
-        ...(formData.role === 'pépiniériste' && {
-          cin: formData.cin,
-          specialty: formData.specialty,
-          phone: formData.phone,
-          location: formData.location,
-          commercialRegister: formData.commercialRegister
-        }),
-        // Delivery specific data
-        ...(formData.role === 'livreur' && {
-          cin: formData.cin,
-          phone: formData.phone,
-          location: formData.location,
-          vehicleType: formData.vehicleType
-        })
-      };
-      // Instead of logging in right away, we show success and clear form
       setSuccess(true);
       setFormData({
         name: '', email: '', password: '', role: '',
@@ -102,131 +78,121 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#FCFCFB] text-charcoal selection:bg-sage/20 selection:text-sage relative">
+    <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-colors duration-700 relative
+      ${isDarkMode ? 'bg-[#050505]' : 'bg-[#FCFCFB]'}`}>
+      
+      {/* Success Modal */}
       <AnimatePresence>
         {success && (
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 30 }} 
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.6, type: 'spring' }}
-              className="bg-white p-12 max-w-sm w-full flex flex-col items-center text-center shadow-2xl rounded-[2rem] border border-sage/10 relative"
+              className={`p-12 max-w-sm w-full flex flex-col items-center text-center rounded-[3.5rem] border shadow-2xl relative
+                ${isDarkMode ? 'bg-[#141414] border-white/10 text-white' : 'bg-white border-slate-100'}`}
             >
-               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 relative">
-                 <UserCheck size={32} className="text-emerald-500 relative z-10" />
+               <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 relative
+                 ${isDarkMode ? 'bg-emerald-500/20 shadow-[0_0_30px_#10b98133]' : 'bg-emerald-50'}`}>
+                 <UserCheck size={40} className="text-emerald-500 relative z-10" />
                </div>
                
-               <h2 className="text-2xl font-serif font-black text-slate-800 mb-2">Success!</h2>
-               <p className="text-slate-900 leading-relaxed mb-8 text-sm">
-                 Account Successfully Created.<br/>You can now proceed to login.
+               <h2 className="text-3xl font-serif font-black italic tracking-tight mb-4 text-emerald-500">Welcome Aboard</h2>
+               <p className={`leading-relaxed mb-10 text-sm font-bold ${isDarkMode ? 'text-white/60' : 'text-slate-600'}`}>
+                 Your botanical profile is ready.<br/>You can now enter the boutique.
                </p>
                
-               <Button onClick={() => navigate('/login')} className="w-full bg-sage text-white hover:bg-sage/90 h-14 rounded-2xl font-bold shadow-lg shadow-sage/20 transition-all duration-300">
-                  Proceed to Login
+               <Button onClick={() => navigate('/login')} className={`w-full h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black shadow-2xl transition-all
+                 ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-sage text-white shadow-sage/20'}`}>
+                  Proceed to Portal
                </Button>
-               
-               <button onClick={() => setSuccess(false)} className="mt-4 text-xs font-bold text-slate-800 hover:text-slate-600 transition-colors uppercase tracking-widest">
-                  Close
-               </button>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Profile Details Modal */}
       <AnimatePresence>
         {showRoleModal && (
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-[900] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4"
           >
             <motion.div 
               initial={{ scale: 0.95, opacity: 0, y: 20 }} 
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              className="bg-white p-8 max-w-lg w-full rounded-[2rem] shadow-2xl relative max-h-[90vh] overflow-y-auto border border-sage/10"
+              className={`p-10 max-w-lg w-full rounded-[4rem] shadow-2xl relative max-h-[90vh] overflow-y-auto border transition-all duration-700
+                ${isDarkMode ? 'bg-[#141414] border-white/5 text-white' : 'bg-white border-slate-100'}`}
             >
-               <h2 className="text-2xl font-serif font-black text-slate-800 mb-2 w-full text-center tracking-tight">
-                 Almost done!
-               </h2>
-               <p className="text-center text-slate-500 mb-8 text-sm font-medium">Please provide a few more details to set up your <span className="text-sage font-black uppercase tracking-widest">{formData.role}</span> profile.</p>
+               <h2 className="text-3xl font-serif font-black italic tracking-tighter mb-4 text-center">Complete Setup</h2>
+               <p className={`text-center mb-10 text-sm font-serif italic ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>
+                 Provide a few more identifiers for your <span className="text-emerald-500 font-black uppercase tracking-widest">{formData.role}</span> credentials.
+               </p>
 
-               <form onSubmit={handleRegister} className="space-y-6">
+               <form onSubmit={handleRegister} className="space-y-8">
                  {formData.role === 'customer' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Phone *</label>
-                        <div className="relative group">
-                          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="0600000000" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Main Address *</label>
-                        <div className="relative group">
-                          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                          <input name="location" value={formData.location} onChange={handleChange} required placeholder="Number, rue, City name..." className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" />
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                       <ModalInput icon={Phone} label="Contact" name="phone" value={formData.phone} onChange={handleChange} placeholder="06..." isDark={isDarkMode} />
+                       <ModalInput icon={MapPin} label="Home Port" name="location" value={formData.location} onChange={handleChange} placeholder="Agadir..." isDark={isDarkMode} />
                     </div>
                  )}
 
                  {(formData.role === 'pépiniériste' || formData.role === 'livreur') && (
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">CIN *</label>
-                          <div className="relative group"><CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="cin" value={formData.cin} onChange={handleChange} required placeholder="AB123456" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Phone *</label>
-                          <div className="relative group"><Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="0600000000" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
-                        </div>
-                      </div>
+                    <div className="space-y-8">
+                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                          <ModalInput icon={CreditCard} label="Identity (CIN)" name="cin" value={formData.cin} onChange={handleChange} placeholder="AB123..." isDark={isDarkMode} />
+                          <ModalInput icon={Phone} label="Direct Line" name="phone" value={formData.phone} onChange={handleChange} placeholder="06..." isDark={isDarkMode} />
+                       </div>
 
-                      {formData.role === 'pépiniériste' ? (
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Specialty Marketplace *</label>
-                          <div className="relative group">
-                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                            <select name="specialty" value={formData.specialty} onChange={handleChange} required className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm appearance-none cursor-pointer text-charcoal">
-                              <option value="" disabled>Select your specialty...</option><option value="plants">Plants & Nursery</option><option value="flowers">Flowers & Bouquets</option><option value="oils">Botanical Oils & Care</option>
-                            </select>
+                       {formData.role === 'pépiniériste' ? (
+                          <div className="space-y-3 group">
+                            <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors ${isDarkMode ? 'text-white/30' : 'text-slate-400'}`}>Market Specialty</label>
+                            <div className="relative">
+                              <Briefcase className={`absolute left-6 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`} size={18} />
+                              <select name="specialty" value={formData.specialty} onChange={handleChange} required 
+                                className={`w-full pl-16 pr-8 py-5 rounded-2xl text-[12px] font-black outline-none transition-all appearance-none cursor-pointer
+                                  ${isDarkMode ? 'bg-white/5 text-white border-none focus:bg-white/10' : 'bg-slate-50 text-slate-900 border-none shadow-inner'}`}>
+                                <option value="" disabled className={isDarkMode ? 'bg-zinc-900' : ''}>Focus...</option>
+                                <option value="plants" className={isDarkMode ? 'bg-zinc-900' : ''}>Nursery & Plants</option>
+                                <option value="flowers" className={isDarkMode ? 'bg-zinc-900' : ''}>Flowers & Bouquets</option>
+                                <option value="oils" className={isDarkMode ? 'bg-zinc-900' : ''}>Botanical Extracts</option>
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Vehicle Type *</label>
-                          <div className="relative group">
-                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} />
-                            <select name="vehicleType" value={formData.vehicleType || ''} onChange={handleChange} required className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm appearance-none cursor-pointer text-charcoal">
-                              <option value="" disabled>Select vehicle...</option><option value="moto">Motorcycle / Scooter</option><option value="car">Car (Hatchback/Sedan)</option><option value="van">Cargo Van</option><option value="truck">Refrigerated Truck</option>
-                            </select>
+                       ) : (
+                          <div className="space-y-3 group">
+                            <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors ${isDarkMode ? 'text-white/30' : 'text-slate-400'}`}>Vessel Type</label>
+                            <div className="relative">
+                              <Truck className={`absolute left-6 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`} size={18} />
+                              <select name="vehicleType" value={formData.vehicleType || ''} onChange={handleChange} required 
+                                className={`w-full pl-16 pr-8 py-5 rounded-2xl text-[12px] font-black outline-none transition-all appearance-none cursor-pointer
+                                  ${isDarkMode ? 'bg-white/5 text-white border-none focus:bg-white/10' : 'bg-slate-50 text-slate-900 border-none shadow-inner'}`}>
+                                <option value="" disabled className={isDarkMode ? 'bg-zinc-900' : ''}>Select Vessel...</option>
+                                <option value="moto" className={isDarkMode ? 'bg-zinc-900' : ''}>Scout (Moto)</option>
+                                <option value="car" className={isDarkMode ? 'bg-zinc-900' : ''}>Swift (Car)</option>
+                                <option value="van" className={isDarkMode ? 'bg-zinc-900' : ''}>Cargo (Van)</option>
+                                <option value="truck" className={isDarkMode ? 'bg-zinc-900' : ''}>Heavy (Truck)</option>
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                       )}
 
-                      <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Operating Zones (Location) *</label>
-                        <div className="relative group"><MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="location" value={formData.location} onChange={handleChange} required placeholder="e.g. Nursery Agadir Center" className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Commercial Register or License *</label>
-                        <div className="relative group"><Award className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={16} /><input name="commercialRegister" value={formData.commercialRegister} onChange={handleChange} required placeholder="N° Registre de commerce / Patente..." className="w-full pl-11 pr-4 py-4 bg-[#fbfbfb] border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm" /></div>
-                      </div>
+                       <ModalInput icon={MapPin} label="Operating Zone" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Agadir Center" isDark={isDarkMode} />
+                       <ModalInput icon={Award} label="Commercial Registry" name="commercialRegister" value={formData.commercialRegister} onChange={handleChange} placeholder="Registration N°..." isDark={isDarkMode} />
                     </div>
                  )}
 
-                 <div className="flex gap-4 pt-6 border-t border-slate-100 mt-8">
-                   <button type="button" onClick={() => setShowRoleModal(false)} className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Back</button>
-                   <Button type="submit" disabled={loading} className="w-full bg-sage text-white hover:bg-sage/90 py-4 h-auto rounded-2xl font-bold text-sm shadow-lg shadow-sage/20 transition-all duration-300">
-                     {loading ? 'Processing...' : 'Complete Setup'}
+                 <div className="flex gap-6 pt-10 border-t border-white/5">
+                   <button type="button" onClick={() => setShowRoleModal(false)} className={`px-8 py-4 text-[10px] font-black uppercase tracking-widest transition-colors ${isDarkMode ? 'text-white/20 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>BACK</button>
+                   <Button type="submit" disabled={loading} className={`w-full py-6 rounded-2xl h-auto font-black uppercase tracking-[0.3em] text-[10px] shadow-2xl transition-all
+                     ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}>
+                     {loading ? 'PROCESSING...' : 'INITIALIZE PROFILE'}
                    </Button>
                  </div>
                </form>
@@ -235,167 +201,171 @@ const Register = () => {
         )}
       </AnimatePresence>
 
-      {/* Decorative Visual Side */}
+      {/* Decorative Branding Side */}
       <div className="hidden lg:block relative p-12 h-full order-last lg:order-first">
-        <div className="absolute inset-0 bg-sage/5 rounded-[3rem] m-8 overflow-hidden">
-          <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-sage/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-[100px]" />
-          <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-sage/5 rounded-full translate-x-1/4 translate-y-1/4 blur-[100px]" />
+        <div className={`absolute inset-0 rounded-[4rem] m-8 overflow-hidden border transition-all duration-700
+           ${isDarkMode ? 'bg-white/5 border-white/5 shadow-black' : 'bg-sage/5 border-slate-100 shadow-slate-100/50'}`}>
+          <div className={`absolute top-0 left-0 w-[45rem] h-[45rem] rounded-full -translate-x-1/2 -translate-y-1/2 blur-[100px] transition-colors
+              ${isDarkMode ? 'bg-emerald-500/10' : 'bg-sage/10'}`} />
+          <div className={`absolute bottom-0 right-0 w-[45rem] h-[45rem] rounded-full translate-x-1/4 translate-y-1/4 blur-[100px] transition-colors
+              ${isDarkMode ? 'bg-emerald-500/5' : 'bg-sage/5'}`} />
 
-          <div className="relative h-full flex flex-col items-center justify-center p-20 text-center">
+          <div className="relative h-full flex flex-col items-center justify-center p-24 text-center space-y-12">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center text-sage mb-8"
+              className={`w-28 h-28 rounded-[2.5rem] shadow-2xl flex items-center justify-center transition-all duration-700
+                  ${isDarkMode ? 'bg-[#141414] text-emerald-500 border border-white/5' : 'bg-white text-sage'}`}
             >
-              <Sprout size={48} />
+              <Sprout size={52} strokeWidth={1.5} />
             </motion.div>
-            <h2 className="text-5xl font-serif font-black mb-6 text-slate-800 leading-tight">Join the <br /> nursery.</h2>
-            <p className="text-slate-800 max-w-sm text-lg italic tracking-tight">Share your blooms or discover rare plants from around the world.</p>
+            
+            <div className="space-y-6">
+              <h2 className={`text-6xl font-serif font-black italic tracking-tighter leading-[0.9] transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Join the <br /> Nursery.</h2>
+              <p className={`max-w-xs mx-auto text-lg font-serif italic transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-600'}`}>"Share your harvests or discover rare specimens from our curated global network."</p>
+            </div>
 
-            <div className="mt-20 flex flex-col items-start gap-4">
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                <ShieldCheck size={20} className="text-sage" /> Your privacy is protected
-              </div>
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                <ShieldCheck size={20} className="text-sage" /> Secure payments (Stripe)
-              </div>
-              <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                <ShieldCheck size={20} className="text-sage" /> Customer support available
-              </div>
+            <div className="mt-20 space-y-6">
+              <RegisterPromise label="HERITAGE PROTECTION" isDark={isDarkMode} />
+              <RegisterPromise label="SECURE BOTANICAL TRADE" isDark={isDarkMode} />
+              <RegisterPromise label="24/7 ARTISAN SUPPORT" isDark={isDarkMode} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Form Side */}
+      {/* Primary Form Side */}
       <div className="flex items-center justify-center p-8 lg:p-24 relative overflow-hidden">
-
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="w-full max-w-md space-y-8"
+          className="w-full max-w-md space-y-12 relative z-10"
         >
-          <div className="space-y-4">
-            <h1 className="text-4xl font-serif font-black tracking-tight text-slate-800 leading-tight">Create your <br /> profile.</h1>
-            <p className="text-slate-800 font-medium">Welcome! It's time to join us.</p>
+          <div className="space-y-6">
+             <div className="space-y-3">
+                <h1 className={`text-5xl font-serif font-black italic tracking-tighter leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Begin your <br /> Journey.</h1>
+                <div className={`h-1 w-20 rounded-full ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-sage'}`} />
+             </div>
+             <p className={`font-serif italic text-lg ${isDarkMode ? 'text-white/40' : 'text-slate-600'}`}>Welcome to the atelier. Join our community.</p>
           </div>
 
-          <form onSubmit={handleInitialSubmit} className="space-y-5">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Full Name</label>
-                <div className="relative group">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
-                  <input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    autoComplete="off"
-                    placeholder="e.g. John Doe"
-                    className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
-                  />
+          <form onSubmit={handleInitialSubmit} className="space-y-10">
+            <div className="space-y-6">
+              <AuthInput icon={User} label="Identity" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" isDark={isDarkMode} />
+              <AuthInput icon={Mail} label="Communication" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="email@sunflower.io" isDark={isDarkMode} />
+              <AuthInput icon={Lock} label="Secret Key" name="password" type="password" value={formData.password} onChange={handleChange} placeholder="••••••••" isDark={isDarkMode} />
+
+              {/* Role Selection */}
+              <div className="space-y-4">
+                <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors ${isDarkMode ? 'text-white/30' : 'text-slate-400'}`}>Select Role</label>
+                <div className="grid grid-cols-3 gap-4">
+                  <RoleButton current={formData.role} role="customer" icon={UserCheck} label="PROSPECT" onClick={(r) => setFormData({...formData, role: r})} isDark={isDarkMode} />
+                  <RoleButton current={formData.role} role="pépiniériste" icon={Store} label="ARTISAN" onClick={(r) => setFormData({...formData, role: r})} isDark={isDarkMode} />
+                  <RoleButton current={formData.role} role="livreur" icon={Truck} label="CARRIER" onClick={(r) => setFormData({...formData, role: r})} isDark={isDarkMode} />
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Email</label>
-                <div className="relative group">
-                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
-                  <input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    autoComplete="new-email"
-                    placeholder="your@email.com"
-                    className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Password</label>
-                <div className="relative group">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-sage transition-colors" size={18} />
-                  <input
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    autoComplete="new-password"
-                    placeholder="••••••••••••"
-                    className="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-[1.2rem] focus:ring-4 focus:ring-sage/5 focus:border-sage/20 outline-none transition-all font-medium text-sm shadow-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Role Selection Toggle */}
-              <div className="space-y-3">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-900 ml-4">Your Role</label>
-                <div className="grid grid-cols-3 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: 'customer' })}
-                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'customer' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
-                  >
-                    <UserCheck size={18} className={formData.role === 'customer' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
-                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'customer' ? 'text-sage' : 'text-slate-800'}`}>Customer</p>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: 'pépiniériste' })}
-                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'pépiniériste' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
-                  >
-                    <Store size={18} className={formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'} />
-                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'pépiniériste' ? 'text-sage' : 'text-slate-800'}`}>Seller</p>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: 'livreur' })}
-                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all group ${formData.role === 'livreur' ? 'border-sage bg-sage/5 shadow-inner' : 'border-slate-100 bg-white hover:border-sage/20'}`}
-                  >
-                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={formData.role === 'livreur' ? 'text-sage' : 'text-slate-700 group-hover:text-sage/40'}><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                    <p className={`text-[9px] font-black uppercase tracking-widest ${formData.role === 'livreur' ? 'text-sage' : 'text-slate-800'}`}>Delivery</p>
-                  </button>
-                </div>
-              </div>
-
             </div>
 
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-red-50 text-red-600 p-4 rounded-xl text-xs font-bold flex items-center gap-3 border border-red-100"
-              >
-                <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                {error}
-              </motion.div>
-            )}
-
-            <div className="pt-4">
-              <Button 
+            <Button 
                 type="submit" 
                 disabled={loading || !formData.role} 
-                className="w-full bg-sage text-white hover:bg-sage/90 h-14 rounded-2xl font-bold text-sm shadow-lg shadow-sage/20 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full py-7 rounded-[2rem] font-black tracking-[0.4em] uppercase text-[11px] shadow-2xl transition-all group active:scale-95 disabled:opacity-20
+                  ${isDarkMode 
+                     ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20 shadow-black' 
+                     : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}
               >
-                {loading ? 'Processing...' : 'Create Account'}
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                {loading ? 'PROCESSING...' : 'INITIALIZE PROFILE'}
+                <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" size={18} />
               </Button>
-            </div>
           </form>
 
-          <p className="text-center text-slate-800 text-sm font-medium pt-4">
-            Already a customer?{' '}
-            <Link to="/login" className="text-sage font-black hover:underline underline-offset-4 decoration-2">Sign in</Link>
+          <p className={`text-center text-sm font-medium pt-8 transition-colors ${isDarkMode ? 'text-white/30' : 'text-slate-500'}`}>
+            Already identified?{' '}
+            <Link to="/login" className={`font-black uppercase tracking-widest text-[10px] underline underline-offset-8 transition-colors
+              ${isDarkMode ? 'text-emerald-500 hover:text-white' : 'text-sage hover:text-slate-900'}`}>Sign In</Link>
           </p>
         </motion.div>
+
+        {/* Background Elements */}
+        <div className="absolute top-20 right-20 flex gap-8 opacity-5 pointer-events-none">
+           <ShieldCheck size={120} strokeWidth={1} className={isDarkMode ? 'text-white' : 'text-slate-900'} />
+           <Sparkles size={100} strokeWidth={1} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+        </div>
       </div>
     </div>
   );
 };
+
+function AuthInput({ icon: Icon, label, type = "text", name, value, onChange, placeholder, isDark }) {
+  return (
+    <div className="space-y-3 group">
+      <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 transition-colors
+        ${isDark ? 'text-white/30 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-sage'}`}>
+        {label}
+      </label>
+      <div className="relative">
+        <Icon className={`absolute left-6 top-1/2 -translate-y-1/2 transition-colors duration-500
+          ${isDark ? 'text-white/20 group-focus-within:text-emerald-500' : 'text-slate-300 group-focus-within:text-sage'}`} 
+          size={18} strokeWidth={2} />
+        <input 
+          type={type} 
+          name={name}
+          value={value}
+          onChange={onChange}
+          required
+          placeholder={placeholder}
+          className={`w-full pl-16 pr-8 py-5 rounded-[1.5rem] border-none outline-none transition-all font-black text-xs shadow-inner tracking-widest
+            ${isDark 
+               ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10 shadow-black' 
+               : 'bg-slate-50 text-slate-900 focus:bg-white shadow-slate-200'}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ModalInput({ icon: Icon, label, name, value, onChange, placeholder, isDark }) {
+  return (
+    <div className="space-y-3 group">
+      <label className={`text-[9px] font-black uppercase tracking-[0.3em] ml-4 transition-colors ${isDark ? 'text-white/40' : 'text-slate-400'}`}>{label}</label>
+      <div className="relative">
+        <Icon className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${isDark ? 'text-emerald-500' : 'text-sage'}`} size={16} />
+        <input name={name} value={value} onChange={onChange} required placeholder={placeholder}
+          className={`w-full pl-12 pr-6 py-4 rounded-2xl text-[12px] font-black border-none outline-none transition-all shadow-inner
+            ${isDark ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10 shadow-black' : 'bg-slate-50 text-slate-900 shadow-slate-100'}`} />
+      </div>
+    </div>
+  );
+}
+
+function RoleButton({ current, role, icon: Icon, label, onClick, isDark }) {
+  const isActive = current === role;
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(role)}
+      className={`p-6 rounded-[2rem] border-2 transition-all group flex flex-col items-center gap-4 relative overflow-hidden
+        ${isActive 
+          ? (isDark ? 'border-emerald-500 bg-emerald-500/10 shadow-emerald-500/20' : 'border-sage bg-sage/5') 
+          : (isDark ? 'border-white/5 bg-white/[0.02] hover:border-white/20' : 'border-slate-50 bg-white hover:border-sage shadow-sm shadow-slate-100')
+        }`}
+    >
+      <Icon size={24} className={`transition-all ${isActive ? (isDark ? 'text-emerald-500 drop-shadow-[0_0_8px_#10b981]' : 'text-sage') : 'opacity-20 group-hover:opacity-40'}`} />
+      <p className={`text-[8px] font-black uppercase tracking-widest leading-none ${isActive ? (isDark ? 'text-white' : 'text-sage') : (isDark ? 'text-white/20' : 'text-slate-400')}`}>{label}</p>
+      {isActive && <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full ${isDark ? 'bg-emerald-500' : 'bg-sage'}`} />}
+    </button>
+  );
+}
+
+function RegisterPromise({ label, isDark }) {
+  return (
+    <div className="flex items-center gap-4 group">
+       <div className={`p-3 rounded-xl transition-all ${isDark ? 'bg-white/5 group-hover:bg-emerald-500/10' : 'bg-white group-hover:bg-sage/10'}`}>
+          <ShieldCheck size={18} className={isDark ? 'text-emerald-500' : 'text-sage'} />
+       </div>
+       <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${isDark ? 'text-white/40 group-hover:text-white' : 'text-slate-900'}`}>{label}</span>
+    </div>
+  );
+}
 
 export default Register;

@@ -64,6 +64,58 @@
   }
 }
 
+/* Global fixes for visibility in Dark Mode */
+.dark select, 
+.dark option {
+  background-color: #141414 !important;
+  color: #FFFFFF !important;
+}
+
+.dark input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* 
+ * Global High Contrast Accessibility Override 
+ * Refined to protect buttons and specific white-text containers
+ */
+.dark span:not(button *, .text-white *), 
+.dark p:not(button *, .text-white *), 
+.dark label:not(button *), 
+.dark small:not(button *) {
+  color: #FFFFFF;
+}
+
+.dark .text-white\/20, .dark .text-white\/30, .dark .text-white\/40, 
+.dark .text-white\/50, .dark .text-white\/60, .dark .text-white\/70,
+.dark .text-slate-400, .dark .text-slate-500, .dark .text-zinc-400, .dark .text-gray-400 {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Light Mode Overrides for small text - Protected from buttons and dark-background elements */
+span:not(button *, .text-white, .text-white *, [class*="bg-slate-900"], [class*="bg-slate-900"] *, [class*="bg-black"], [class*="bg-black"] *, [class*="bg-emerald-500"], [class*="bg-emerald-500"] *), 
+p:not(button *, .text-white, .text-white *, [class*="bg-slate-900"], [class*="bg-slate-900"] *, [class*="bg-black"], [class*="bg-black"] *, [class*="bg-emerald-500"], [class*="bg-emerald-500"] *), 
+label:not(button *), 
+small:not(button *) {
+  color: #000000;
+}
+
+.text-slate-400, .text-slate-500, .text-gray-400, .text-zinc-400,
+.text-slate-300, .text-gray-300 {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Ensure buttons always have clear text contrast */
+button span, button p, .btn span, [role="button"] span {
+  color: inherit !important;
+}
+
+.dark .opacity-20, .dark .opacity-30, .dark .opacity-40, .dark .opacity-50, .dark .opacity-60 {
+  opacity: 0.9 !important;
+}
+
 /* Explicit Utility Mapping to keep legacy classes working without @theme rule warnings */
 @layer utilities {
   .font-serif {
@@ -138,12 +190,18 @@
     font-weight: 500;
   }
 
-  /* Universal Hover Pattern for Buttons */
-  button:hover,
-  .btn:hover,
-  [role="button"]:hover {
+  /* Universal Hover Pattern for Buttons - Fixed for Dark Mode */
+  button:not(.no-hover):hover,
+  .btn:not(.no-hover):hover,
+  [role="button"]:not(.no-hover):hover {
     background-color: #A3B18A !important;
     color: white !important;
     border-color: #A3B18A !important;
+  }
+  
+  .dark button:not(.no-hover):hover {
+    background-color: #10b981 !important; /* Neon Green for Dark Mode */
+    color: white !important;
+    border-color: #10b981 !important;
   }
 }

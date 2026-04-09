@@ -1,79 +1,102 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Twitter, Mail } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Mail, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Footer() {
+  const { isDarkMode } = useTheme();
+
   return (
-    <footer className="bg-[#55633C] text-white pt-24 pb-10 border-t border-[#465331] transition-colors duration-300">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12">
+    <footer className={`pt-32 pb-12 transition-all duration-700
+      ${isDarkMode ? 'bg-[#050505] text-white border-t border-white/5' : 'bg-[#55633C] text-white'}`}>
+      
+      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 lg:gap-12 relative z-10">
         {/* Brand Section */}
-        <div className="space-y-8">
-          <Link to="/" className="text-4xl font-serif text-white tracking-tight drop-shadow-sm">Sunflowers</Link>
-          <p className="text-sm text-white/90 leading-loose max-w-sm font-sans font-medium">
-            Bringing the pure essence of nature directly to your doorstep. Our premium selection of exquisite flowers, indigenous plants, and artisanal essential oils is handcrafted for the truly elegant home.
+        <div className="space-y-10 group">
+          <div className="space-y-4">
+             <Link to="/" className="text-5xl font-serif text-white tracking-tighter drop-shadow-2xl italic font-black">Sunflowers</Link>
+             <div className={`h-[1px] w-20 transition-all group-hover:w-40 ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-white/40'}`} />
+          </div>
+          
+          <p className={`text-[15px] leading-[1.8] max-w-sm font-serif italic transition-colors
+            ${isDarkMode ? 'text-white/60' : 'text-white/90'}`}>
+            "Bringing the pure essence of nature directly to your doorstep. Our premium selection is handcrafted for the truly elegant home."
           </p>
-          <div className="flex space-x-5 pt-2">
-            <div className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-charcoal hover:text-white transition-all cursor-pointer">
-              <Instagram size={18} />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-charcoal hover:text-white transition-all cursor-pointer">
-              <Facebook size={18} />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-charcoal hover:text-white transition-all cursor-pointer">
-              <Twitter size={18} />
-            </div>
+          
+          <div className="flex space-x-4 pt-4">
+            {[Instagram, Facebook, Twitter].map((Icon, i) => (
+               <div key={i} className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all cursor-pointer shadow-xl
+                 ${isDarkMode ? 'bg-white/5 hover:bg-emerald-500 hover:text-white border border-white/5' : 'bg-white/20 hover:bg-slate-900 group-hover:scale-110'}`}>
+                 <Icon size={20} strokeWidth={1.5} />
+               </div>
+            ))}
           </div>
         </div>
 
         {/* Quick Links */}
-        <div>
-          <h4 className="text-[11px] uppercase font-sans tracking-[0.25em] font-bold mb-8 text-[#D4DFB2]">Explore Collection</h4>
-          <ul className="space-y-5 text-[15px] font-sans text-white/90 font-medium">
-            <li><Link to="/shop/flowers" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Flower Delivery</Link></li>
-            <li><Link to="/shop/plants" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">House Plants</Link></li>
-            <li><Link to="/shop/oils" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Aromatherapy Oils</Link></li>
-            <li><Link to="/guides" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Expert Care Guides</Link></li>
+        <div className="space-y-10">
+          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>Collections</h4>
+          <ul className="space-y-6 text-[11px] font-black uppercase tracking-widest text-white/50">
+            {['Flower Delivery', 'House Plants', 'Aromatherapy Oils', 'Expert Care Guides'].map((item, i) => (
+               <li key={i}>
+                <Link to="#" className="hover:text-white transition-all flex items-center group">
+                   <ArrowUpRight size={14} className="mr-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                   {item}
+                </Link>
+               </li>
+            ))}
           </ul>
         </div>
 
         {/* Support */}
-        <div>
-          <h4 className="text-[11px] uppercase font-sans tracking-[0.25em] font-bold mb-8 text-[#D4DFB2]">Client Support</h4>
-          <ul className="space-y-5 text-[15px] font-sans text-white/90 font-medium">
-            <li><Link to="/about" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Our Heritage Story</Link></li>
-            <li><Link to="/faq" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Shipping & Delivery</Link></li>
-            <li><Link to="/contact" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Contact The Atelier</Link></li>
-            <li><Link to="/privacy" className="hover:text-[#D4DFB2] hover:pl-2 transition-all flex items-center">Privacy & Terms</Link></li>
+        <div className="space-y-10">
+          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>Atelier Support</h4>
+          <ul className="space-y-6 text-[11px] font-black uppercase tracking-widest text-white/50">
+            {['Our Heritage Story', 'Shipping & Delivery', 'Contact The Atelier', 'Privacy & Terms'].map((item, i) => (
+               <li key={i}>
+                <Link to="#" className="hover:text-white transition-all flex items-center group">
+                   {item}
+                </Link>
+               </li>
+            ))}
           </ul>
         </div>
 
         {/* Newsletter */}
-        <div className="space-y-6">
-          <h4 className="text-[11px] uppercase font-sans tracking-[0.25em] font-bold mb-8 text-[#D4DFB2]">Join The Botanical Club</h4>
-          <p className="text-[15px] text-white/90 font-medium leading-relaxed font-sans pb-2">
-            Subscribe to receive exclusive harvesting tips, VIP insights, and secret seasonal offers.
-          </p>
-          <div className="flex flex-col space-y-3">
-            <Input 
-              type="email" 
-              placeholder="Enter your email address..." 
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/60 px-5 py-6 rounded-none focus-visible:ring-1 focus-visible:ring-white transition-all" 
-            />
-            <Button className="w-full bg-[#D4DFB2] text-[#2D3430] hover:bg-white hover:text-[#2D3430] font-bold tracking-[0.2em] uppercase text-[11px] py-6 rounded-none transition-colors">
-              Subscribe Now
-            </Button>
+        <div className="space-y-10">
+          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>The Botanical Club</h4>
+          <div className={`p-8 rounded-[2.5rem] border transition-all ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-white/10 border-white/20'}`}>
+            <p className="text-[13px] text-white/90 font-bold leading-relaxed mb-8">
+              Subscribe to receive exclusive harvesting tips and seasonal offers.
+            </p>
+            <div className="space-y-4">
+              <Input 
+                type="email" 
+                placeholder="Your email address..." 
+                className={`border-none px-6 py-7 rounded-2xl text-[11px] font-black outline-none transition-all
+                  ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-white/20 text-white placeholder:text-white/60'}`} 
+              />
+              <Button className={`w-full py-7 rounded-2xl font-black tracking-[0.3em] uppercase text-[10px] transition-all shadow-2xl active:scale-95
+                ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-white text-slate-900 hover:bg-slate-100'}`}>
+                Join Atelier
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Footer Bottom Line */}
-      <div className="container mx-auto px-6 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.2em] text-white/70 font-semibold gap-4">
-        <p>© 2026 Sunflowers Botanical. All Rights Reserved.</p>
-        <div className="flex items-center space-x-2">
-           <span>Crafted in Agadir for Elegance</span>
-           <span className="text-[#D4DFB2] px-2">♦</span>
-           <span>Sustainable Harvest</span>
+      <div className={`container mx-auto px-6 mt-32 pt-10 border-t flex flex-col md:flex-row justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] gap-6 transition-colors
+        ${isDarkMode ? 'border-white/5 text-white/20' : 'border-white/10 text-white/60'}`}>
+        <p>© 2026 Sunflowers Botanical Heritage.</p>
+        <div className="flex items-center gap-6">
+           <div className="flex items-center gap-2">
+              <ShieldCheck size={14} className={isDarkMode ? 'text-emerald-500' : 'text-white'} />
+              <span>Sustainable Harvest Only</span>
+           </div>
+           <span className="opacity-20">|</span>
+           <span>Agadir, Morocco</span>
         </div>
       </div>
     </footer>

@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
+import { ShoppingBag, Search, User, Menu, X, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
   const { user, logout } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +49,12 @@ export default function Navbar() {
         </button>
 
         {/* Logo */}
-        <Link to="/" className={cn("text-2xl font-serif tracking-tight absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
+        <Link to="/" className={cn(
+          "text-2xl font-serif tracking-tight absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 transition-colors duration-500", 
+          isScrolled 
+            ? (isDarkMode ? "text-white" : "text-foreground") 
+            : "text-white drop-shadow-md"
+        )}>
           Sunflowers
         </Link>
 
@@ -57,7 +64,12 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
-              className={cn("text-xs uppercase tracking-[0.2em] font-sans font-medium hover:opacity-100 transition-all", isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/80 hover:text-white drop-shadow-md")}
+              className={cn(
+                "text-[10px] uppercase tracking-[0.25em] font-sans font-bold hover:opacity-100 transition-all", 
+                isScrolled 
+                  ? (isDarkMode ? "text-white/60 hover:text-white" : "text-foreground/70 hover:text-foreground") 
+                  : "text-white/80 hover:text-white drop-shadow-md"
+              )}
             >
               {link.name}
             </Link>
@@ -66,7 +78,18 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center space-x-4 lg:space-x-6">
-          <button className={cn("hover:scale-110 transition-transform", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
+          <button 
+            onClick={toggleDarkMode}
+            className={cn("p-2 rounded-full transition-all duration-500", 
+              isScrolled 
+                ? (isDarkMode ? "text-amber-400 bg-white/5" : "text-foreground bg-slate-100") 
+                : "text-white bg-white/10"
+            )}
+          >
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          
+          <button className={cn("hover:scale-110 transition-transform", isScrolled ? (isDarkMode ? "text-white" : "text-foreground") : "text-white drop-shadow-md")}>
             <Search size={22} strokeWidth={1.5} />
           </button>
           <div className="hidden sm:flex items-center">
