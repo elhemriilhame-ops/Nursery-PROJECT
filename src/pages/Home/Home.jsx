@@ -3,6 +3,7 @@ import { HeroSection } from './HeroSection';
 import { FeaturedBoutique } from './FeaturedBoutique';
 import { CategoryPreview } from './CategoryPreview';
 import { PlantGuidesTeaser } from './PlantGuidesTeaser';
+import { StoreReviews } from './StoreReviews';
 import { SellersMap } from '@/components/ui/SellersMap';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -42,6 +43,10 @@ export default function Home() {
             </p>
           </div>
           <FeaturedBoutique />
+        </section>
+
+        <section>
+          <StoreReviews />
         </section>
 
         <PlantGuidesTeaser />

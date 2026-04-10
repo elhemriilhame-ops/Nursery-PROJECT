@@ -30,37 +30,15 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    // MOCK LOGIN BYPASS
-    if (email === 'admin@sunflower.io' || email === 'admin@garden.com') {
-      const mockAdmin = { _id: 'admin', name: 'Admin', role: 'admin', token: 'mock' };
-      login(mockAdmin);
-      navigate('/admin');
-      return;
-    }
-
-    if (email.toLowerCase() === 'nourplant@gmail.com') {
-      const mockSeller = { _id: 'seller', name: 'Nourplant', role: 'pépiniériste', token: 'mock' };
-      login(mockSeller);
-      navigate('/seller/dashboard');
-      return;
-    }
-
-    if (email.toLowerCase() === 'delivery@gmail.com') {
-      const mockDelivery = { _id: 'delivery', name: 'Carrier', role: 'livreur', token: 'mock' };
-      login(mockDelivery);
-      navigate('/delivery/dashboard');
-      return;
-    }
-
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password });
       login(data);
       if (data.role === 'admin') navigate('/admin');
-      else if (data.role === 'pépiniériste') navigate('/seller/dashboard');
-      else if (data.role === 'livreur') navigate('/delivery/dashboard');
+      else if (data.role === 'pépiniériste') navigate('/seller');
+      else if (data.role === 'livreur') navigate('/delivery');
       else navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials');
+      setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -189,6 +167,15 @@ const Login = () => {
             Don't have an account?{' '}
             <Link to="/register" className={`font-black uppercase tracking-widest text-xs underline underline-offset-8 transition-colors text-emerald-500 hover:text-emerald-400`}>Sign Up</Link>
           </p>
+
+          {/* Demo Credentials */}
+          <div className={`mt-6 p-5 rounded-2xl border text-[10px] font-black uppercase tracking-widest space-y-2
+            ${isDarkMode ? 'bg-white/3 border-white/5 text-white/30' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
+            <p className={`mb-3 ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>Demo Access Credentials</p>
+            <p>Admin — admin@garden.com / admin123</p>
+            <p>Seller — nourplant@gmail.com / seller123</p>
+            <p>Delivery — delivery@gmail.com / delivery123</p>
+          </div>
         </motion.div>
 
         {/* Floating Icons */}

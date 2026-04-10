@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { GUIDES } from '@/data/mockData';
+import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, BookOpen, Sparkles, Share2, Bookmark, Clock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,28 @@ import { useTheme } from '@/context/ThemeContext';
 
 export default function Guides() {
   const { isDarkMode } = useTheme();
+  const [guides, setGuides] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const [loading, setLoading] = useState(true);
+
+  const [errorObj, setErrorObj] = useState(null);
+
+  useEffect(() => {
+    const fetchGuides = async () => {
+      try {
+        const { data } = await axios.get('http://127.0.0.1:5000/api/guides');
+        setGuides(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching guides:', error);
+        setErrorObj(error.message);
+        setLoading(false);
+      }
+    };
+    fetchGuides();
+  }, []);
+
+  const filteredGuides = filter === 'All' ? guides : guides.filter(g => g.category === filter);
 
   return (
     <div className={`min-h-screen transition-colors duration-700 font-sans ${isDarkMode ? 'bg-[#050505] text-white' : 'bg-[#FCFCFB] text-slate-900'}`}>
@@ -118,21 +140,32 @@ export default function Guides() {
            
            <div className={`flex items-center gap-6 pb-4 border-b transition-colors
              ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
-              {['All', 'Growth', 'Aesthetics', 'Heritage'].map(filter => (
-                 <button key={filter} className={`text-[10px] font-black uppercase tracking-widest transition-colors
-                   ${filter === 'All' 
+              {['All', 'Growth', 'Aesthetics', 'Heritage'].map(f => (
+                 <button key={f} onClick={() => setFilter(f)} className={`text-[10px] font-black uppercase tracking-widest transition-colors
+                   ${filter === f 
                       ? (isDarkMode ? 'text-emerald-500' : 'text-slate-900') 
                       : (isDarkMode ? 'text-white/20 hover:text-white' : 'text-slate-400 hover:text-slate-900')}`}>
-                    {filter}
+                    {f}
                  </button>
               ))}
            </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-20">
-          {GUIDES.map((guide, idx) => (
+          {loading ? (
+             <div className="col-span-full py-20 text-center opacity-50 uppercase tracking-widest text-[10px] font-black">
+               Loading Botanical Archive...
+             </div>
+           ) : errorObj || filteredGuides.length === 0 ? (
+             <div className="col-span-full py-20 flex flex-col items-center justify-center space-y-4 text-center">
+               <p className="text-sm font-black uppercase tracking-[0.2em] text-rose-500">Registry Connection Failed</p>
+               <p className={`font-serif italic text-xl ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>
+                 The botanical database is currently unreachable. Make sure the backend server is running on port 5000.
+               </p>
+             </div>
+           ) : filteredGuides.map((guide, idx) => (
              <motion.article 
-               key={guide.id}
+               key={guide._id}
                initial={{ opacity: 0, y: 30 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
@@ -162,7 +195,7 @@ export default function Guides() {
                        <User size={14} className="text-emerald-500" />
                        <span className="text-white text-[9px] font-black uppercase tracking-widest">{guide.author}</span>
                     </div>
-                    <Link to="#" className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                    <Link to={`/guides/${guide._id}`} className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform">
                        <ArrowRight size={20} />
                     </Link>
                  </div>
@@ -175,7 +208,7 @@ export default function Guides() {
                       {guide.date}
                     </span>
                  </div>
-                 <Link to="#">
+                 <Link to={`/guides/${guide._id}`}>
                    <h3 className={`text-3xl font-serif font-black italic tracking-tighter leading-snug group-hover:translate-x-3 transition-transform duration-500
                      ${isDarkMode ? 'text-white hover:text-emerald-400' : 'text-slate-900 hover:text-emerald-700'}`}>
                      {guide.title}

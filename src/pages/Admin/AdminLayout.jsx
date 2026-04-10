@@ -15,7 +15,8 @@ import {
   ChevronRight,
   TrendingUp,
   Package,
-  Store as StoreIcon
+  Store as StoreIcon,
+  MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
@@ -47,6 +48,8 @@ const AdminLayout = () => {
     { name: 'Orders', icon: ShoppingBag, path: '/admin/orders' },
     { name: 'Sellers', icon: Store, path: '/admin/sellers' },
     { name: 'Deliveries', icon: TrendingUp, path: '/admin/deliveries' },
+    { name: 'Customers', icon: Users, path: '/admin/customers' },
+    { name: 'Reviews', icon: MessageSquare, path: '/admin/reviews' },
     { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];
 

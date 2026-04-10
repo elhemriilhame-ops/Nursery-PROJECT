@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import Shop from './pages/Shop/Shop';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import Guides from './pages/Guides/Guides';
+import GuideDetail from './pages/Guides/GuideDetail';
 import Cart from './pages/Cart/Cart';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -18,6 +19,7 @@ import Deliveries from './pages/Admin/Deliveries';
 import AdminSellers from './pages/Admin/AdminSellers';
 import AdminOrders from './pages/Admin/AdminOrders';
 import AdminSettings from './pages/Admin/AdminSettings';
+import AdminReviews from './pages/Admin/AdminReviews';
 
 import SellerLayout from './pages/Seller/SellerLayout';
 import SellerDashboard from './pages/Seller/SellerDashboard';
@@ -51,6 +53,7 @@ function AppContent() {
           <Route path="/shop/:category" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/guides" element={<Guides />} />
+          <Route path="/guides/:id" element={<GuideDetail />} />
           <Route path="/cart" element={<Cart />} />
           
           {/* Auth Routes */}
@@ -66,6 +69,7 @@ function AppContent() {
             <Route path="deliveries" element={<Deliveries />} />
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="reviews" element={<AdminReviews />} />
           </Route>
 
           {/* Seller Dashboard Routes */}
