@@ -141,7 +141,7 @@ const SellerLayout = () => {
               <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-colors shrink-0", isDarkMode ? "bg-rose-500/10 group-hover:bg-rose-500/20" : "bg-red-50 group-hover:bg-red-100", !isSidebarOpen && "mx-auto")}>
                 <LogOut size={18} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform" />
               </div>
-              {isSidebarOpen && <span>Leave Sanctuary</span>}
+              {isSidebarOpen && <span>Log Out</span>}
             </button>
           </div>
         </nav>

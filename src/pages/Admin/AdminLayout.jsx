@@ -124,7 +124,7 @@ const AdminLayout = () => {
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isDarkMode ? 'bg-rose-500/10' : 'bg-red-50'}`}>
                 <LogOut size={20} className={`shrink-0 group-hover:-translate-x-1 transition-transform ${isSidebarOpen ? '' : 'mx-auto'}`} />
               </div>
-              {isSidebarOpen && <span>Sign Out</span>}
+              {isSidebarOpen && <span>Log Out</span>}
             </button>
           </div>
         </nav>

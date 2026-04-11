@@ -29,11 +29,13 @@ const SellerProductManagement = () => {
    const [formData, setFormData] = useState({
       name: '',
       price: '',
+      discount: '',
       image: '',
       category: 'Bouquets',
       type: 'Flowers',
       description: '',
       stock: 0,
+      badge: 'IN STOCK',
       featured: false
    });
    const [error, setError] = useState(null);
@@ -84,11 +86,13 @@ const SellerProductManagement = () => {
          setFormData({
             name: product.name,
             price: product.price,
+            discount: product.discount || '',
             image: product.image,
             category: product.category,
             type: product.type,
             description: product.description || '',
             stock: product.stock || 0,
+            badge: product.badge || (product.stock > 0 ? 'IN STOCK' : 'OUT STOCK'),
             featured: product.featured || false
          });
       } else {
@@ -96,11 +100,13 @@ const SellerProductManagement = () => {
          setFormData({
             name: '',
             price: '',
+            discount: '',
             image: '',
             category: 'Bouquets',
             type: 'Flowers',
             description: '',
             stock: 0,
+            badge: 'IN STOCK',
             featured: false
          });
       }
@@ -221,16 +227,27 @@ const SellerProductManagement = () => {
                                ${isDarkMode ? 'bg-black/60 text-white border-white/10' : 'bg-white/60 text-slate-900 border-slate-200'}`}>
                                {p.category}
                             </span>
+                            {p.badge && (
+                               <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border transition-all
+                                  ${p.badge === 'OUT STOCK' ? 'bg-rose-500/90 text-white border-rose-500/30' : 
+                                    p.badge === 'NEW' ? 'bg-amber-500/90 text-white border-amber-500/30' : 
+                                    (isDarkMode ? 'bg-white/10 text-white border-white/20' : 'bg-slate-900/90 text-white border-transparent')}`}>
+                                  {p.badge}
+                               </span>
+                            )}
                             {p.featured && (
                                <span className="bg-emerald-500 text-white p-2 rounded-xl shadow-lg shadow-emerald-500/40 w-fit">
                                   <Sparkles size={14} fill="white" />
                                </span>
                             )}
                         </div>
-                        <div className="absolute bottom-6 right-6">
+                        <div className="absolute bottom-6 right-6 flex flex-col items-end gap-2">
+                            {p.discount > 0 && (
+                               <span className="px-3 py-1 bg-amber-500 text-white rounded-xl text-[10px] font-black shadow-lg shadow-amber-500/40">-{p.discount}%</span>
+                            )}
                             <span className={`px-6 py-2.5 rounded-2xl text-[14px] font-black backdrop-blur-3xl shadow-2xl transition-all
-                               ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/30' : 'bg-slate-900 text-white shadow-slate-900/40'}`}>
-                               {p.price} DH
+                                ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/30' : 'bg-slate-900 text-white shadow-slate-900/40'}`}>
+                               {p.discount ? (p.price - (p.price * (p.discount/100))).toFixed(0) : p.price} DH
                             </span>
                         </div>
                      </div>
@@ -285,12 +302,10 @@ const SellerProductManagement = () => {
                      className={`w-full max-w-4xl rounded-[4rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] relative z-[1001] overflow-hidden overflow-y-auto max-h-[90vh] border transition-all duration-700
                         ${isDarkMode ? 'bg-[#0D0D0D] border-white/5' : 'bg-white border-slate-200'}`}
                   >
-                     <form onSubmit={handleSubmit} className="p-10 lg:p-20 space-y-12">
+                     <form onSubmit={handleSubmit} className="p-8 lg:p-12 space-y-8">
                         <div className="flex items-center justify-between">
                            <div className="space-y-3">
-                              <h3 className={`text-4xl font-serif font-black italic tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                                 {editingProduct ? 'Update <br/> Chronicle' : 'Publish <br/> Specimen'}
-                              </h3>
+                              <h3 className={`text-4xl font-serif font-black italic tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{editingProduct ? 'Update ' : 'Create '} <br/> Product Card</h3>
                               <div className={`h-1 w-20 rounded-full ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-amber-500'}`} />
                            </div>
                            <button 
@@ -303,12 +318,16 @@ const SellerProductManagement = () => {
                            </button>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                           <div className="space-y-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                           <div className="space-y-6">
                               <FormInput label="Specimen Name" name="name" value={formData.name} onChange={handleInputChange} placeholder="e.g. Damascus Rose" isDark={isDarkMode} />
                               <div className="grid grid-cols-2 gap-6">
                                  <FormInput label="Market Price (DH)" name="price" value={formData.price} onChange={handleInputChange} type="number" placeholder="450" isDark={isDarkMode} />
+                                 <FormInput label="Discount (%)" name="discount" value={formData.discount} onChange={handleInputChange} type="number" placeholder="15" isDark={isDarkMode} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-6">
                                  <FormInput label="Registry Stock" name="stock" value={formData.stock} onChange={handleInputChange} type="number" placeholder="20" isDark={isDarkMode} />
+                                 <FormSelect label="Badge Status" name="badge" value={formData.badge} onChange={handleInputChange} options={['NEW', 'IN STOCK', 'OUT STOCK']} isDark={isDarkMode} />
                               </div>
                               <div className="grid grid-cols-2 gap-6">
                                  <FormSelect label="Category" name="category" value={formData.category} onChange={handleInputChange} options={categories} isDark={isDarkMode} />
@@ -316,14 +335,14 @@ const SellerProductManagement = () => {
                               </div>
                            </div>
                            
-                           <div className="space-y-8">
+                           <div className="space-y-6">
                               <FormInput icon={ImageIcon} label="Visual Portrait (URL)" name="image" value={formData.image} onChange={handleInputChange} placeholder="https://source.unsplash..." isDark={isDarkMode} />
                               
                               <div className="space-y-4">
-                                 <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Botanical Narrative</label>
+                                 <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-6 opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Description</label>
                                  <textarea 
                                     rows="5" name="description" value={formData.description} onChange={handleInputChange}
-                                    placeholder="Chronicle the unique history and care of this specimen..."
+                                    placeholder="Describe this product and its characteristics..."
                                     className={`w-full px-8 py-6 rounded-[2rem] text-[12px] font-black outline-none transition-all resize-none shadow-inner tracking-widest leading-relaxed
                                        ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10' : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:bg-white'}`}
                                  />
@@ -337,10 +356,10 @@ const SellerProductManagement = () => {
                            </div>
                         </div>
 
-                        <div className="pt-10 border-t border-white/5">
+                        <div className="pt-6 border-t border-white/5">
                            <button 
                               type="submit" disabled={saving}
-                              className={`w-full py-8 rounded-[2.5rem] font-black tracking-[0.4em] uppercase text-[11px] shadow-2xl transition-all flex items-center justify-center gap-4 group active:scale-95
+                              className={`w-full py-6 rounded-3xl font-black tracking-[0.4em] uppercase text-[11px] shadow-2xl transition-all flex items-center justify-center gap-4 group active:scale-95
                                 ${isDarkMode 
                                    ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
                                    : 'bg-slate-900 text-white hover:bg-amber-600 shadow-slate-900/10'}`}
@@ -368,7 +387,7 @@ function FormInput({ icon: Icon, label, name, value, onChange, type = "text", pl
             <input 
                required name={name} value={value} onChange={onChange}
                type={type} placeholder={placeholder}
-               className={`w-full ${Icon ? 'pl-16' : 'px-8'} pr-8 py-5 rounded-[1.8rem] border-none outline-none transition-all font-black text-[12px] shadow-inner tracking-widest
+               className={`w-full ${Icon ? 'pl-16' : 'px-8'} pr-8 py-5 rounded-[1.8rem] border-none outline-none transition-all font-black text-[12px] shadow-inner tracking-widest [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
                   ${isDark ? 'bg-white/5 text-white placeholder:text-white/10 focus:bg-white/10' : 'bg-slate-50 text-slate-900 focus:bg-white shadow-slate-100'}`}
             />
          </div>

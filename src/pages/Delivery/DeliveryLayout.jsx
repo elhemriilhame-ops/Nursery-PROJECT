@@ -109,7 +109,7 @@ const DeliveryLayout = () => {
               <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-colors", isDarkMode ? "bg-rose-500/10" : "bg-red-50")}>
                 <LogOut size={22} className={cn("shrink-0 group-hover:-translate-x-1 transition-transform", !isSidebarOpen && "mx-auto")} />
               </div>
-              {isSidebarOpen && <span>Go Offline</span>}
+              {isSidebarOpen && <span>Log Out</span>}
             </button>
           </div>
         </nav>
