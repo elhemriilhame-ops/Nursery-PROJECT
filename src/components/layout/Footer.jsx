@@ -38,11 +38,16 @@ export default function Footer() {
         <div className="space-y-10">
           <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>Collections</h4>
           <ul className="space-y-6 text-[11px] font-black uppercase tracking-widest text-white/50">
-            {['Flower Delivery', 'House Plants', 'Aromatherapy Oils', 'Expert Care Guides'].map((item, i) => (
+            {[
+              { name: 'Flower Delivery', path: '/shop/flowers' },
+              { name: 'House Plants', path: '/shop/plants' },
+              { name: 'Aromatherapy Oils', path: '/shop/oils' },
+              { name: 'Expert Care Guides', path: '/guides' }
+            ].map((item, i) => (
                <li key={i}>
-                <Link to="#" className="hover:text-white transition-all flex items-center group">
+                <Link to={item.path} className="hover:text-white transition-all flex items-center group">
                    <ArrowUpRight size={14} className="mr-2 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                   {item}
+                   {item.name}
                 </Link>
                </li>
             ))}

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 
 // Hoisted Store Icon for stability
@@ -30,10 +31,12 @@ const Store = ({ size = 24, className }) => (
 const SellerLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { user, logout: authLogout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
+    authLogout();
     localStorage.removeItem('userToken');
     navigate('/');
   };
@@ -104,17 +107,41 @@ const SellerLayout = () => {
             ))}
           </div>
 
-          {/* Special Terminal Item: Logout */}
-          <div className="pt-4 border-t border-white/5 mt-auto">
+          {/* Footer Area: Profile & Logout */}
+          <div className="pt-4 border-t mt-auto space-y-4" style={{ borderColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}>
+            
+            {/* Seller Profile */}
+            <button 
+               onClick={() => navigate('/seller/settings')}
+               className={`flex items-center w-full text-left px-4 py-3 rounded-2xl transition-all cursor-pointer group ${!isSidebarOpen && 'justify-center mx-auto'} ${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-amber-50'}`}
+            >
+               <div className={cn(
+                 "w-10 h-10 rounded-xl p-0.5 border shrink-0 transition-colors",
+                 isDarkMode ? "bg-white/5 border-white/10 group-hover:border-amber-500/50" : "bg-white border-slate-200 group-hover:border-amber-500/50"
+               )}>
+                 <div className={cn("w-full h-full rounded-[0.6rem] flex items-center justify-center transition-colors", isDarkMode ? "bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20" : "bg-amber-50/50 text-amber-600 group-hover:bg-amber-100/50")}>
+                    <User size={18} strokeWidth={2} />
+                 </div>
+               </div>
+               
+               {isSidebarOpen && (
+                 <div className="ml-4 truncate">
+                   <p className={cn("text-[12px] font-black tracking-tight leading-none truncate transition-colors", isDarkMode ? "text-white group-hover:text-amber-400" : "text-slate-900 group-hover:text-amber-600")}>{user?.name || 'Artisan'}</p>
+                   <p className={cn("text-[9px] font-black uppercase tracking-[0.2em] mt-1.5 truncate", isDarkMode ? "text-amber-500" : "text-amber-600")}>{user?.role === 'pépiniériste' ? 'Store Artisan' : (user?.role || 'Store Artisan')}</p>
+                 </div>
+               )}
+            </button>
+
+            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className={`flex items-center gap-4 px-4 py-4 rounded-2xl w-full transition-all group font-black uppercase tracking-widest text-[11px]
-                ${isDarkMode ? 'text-rose-500 hover:bg-rose-500/10' : 'text-red-600 hover:bg-red-50'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-2xl w-full transition-all group font-black uppercase tracking-widest text-[11px]
+                ${isDarkMode ? 'text-rose-500 hover:bg-rose-500/10' : 'text-red-700 hover:bg-red-50'}`}
             >
-              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-colors", isDarkMode ? "bg-rose-500/10" : "bg-red-50")}>
-                <LogOut size={22} className={cn("shrink-0 group-hover:-translate-x-1 transition-transform", !isSidebarOpen && "mx-auto")} />
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-colors shrink-0", isDarkMode ? "bg-rose-500/10 group-hover:bg-rose-500/20" : "bg-red-50 group-hover:bg-red-100", !isSidebarOpen && "mx-auto")}>
+                <LogOut size={18} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform" />
               </div>
-              {isSidebarOpen && <span>Go Offline</span>}
+              {isSidebarOpen && <span>Leave Sanctuary</span>}
             </button>
           </div>
         </nav>
@@ -151,32 +178,28 @@ const SellerLayout = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4 lg:gap-5">
             {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
               className={cn(
-                "p-3.5 rounded-2xl transition-all border",
+                "p-3.5 rounded-2xl transition-all border shrink-0",
                 isDarkMode ? "bg-amber-500/10 border-amber-500/20 text-amber-500 shadow-[0_0_20px_#f59e0b22]" : "bg-white border-slate-100 text-slate-800 shadow-sm"
               )}
             >
-              {isDarkMode ? <Sun size={22} strokeWidth={1.5} /> : <Moon size={22} strokeWidth={1.5} />}
+              {isDarkMode ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
             </button>
 
-            <div className={cn("hidden sm:flex items-center pl-5 border-l ml-3 transition-colors duration-500", isDarkMode ? "border-white/5" : "border-slate-100")}>
-               <div className="text-right mr-5">
-                 <p className={cn("text-[12px] font-black tracking-tight leading-none text-slate-900", isDarkMode && "text-white")}>Nourplant Store</p>
-                 <p className={cn("text-[9px] font-black uppercase tracking-[0.3em] mt-1.5 text-amber-600", isDarkMode && "text-amber-400")}>Verified Merchant</p>
-               </div>
-               <div className={cn(
-                 "w-12 h-12 rounded-2xl p-1 border group cursor-pointer transition-all shrink-0",
-                 isDarkMode ? "bg-white/5 border-white/5 hover:border-amber-500" : "bg-white border-slate-200 hover:border-amber-600"
-               )}>
-                 <div className={cn("w-full h-full rounded-xl flex items-center justify-center transition-all", isDarkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-500/10 text-amber-600")}>
-                    <User size={22} strokeWidth={1.5} />
-                 </div>
-               </div>
-            </div>
+            {/* Notifications */}
+            <button
+              className={cn(
+                "p-3.5 rounded-2xl transition-all border relative shrink-0",
+                isDarkMode ? "bg-white/5 border-white/10 text-white hover:bg-white/10" : "bg-white border-slate-100 text-slate-800 shadow-sm hover:border-amber-600 hover:text-amber-600"
+              )}
+            >
+              <Bell size={20} className="animate-pulse" strokeWidth={1.5} />
+              <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_10px_#f43f5e]" />
+            </button>
           </div>
         </header>
 

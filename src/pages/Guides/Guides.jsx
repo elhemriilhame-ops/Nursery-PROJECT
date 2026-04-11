@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, BookOpen, Sparkles, Share2, Bookmark, Clock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
+import { StoreReviews } from '../Home/StoreReviews';
 
 export default function Guides() {
   const { isDarkMode } = useTheme();
@@ -268,6 +269,8 @@ export default function Guides() {
             </div>
          </div>
       </section>
+
+      <StoreReviews />
     </div>
   );
 }

@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Package,
   Store as StoreIcon,
-  MessageSquare
+  MessageSquare,
+  AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
@@ -50,6 +51,7 @@ const AdminLayout = () => {
     { name: 'Deliveries', icon: TrendingUp, path: '/admin/deliveries' },
     { name: 'Customers', icon: Users, path: '/admin/customers' },
     { name: 'Reviews', icon: MessageSquare, path: '/admin/reviews' },
+    { name: 'Complaints', icon: AlertTriangle, path: '/admin/complaints' },
     { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];
 

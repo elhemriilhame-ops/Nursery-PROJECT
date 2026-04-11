@@ -6,10 +6,20 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
+import { useFavorites } from '@/context/FavoritesContext';
 
 export function ProductCard({ id, name, price, image, category, description, featured }) {
   const { addToCart } = useCart();
   const { isDarkMode } = useTheme();
+  const { toggleFavorite, isFavorite } = useFavorites();
+
+  const isFav = isFavorite(id);
+
+  const handleFavoriteClick = (e) => {
+    e.preventDefault(); // Prevents navigating to product detail
+    e.stopPropagation();
+    toggleFavorite({ id, name, price, image, category, description, featured });
+  };
 
   const handleAddToCart = () => {
     addToCart({ id, name, price, image, category, description });
@@ -35,9 +45,14 @@ export function ProductCard({ id, name, price, image, category, description, fea
         )}
 
         {/* Favorite Icon */}
-        <button className={`absolute top-6 right-6 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100
-          ${isDarkMode ? 'bg-white/5 text-white/40 hover:text-rose-500 hover:bg-rose-500/10' : 'bg-white/80 text-slate-400 hover:text-rose-500'}`}>
-           <Heart size={18} />
+        <button 
+          onClick={handleFavoriteClick}
+          className={`absolute top-6 right-6 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-lg
+            ${isFav 
+              ? (isDarkMode ? 'bg-rose-500/20 text-rose-500 opacity-100' : 'bg-rose-50 text-rose-500 opacity-100') 
+              : (isDarkMode ? 'bg-white/5 text-white/40 hover:text-rose-500 hover:bg-rose-500/10' : 'bg-white text-slate-400 hover:text-rose-500 hover:bg-rose-50')}`}
+        >
+           <Heart size={18} className={isFav ? "fill-current" : ""} />
         </button>
 
         {/* Product Image */}

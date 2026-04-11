@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Search, User, Menu, X, Sun, Moon } from 'lucide-react';
+import { ShoppingBag, Search, User, Menu, X, Sun, Moon, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import { useFavorites } from '@/context/FavoritesContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,6 +14,7 @@ export default function Navbar() {
   const { totalItems } = useCart();
   const { user, logout } = useAuth();
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { favorites } = useFavorites();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,6 +117,14 @@ export default function Navbar() {
               </Link>
             )}
           </div>
+          <Link to="/favorites" className={cn("hover:scale-110 transition-transform relative", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
+            <Heart size={22} strokeWidth={1.5} />
+            {favorites.length > 0 && (
+              <span className="absolute -top-1 -right-2 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {favorites.length > 9 ? '9+' : favorites.length}
+              </span>
+            )}
+          </Link>
           <Link to="/cart" className={cn("hover:scale-110 transition-transform relative", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (

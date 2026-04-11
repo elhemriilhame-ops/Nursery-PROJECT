@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   ShoppingBag, 
   ChevronRight, 
@@ -18,7 +18,8 @@ import {
   CreditCard,
   Lock,
   Loader2,
-  Sparkles
+  Sparkles,
+  Banknote
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -26,11 +27,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
 
+const MOROCCAN_CITIES = [
+  'Agadir', 'Al Hoceima', 'Azilal', 'Beni Mellal', 'Benslimane', 'Berkane', 'Berrechid', 
+  'Casablanca', 'Chefchaouen', 'Dakhla', 'El Jadida', 'El Kelaa des Sraghna', 'Errachidia', 
+  'Essaouira', 'Fez', 'Fquih Ben Salah', 'Guelmim', 'Guercif', 'Ifrane', 'Kenitra', 
+  'Khemisset', 'Khenifra', 'Khouribga', 'Laayoune', 'Larache', 'Marrakech', 'Meknes', 
+  'Midelt', 'Mohammedia', 'Nador', 'Ouarzazate', 'Ouezzane', 'Oujda', 'Rabat', 'Safi', 
+  'Sale', 'Sefrou', 'Settat', 'Sidi Bennour', 'Sidi Kacem', 'Sidi Slimane', 'Skhirat', 
+  'Tangier', 'Taroudant', 'Taza', 'Temara', 'Tetouan', 'Tiznit', 'Zagora'
+];
+
 export default function Cart() {
-  const { items, updateQuantity, removeItem, subtotal } = useCart();
+  const { items, updateQuantity, removeItem, subtotal, clearCart } = useCart();
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' | 'delivery'
+  const [trackingNum] = useState(`#BOT-${Math.floor(1000 + Math.random() * 9000)}`);
+  const [shippingCity, setShippingCity] = useState('Agadir');
 
   const shipping = 15;
   const total = subtotal + shipping;
@@ -40,6 +55,7 @@ export default function Cart() {
     setTimeout(() => {
       setIsProcessing(false);
       setIsConfirmed(true);
+      if (clearCart) clearCart();
     }, 2500);
   };
 
@@ -76,10 +92,14 @@ export default function Cart() {
                  Everything is set. Your exquisite botanical selection is being carefully prepared by our artisans.
                </p>
                
-               <div className={`w-full space-y-4 p-8 rounded-3xl ${isDarkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
+               <div className={`w-full space-y-4 p-8 rounded-3xl mb-8 ${isDarkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
                  <div className="flex justify-between items-center py-4 border-b border-white/5">
                    <span className="opacity-40 uppercase tracking-widest text-[9px] font-black">Tracking Number</span>
-                   <span className="font-black">#BOT-9042</span>
+                   <span className="font-black">{trackingNum}</span>
+                 </div>
+                 <div className="flex justify-between items-center py-4 border-b border-white/5">
+                   <span className="opacity-40 uppercase tracking-widest text-[9px] font-black">Payment</span>
+                   <span className="font-black">{paymentMethod === 'card' ? '💳 Credit Card' : '🚚 Cash on Delivery'}</span>
                  </div>
                  <div className="flex justify-between items-center py-4">
                    <span className="opacity-40 uppercase tracking-widest text-[9px] font-black">Total Debited</span>
@@ -87,10 +107,24 @@ export default function Cart() {
                  </div>
                </div>
 
-               <Button onClick={() => setIsConfirmed(false)} className={`w-full mt-12 h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black shadow-2xl transition-all
-                 ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-slate-900 text-white hover:bg-sage'}`}>
-                  Explore Fresh Harvests
-               </Button>
+               <p className={`text-xs font-bold mb-8 leading-relaxed ${isDarkMode ? 'text-white/40' : 'text-slate-500'}`}>
+                 A problem with your order? View your orders and file a complaint directly from your account.
+               </p>
+
+               <div className="w-full space-y-4">
+                 <Button 
+                   onClick={() => navigate('/my-orders')} 
+                   className={`w-full h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black transition-all
+                     ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-slate-900 text-white hover:bg-sage'}`}>
+                   View My Orders
+                 </Button>
+                 <Button 
+                   onClick={() => { setIsConfirmed(false); navigate('/shop/all'); }} 
+                   className={`w-full h-14 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black transition-all border
+                     ${isDarkMode ? 'bg-transparent border-white/10 text-white/60 hover:bg-white/5' : 'bg-transparent border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                   Continue Shopping
+                 </Button>
+               </div>
             </motion.div>
           </motion.div>
         )}
@@ -222,14 +256,19 @@ export default function Cart() {
                            <span className="text-sm font-black uppercase tracking-[0.2em] opacity-40">Delivery HUB :</span>
                         </div>
                         <div className="flex items-center gap-3">
-                           <div className={`px-10 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest leading-none shadow-xl
-                             ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-sage text-white shadow-sage/20'}`}>
-                              AGADIR
-                           </div>
-                           <button className={`px-10 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest leading-none border transition-all
-                             ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-white border-slate-100 text-slate-900 shadow-xl shadow-slate-100 hover:border-slate-900'}`}>
-                              CHANGE
-                           </button>
+                           <select 
+                             value={shippingCity}
+                             onChange={(e) => setShippingCity(e.target.value)}
+                             className={`px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest leading-none shadow-xl cursor-pointer outline-none transition-all appearance-none pr-12
+                               ${isDarkMode ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-sage text-white shadow-sage/20'}
+                               bg-[url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2214%22%20height%3D%2214%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M3%205l4%204%204-4%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")] bg-no-repeat bg-[position:right_1.25rem_center]`}
+                           >
+                              {MOROCCAN_CITIES.map(city => (
+                                 <option key={city} value={city} className={isDarkMode ? 'bg-[#141414] text-white' : 'bg-white text-slate-900'}>
+                                    {city.toUpperCase()}
+                                 </option>
+                              ))}
+                           </select>
                         </div>
                      </div>
                   </div>
@@ -239,39 +278,88 @@ export default function Cart() {
                <div className={`p-10 sm:p-14 rounded-[4rem] border shadow-2xl transition-all duration-700
                  ${isDarkMode ? 'bg-[#141414] border-white/5 shadow-black text-white' : 'bg-white border-slate-100 text-slate-900'}`}>
                   <div className="flex items-center justify-between mb-12 border-b transition-colors pb-8 border-white/5">
-                     <h3 className="text-3xl font-serif font-black italic tracking-tighter">Secure Checkout</h3>
+                     <h3 className="text-3xl font-serif font-black italic tracking-tighter">Payment Method</h3>
                      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest border border-emerald-500/20">
-                        <Lock size={12} strokeWidth={3} /> TLS SECURED
+                        <Lock size={12} strokeWidth={3} /> SECURE
                      </div>
                   </div>
 
-                  <div className="space-y-10">
-                     <FormRow icon={CreditCard} label="Card Information" isDark={isDarkMode}>
-                        <div className="relative">
-                          <input type="text" placeholder="0000 0000 0000 0000" 
-                            className={`w-full p-5 pl-14 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all
-                              ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
-                          <CreditCard size={20} className="absolute left-5 top-1/2 -translate-y-1/2 opacity-20" />
-                        </div>
-                     </FormRow>
-
-                     <div className="grid grid-cols-2 gap-10">
-                        <FormRow label="Expiry" isDark={isDarkMode}>
-                           <input type="text" placeholder="MM/YY" 
-                              className={`w-full p-5 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all text-center
-                                ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
-                        </FormRow>
-                        <FormRow label="CVC" isDark={isDarkMode}>
-                           <input type="text" placeholder="***" 
-                              className={`w-full p-5 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all text-center
-                                ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
-                        </FormRow>
-                     </div>
+                  {/* Method Selector */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    {/* Card */}
+                    <button
+                      onClick={() => setPaymentMethod('card')}
+                      className={`flex flex-col items-center gap-4 p-8 rounded-[2rem] border-2 transition-all duration-300
+                        ${paymentMethod === 'card'
+                          ? isDarkMode ? 'border-emerald-500 bg-emerald-500/10 text-white' : 'border-sage bg-sage/5 text-slate-900'
+                          : isDarkMode ? 'border-white/5 bg-white/3 text-white/40 hover:border-white/20' : 'border-slate-200 bg-slate-50 text-slate-400 hover:border-slate-400'}`}
+                    >
+                      <CreditCard size={28} />
+                      <span className="text-[11px] font-black uppercase tracking-widest">Credit / Debit Card</span>
+                    </button>
+                    {/* Cash on Delivery */}
+                    <button
+                      onClick={() => setPaymentMethod('delivery')}
+                      className={`flex flex-col items-center gap-4 p-8 rounded-[2rem] border-2 transition-all duration-300
+                        ${paymentMethod === 'delivery'
+                          ? isDarkMode ? 'border-emerald-500 bg-emerald-500/10 text-white' : 'border-sage bg-sage/5 text-slate-900'
+                          : isDarkMode ? 'border-white/5 bg-white/3 text-white/40 hover:border-white/20' : 'border-slate-200 bg-slate-50 text-slate-400 hover:border-slate-400'}`}
+                    >
+                      <Truck size={28} />
+                      <span className="text-[11px] font-black uppercase tracking-widest">Cash on Delivery</span>
+                    </button>
                   </div>
+
+                  {/* Card form (only shown if card selected) */}
+                  <AnimatePresence>
+                  {paymentMethod === 'card' && (
+                    <motion.div 
+                      key="card-form"
+                      initial={{ opacity: 0, height: 0 }} 
+                      animate={{ opacity: 1, height: 'auto' }} 
+                      exit={{ opacity: 0, height: 0 }}
+                      className="space-y-10 overflow-hidden"
+                    >
+                      <FormRow icon={CreditCard} label="Card Information" isDark={isDarkMode}>
+                         <div className="relative">
+                           <input type="text" placeholder="0000 0000 0000 0000" 
+                             className={`w-full p-5 pl-14 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all
+                               ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
+                           <CreditCard size={20} className="absolute left-5 top-1/2 -translate-y-1/2 opacity-20" />
+                         </div>
+                      </FormRow>
+                      <div className="grid grid-cols-2 gap-10">
+                         <FormRow label="Expiry" isDark={isDarkMode}>
+                            <input type="text" placeholder="MM/YY" 
+                               className={`w-full p-5 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all text-center
+                                 ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
+                         </FormRow>
+                         <FormRow label="CVC" isDark={isDarkMode}>
+                            <input type="text" placeholder="***" 
+                               className={`w-full p-5 rounded-2xl text-[14px] font-black outline-none tracking-[0.3em] transition-all text-center
+                                 ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 text-slate-950 placeholder:text-slate-200'}`} />
+                         </FormRow>
+                      </div>
+                    </motion.div>
+                  )}
+                  {paymentMethod === 'delivery' && (
+                    <motion.div 
+                      key="delivery-info"
+                      initial={{ opacity: 0, height: 0 }} 
+                      animate={{ opacity: 1, height: 'auto' }} 
+                      exit={{ opacity: 0, height: 0 }}
+                      className={`p-8 rounded-2xl text-sm font-bold leading-relaxed overflow-hidden
+                        ${isDarkMode ? 'bg-white/5 text-white/60' : 'bg-amber-50 text-amber-700'}`}
+                    >
+                      🚚 You'll pay <strong>{total} DH</strong> in cash when your order arrives. Our delivery team will contact you beforehand to confirm the schedule.
+                    </motion.div>
+                  )}
+                  </AnimatePresence>
                </div>
+
             </div>
            )}
-        </div>
+         </div>
 
         {/* Right Column: Order Summary */}
         <aside className="space-y-10 h-fit lg:sticky lg:top-[120px]">

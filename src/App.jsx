@@ -10,6 +10,8 @@ import GuideDetail from './pages/Guides/GuideDetail';
 import Cart from './pages/Cart/Cart';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import MyOrders from './pages/Orders/MyOrders';
+import MyFavorites from './pages/Favorites/MyFavorites';
 
 import AdminLayout from './pages/Admin/AdminLayout';
 import Dashboard from './pages/Admin/Dashboard';
@@ -20,6 +22,7 @@ import AdminSellers from './pages/Admin/AdminSellers';
 import AdminOrders from './pages/Admin/AdminOrders';
 import AdminSettings from './pages/Admin/AdminSettings';
 import AdminReviews from './pages/Admin/AdminReviews';
+import AdminComplaints from './pages/Admin/AdminComplaints';
 
 import SellerLayout from './pages/Seller/SellerLayout';
 import SellerDashboard from './pages/Seller/SellerDashboard';
@@ -59,6 +62,8 @@ function AppContent() {
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/favorites" element={<MyFavorites />} />
           
           {/* Admin Dashboard Routes */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -70,6 +75,7 @@ function AppContent() {
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="reviews" element={<AdminReviews />} />
+            <Route path="complaints" element={<AdminComplaints />} />
           </Route>
 
           {/* Seller Dashboard Routes */}
