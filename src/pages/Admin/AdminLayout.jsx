@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { 
   Menu,
   LogOut, 
@@ -17,10 +18,14 @@ import {
   Package,
   Store as StoreIcon,
   MessageSquare,
-  AlertTriangle
+  AlertTriangle,
+  Wallet,
+  Inbox,
+  ShieldCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 
 // Hoisted Custom Store Icon for stability
@@ -34,17 +39,43 @@ const Store = ({ size = 24, className }) => (
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
+  const fetchPendingCount = async () => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (!storedUser || storedUser === 'undefined') return;
+      const { token } = JSON.parse(storedUser);
+      
+      const response = await axios.get('http://127.0.0.1:5000/api/admin/users', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const pending = response.data.filter(u => u.status === 'pending');
+      setPendingCount(pending.length);
+    } catch (err) {
+      console.error('Failed to fetch pending count:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPendingCount();
+    // Poll every 30 seconds
+    const interval = setInterval(fetchPendingCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleLogout = () => {
-    localStorage.removeItem('userToken');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
   const menuItems = [
-    { name: 'Analytics', icon: LayoutDashboard, path: '/admin' },
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
+    { name: 'Requests', icon: Inbox, path: '/admin/requests' },
     { name: 'Products', icon: Package, path: '/admin/products' },
     { name: 'Orders', icon: ShoppingBag, path: '/admin/orders' },
     { name: 'Sellers', icon: Store, path: '/admin/sellers' },
@@ -52,13 +83,16 @@ const AdminLayout = () => {
     { name: 'Customers', icon: Users, path: '/admin/customers' },
     { name: 'Reviews', icon: MessageSquare, path: '/admin/reviews' },
     { name: 'Complaints', icon: AlertTriangle, path: '/admin/complaints' },
+    { name: 'Earnings', icon: Wallet, path: '/admin/earnings' },
     { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];
 
   const notifications = [
-    { id: 1, title: 'New Seller Request', time: '5m ago', icon: Store },
-    { id: 2, title: 'Inventory Alert', time: '12m ago', icon: Package },
-    { id: 3, title: 'System Updated', time: '1h ago', icon: Settings },
+    ...(pendingCount > 0 
+      ? [{ id: 'pending-users', title: `${pendingCount} New Approval Requests`, time: 'Action Required', icon: Users, link: '/admin/requests' }] 
+      : [{ id: 'demo-req', title: 'System: Ready for validation', time: 'Online', icon: ShieldCheck, link: '/admin/requests' }]),
+    { id: 1, title: 'Inventory Alert', time: '12m ago', icon: Package },
+    { id: 2, title: 'System Updated', time: '1h ago', icon: Settings },
   ];
 
   const activePage = menuItems.find(item => item.path === location.pathname)?.name || 'Admin';
@@ -102,20 +136,56 @@ const AdminLayout = () => {
                 key={item.name}
                 to={item.path}
                 className={({ isActive }) => `
-                  flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group
+                  flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group relative
                   ${isActive
                     ? `${isDarkMode ? 'bg-emerald-500 text-white shadow-[0_4px_20px_rgba(16,185,129,0.4)]' : 'bg-sage text-white shadow-xl shadow-sage/20'} font-bold`
                     : `${isDarkMode ? 'text-[#CBD5E1] hover:bg-white/5' : 'text-slate-500 hover:bg-slate-50 hover:text-sage'}`}
                 `}
               >
                 <item.icon size={22} className={`shrink-0 transition-transform group-hover:scale-110 ${isSidebarOpen ? '' : 'mx-auto'}`} />
-                {isSidebarOpen && <span className="text-[14px] font-black uppercase tracking-widest">{item.name}</span>}
+                {isSidebarOpen && (
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-[14px] font-black uppercase tracking-widest">{item.name}</span>
+                    {item.name === 'Requests' && (
+                      <span className="bg-rose-500 text-[8px] text-white px-2 py-0.5 rounded-full animate-pulse">NEW</span>
+                    )}
+                  </div>
+                )}
+                {item.name === 'Requests' && pendingCount > 0 && !isActive && (
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-rose-500 text-[10px] text-white flex items-center justify-center font-black animate-pulse shadow-lg shadow-rose-500/20">
+                    {pendingCount}
+                  </div>
+                )}
               </NavLink>
             ))}
           </div>
 
-          {/* Bottom Logout Item */}
-          <div className="pt-4 border-t border-white/5 mt-auto">
+          {/* Footer Area: Profile & Logout */}
+          <div className="pt-4 border-t mt-auto space-y-4" style={{ borderColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}>
+            
+            {/* Admin Profile */}
+            <button 
+               onClick={() => navigate('/admin/settings')}
+               className={`flex items-center w-full text-left px-4 py-3 rounded-2xl transition-all cursor-pointer group ${!isSidebarOpen && 'justify-center mx-auto'} ${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-sage/10'}`}
+            >
+               <div className={cn(
+                 "w-10 h-10 rounded-xl p-0.5 border shrink-0 transition-colors",
+                 isDarkMode ? "bg-white/5 border-white/10 group-hover:border-emerald-500/50" : "bg-white border-slate-200 group-hover:border-sage/50"
+               )}>
+                 <div className={cn("w-full h-full rounded-[0.6rem] flex items-center justify-center transition-colors", isDarkMode ? "bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20" : "bg-sage/10 text-sage group-hover:bg-sage/20")}>
+                    <User size={18} strokeWidth={2} />
+                 </div>
+               </div>
+               
+               {isSidebarOpen && (
+                 <div className="ml-4 truncate">
+                   <p className={cn("text-[12px] font-black tracking-tight leading-none truncate transition-colors", isDarkMode ? "text-white group-hover:text-emerald-400" : "text-slate-900 group-hover:text-sage")}>Sunflower Admin</p>
+                   <p className={cn("text-[9px] font-black uppercase tracking-[0.2em] mt-1.5 truncate", isDarkMode ? "text-emerald-500" : "text-sage")}>System Admin</p>
+                 </div>
+               )}
+            </button>
+
+            {/* Logout Button */}
             <button
               onClick={handleLogout}
               className={`flex items-center gap-4 px-4 py-4 rounded-2xl w-full transition-all group font-black uppercase tracking-widest text-[11px]
@@ -181,7 +251,9 @@ const AdminLayout = () => {
                   isDarkMode ? "bg-white/5 border-white/10 text-white/40 hover:text-white" : "bg-white border-slate-100 text-slate-400 hover:text-slate-900 shadow-sm"
                 )}
               >
-                <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-rose-500 border-2 border-inherit" />
+                {pendingCount > 0 && (
+                  <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-rose-500 border-2 border-inherit animate-pulse" />
+                )}
                 <Bell size={22} strokeWidth={1.5} />
               </button>
 
@@ -201,7 +273,16 @@ const AdminLayout = () => {
                       <h4 className="text-[11px] font-black uppercase tracking-[0.3em] mb-6 opacity-40">Intelligence Stream</h4>
                       <div className="space-y-6">
                         {notifications.map((notif) => (
-                          <div key={notif.id} className="flex gap-4 items-start group cursor-pointer">
+                          <div 
+                            key={notif.id} 
+                            onClick={() => {
+                              if (notif.link) {
+                                navigate(notif.link);
+                                setShowNotifications(false);
+                              }
+                            }}
+                            className="flex gap-4 items-start group cursor-pointer"
+                          >
                             <div className={cn(
                               "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all",
                               isDarkMode ? "bg-white/5 border-white/10 group-hover:border-emerald-500/50" : "bg-slate-50 border-slate-100 group-hover:border-sage/50"
@@ -236,27 +317,6 @@ const AdminLayout = () => {
               {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
             </button>
 
-            {/* User Profile */}
-            <div className={cn(
-              "flex items-center gap-4 pl-4 border-l ml-2",
-              isDarkMode ? "border-white/5" : "border-slate-100"
-            )}>
-              <div className="hidden sm:block text-right">
-                <p className={cn("text-[12px] font-black tracking-tight leading-none", isDarkMode ? "text-white" : "text-slate-900")}>System Architecht</p>
-                <p className={cn("text-[9px] font-black uppercase tracking-[0.25em] mt-1.5", isDarkMode ? "text-emerald-500" : "text-sage")}>Lvl 99 Admin</p>
-              </div>
-              <div className={cn(
-                "w-11 h-11 rounded-2xl p-1 border group cursor-pointer transition-all shrink-0",
-                isDarkMode ? "bg-white/5 border-white/5 hover:border-emerald-500" : "bg-white border-slate-200 hover:border-sage"
-              )}>
-                <div className={cn(
-                  "w-full h-full rounded-xl flex items-center justify-center",
-                  isDarkMode ? "bg-emerald-500/10 text-emerald-500" : "bg-sage/10 text-sage"
-                )}>
-                  <User size={22} />
-                </div>
-              </div>
-            </div>
           </div>
         </header>
 

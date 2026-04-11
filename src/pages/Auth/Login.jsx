@@ -168,14 +168,6 @@ const Login = () => {
             <Link to="/register" className={`font-black uppercase tracking-widest text-xs underline underline-offset-8 transition-colors text-emerald-500 hover:text-emerald-400`}>Sign Up</Link>
           </p>
 
-          {/* Demo Credentials */}
-          <div className={`mt-6 p-5 rounded-2xl border text-[10px] font-black uppercase tracking-widest space-y-2
-            ${isDarkMode ? 'bg-white/3 border-white/5 text-white/30' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
-            <p className={`mb-3 ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>Demo Access Credentials</p>
-            <p>Admin — admin@garden.com / admin123</p>
-            <p>Seller — nourplant@gmail.com / seller123</p>
-            <p>Delivery — delivery@gmail.com / delivery123</p>
-          </div>
         </motion.div>
 
         {/* Floating Icons */}

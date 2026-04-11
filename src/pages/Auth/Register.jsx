@@ -58,16 +58,17 @@ const Register = () => {
     setSuccess(false);
     setLoading(true);
 
-    // MOCK REGISTER BYPASS
-    setTimeout(() => {
-      setSuccess(true);
-      setFormData({
-        name: '', email: '', password: '', role: '',
-        cin: '', specialty: '', phone: '', location: '', commercialRegister: '', vehicleType: ''
-      });
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+      if (response.data) {
+        setSuccess(true);
+        // We don't clear the whole form yet so we can check the role for the success message
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
       setLoading(false);
-      setShowRoleModal(false);
-    }, 1500);
+    }
   };
 
   const handleInitialSubmit = (e) => {
@@ -76,6 +77,8 @@ const Register = () => {
       setShowRoleModal(true);
     }
   };
+
+  const isPendingRole = formData.role === 'pépiniériste' || formData.role === 'livreur';
 
   return (
     <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-colors duration-700 relative
@@ -98,17 +101,31 @@ const Register = () => {
             >
               <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 relative
                  ${isDarkMode ? 'bg-emerald-500/20 shadow-[0_0_30px_#10b98133]' : 'bg-emerald-50'}`}>
-                <UserCheck size={40} className="text-emerald-500 relative z-10" />
+                {isPendingRole ? (
+                  <Sparkles size={40} className="text-amber-500 relative z-10 animate-pulse" />
+                ) : (
+                  <UserCheck size={40} className="text-emerald-500 relative z-10" />
+                )}
               </div>
 
-              <h2 className="text-3xl font-serif font-black italic tracking-tight mb-4 text-emerald-500">Welcome Aboard</h2>
+              <h2 className={`text-3xl font-serif font-black italic tracking-tight mb-4 ${isPendingRole ? 'text-amber-500' : 'text-emerald-500'}`}>
+                {isPendingRole ? 'Application Received' : 'Welcome Aboard'}
+              </h2>
+              
               <p className={`leading-relaxed mb-10 text-sm font-bold ${isDarkMode ? 'text-white/60' : 'text-slate-600'}`}>
-                Your botanical profile is ready.<br />You can now enter the boutique.
+                {isPendingRole ? (
+                  <>Your botanical profile is under review.<br />We will verify your credentials and notify you once approved.</>
+                ) : (
+                  <>Your botanical profile is ready.<br />You can now enter the boutique.</>
+                )}
               </p>
 
-              <Button onClick={() => navigate('/login')} className={`w-full h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black shadow-2xl transition-all
+              <Button onClick={() => {
+                setSuccess(false);
+                navigate('/login');
+              }} className={`w-full h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black shadow-2xl transition-all
                  ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-sage text-white shadow-sage/20'}`}>
-                Proceed to Portal
+                {isPendingRole ? 'Return to Login' : 'Proceed to Portal'}
               </Button>
             </motion.div>
           </motion.div>
