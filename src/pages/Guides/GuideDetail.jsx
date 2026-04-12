@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
+import { useProducts } from '@/context/ProductContext';
 import { ArrowLeft, Clock, User, Bookmark, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 

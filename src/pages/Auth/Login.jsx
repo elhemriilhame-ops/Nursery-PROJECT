@@ -33,12 +33,18 @@ const Login = () => {
     try {
       const { data } = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password });
       login(data);
+      // Clear fields on success before navigating
+      setEmail('');
+      setPassword('');
       if (data.role === 'admin') navigate('/admin');
       else if (data.role === 'pépiniériste') navigate('/seller');
       else if (data.role === 'livreur') navigate('/delivery');
       else navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+      // Clear fields on failure too
+      setEmail('');
+      setPassword('');
     } finally {
       setLoading(false);
     }
