@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
@@ -12,6 +12,13 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import MyOrders from './pages/Orders/MyOrders';
 import MyFavorites from './pages/Favorites/MyFavorites';
+
+import CustomerLayout from './pages/Account/CustomerLayout';
+import CustomerDashboard from './pages/Account/CustomerDashboard';
+import CustomerOrders from './pages/Account/CustomerOrders';
+import CustomerFavorites from './pages/Account/CustomerFavorites';
+import CustomerProfile from './pages/Account/CustomerProfile';
+import CustomerTracking from './pages/Account/CustomerTracking';
 
 import AdminLayout from './pages/Admin/AdminLayout';
 import Dashboard from './pages/Admin/Dashboard';
@@ -64,8 +71,20 @@ function AppContent() {
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/favorites" element={<MyFavorites />} />
+          
+          {/* Customer Account Routes */}
+          <Route path="/account" element={<CustomerLayout />}>
+            <Route index element={<CustomerDashboard />} />
+            <Route path="orders" element={<CustomerOrders />} />
+            <Route path="tracking" element={<CustomerTracking />} />
+            <Route path="reviews" element={<div className="font-serif italic text-3xl opacity-30">Your reviews history...</div>} />
+            <Route path="favorites" element={<CustomerFavorites />} />
+            <Route path="support" element={<div className="font-serif italic text-3xl opacity-30">Concierge support...</div>} />
+            <Route path="profile" element={<CustomerProfile />} />
+          </Route>
+          
+          <Route path="/my-orders" element={<Navigate to="/account/orders" replace />} />
+          <Route path="/favorites" element={<Navigate to="/account/favorites" replace />} />
           
           {/* Admin Dashboard Routes */}
           <Route path="/admin" element={<AdminLayout />}>

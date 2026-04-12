@@ -36,8 +36,8 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div className="space-y-10">
-          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>Collections</h4>
-          <ul className="space-y-6 text-[11px] font-black uppercase tracking-widest text-white/50">
+          <h4 className={`text-[13px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/80'}`}>Collections</h4>
+          <ul className="space-y-6 text-[14px] font-black uppercase tracking-widest text-white/70">
             {[
               { name: 'Flower Delivery', path: '/shop/flowers' },
               { name: 'House Plants', path: '/shop/plants' },
@@ -56,8 +56,8 @@ export default function Footer() {
 
         {/* Support */}
         <div className="space-y-10">
-          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>Atelier Support</h4>
-          <ul className="space-y-6 text-[11px] font-black uppercase tracking-widest text-white/50">
+          <h4 className={`text-[13px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/80'}`}>Atelier Support</h4>
+          <ul className="space-y-6 text-[14px] font-black uppercase tracking-widest text-white/70">
             {['Our Heritage Story', 'Shipping & Delivery', 'Contact The Atelier', 'Privacy & Terms'].map((item, i) => (
                <li key={i}>
                 <Link to="#" className="hover:text-white transition-all flex items-center group">
@@ -70,7 +70,7 @@ export default function Footer() {
 
         {/* Newsletter */}
         <div className="space-y-10">
-          <h4 className={`text-[10px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/60'}`}>The Botanical Club</h4>
+          <h4 className={`text-[13px] uppercase font-black tracking-[0.4em] transition-colors ${isDarkMode ? 'text-emerald-500' : 'text-white/80'}`}>The Botanical Club</h4>
           <div className={`p-8 rounded-[2.5rem] border transition-all ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-white/10 border-white/20'}`}>
             <p className="text-[13px] text-white/90 font-bold leading-relaxed mb-8">
               Subscribe to receive exclusive harvesting tips and seasonal offers.
@@ -82,7 +82,7 @@ export default function Footer() {
                 className={`border-none px-6 py-7 rounded-2xl text-[11px] font-black outline-none transition-all
                   ${isDarkMode ? 'bg-white/5 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-white/20 text-white placeholder:text-white/60'}`} 
               />
-              <Button className={`w-full py-7 rounded-2xl font-black tracking-[0.3em] uppercase text-[10px] transition-all shadow-2xl active:scale-95
+              <Button className={`w-full py-7 rounded-2xl font-black tracking-[0.3em] uppercase text-[12px] transition-all shadow-2xl active:scale-95
                 ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-white text-slate-900 hover:bg-slate-100'}`}>
                 Join Atelier
               </Button>
@@ -92,8 +92,8 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom Line */}
-      <div className={`container mx-auto px-6 mt-32 pt-10 border-t flex flex-col md:flex-row justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] gap-6 transition-colors
-        ${isDarkMode ? 'border-white/5 text-white/20' : 'border-white/10 text-white/60'}`}>
+      <div className={`container mx-auto px-6 mt-32 pt-10 border-t flex flex-col md:flex-row justify-between items-center text-[12px] font-black uppercase tracking-[0.3em] gap-6 transition-colors
+        ${isDarkMode ? 'border-white/5 text-white/40' : 'border-white/10 text-white/80'}`}>
         <p>© 2026 Sunflowers Botanical Heritage.</p>
         <div className="flex items-center gap-6">
            <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, Search, User, Menu, X, Sun, Moon, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -32,12 +32,15 @@ export default function Navbar() {
     { name: 'Botanical Guides', path: '/guides' },
   ];
 
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   return (
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        isScrolled
-          ? 'bg-background/80 backdrop-blur-md border-border border-b py-4'
+        (isScrolled || !isHomePage)
+          ? (isDarkMode ? 'bg-[#050505]/80 backdrop-blur-md border-white/5 border-b py-4' : 'bg-white/80 backdrop-blur-md border-slate-100 border-b py-4')
           : 'bg-transparent py-6'
       )}
     >
@@ -53,8 +56,8 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className={cn(
           "text-2xl font-serif tracking-tight absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 transition-colors duration-500", 
-          isScrolled 
-            ? (isDarkMode ? "text-white" : "text-foreground") 
+          (isScrolled || !isHomePage) 
+            ? (isDarkMode ? "text-white" : "text-slate-900") 
             : "text-white drop-shadow-md"
         )}>
           Sunflowers
@@ -68,8 +71,8 @@ export default function Navbar() {
               to={link.path}
               className={cn(
                 "text-[10px] uppercase tracking-[0.25em] font-sans font-bold hover:opacity-100 transition-all", 
-                isScrolled 
-                  ? (isDarkMode ? "text-white/60 hover:text-white" : "text-foreground/70 hover:text-foreground") 
+                (isScrolled || !isHomePage) 
+                  ? (isDarkMode ? "text-white/60 hover:text-white" : "text-slate-900/70 hover:text-slate-900") 
                   : "text-white/80 hover:text-white drop-shadow-md"
               )}
             >
@@ -83,41 +86,43 @@ export default function Navbar() {
           <button 
             onClick={toggleDarkMode}
             className={cn("p-2 rounded-full transition-all duration-500", 
-              isScrolled 
-                ? (isDarkMode ? "text-amber-400 bg-white/5" : "text-foreground bg-slate-100") 
+              (isScrolled || !isHomePage) 
+                ? (isDarkMode ? "text-amber-400 bg-white/5" : "text-slate-900 bg-slate-100") 
                 : "text-white bg-white/10"
             )}
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           
-          <button className={cn("hover:scale-110 transition-transform", isScrolled ? (isDarkMode ? "text-white" : "text-foreground") : "text-white drop-shadow-md")}>
+          <button className={cn("hover:scale-110 transition-transform", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}>
             <Search size={22} strokeWidth={1.5} />
           </button>
           <div className="hidden sm:flex items-center">
             {user ? (
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-end mr-2">
-                  <span className={cn("text-[10px] font-bold leading-none tracking-tight", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>{user.name}</span>
+                  <span className={cn("text-[13px] font-bold leading-none tracking-tight", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}>{user.name}</span>
                   {user.role === 'admin' && (
-                    <Link to="/admin" className="text-[8px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
+                    <Link to="/admin" className="text-[11px] text-sage font-black uppercase tracking-[0.2em] mt-0.5 hover:underline">Admin Panel</Link>
                   )}
                 </div>
-                <button
-                  onClick={logout}
-                  className={cn("hover:text-red-500 transition-colors", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}
-                  title="Logout"
+                <Link
+                  to={user.role === 'admin' ? '/admin' : 
+                      user.role === 'pépiniériste' ? '/seller' : 
+                      user.role === 'livreur' ? '/delivery' : '/account'}
+                  className={cn("hover:text-amber-500 transition-colors", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}
+                  title="My Account"
                 >
                   <User size={22} strokeWidth={1.5} />
-                </button>
+                </Link>
               </div>
             ) : (
-              <Link to="/login" className={cn("text-[10px] font-black uppercase tracking-[0.2em] transition-all px-6 py-2.5 rounded-full", isScrolled ? "text-foreground border border-sage/10 hover:text-sage hover:bg-sage/5" : "text-white border border-white/20 hover:bg-white/10 hover:border-white/40 drop-shadow-md")}>
+              <Link to="/login" className={cn("text-[13px] font-black uppercase tracking-[0.2em] transition-all px-6 py-2.5 rounded-full", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white border-white/20" : "text-slate-900 border-slate-200") : "text-white border border-white/20 hover:bg-white/10 hover:border-white/40 drop-shadow-md")}>
                 Sign In
               </Link>
             )}
           </div>
-          <Link to="/favorites" className={cn("hover:scale-110 transition-transform relative", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
+          <Link to="/favorites" className={cn("hover:scale-110 transition-transform relative", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}>
             <Heart size={22} strokeWidth={1.5} />
             {favorites.length > 0 && (
               <span className="absolute -top-1 -right-2 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
@@ -125,7 +130,7 @@ export default function Navbar() {
               </span>
             )}
           </Link>
-          <Link to="/cart" className={cn("hover:scale-110 transition-transform relative", isScrolled ? "text-foreground" : "text-white drop-shadow-md")}>
+          <Link to="/cart" className={cn("hover:scale-110 transition-transform relative", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}>
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-2 bg-sage text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">

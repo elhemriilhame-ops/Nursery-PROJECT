@@ -14,9 +14,9 @@ export function CategoryPreview() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
       {CATEGORIES.map((cat, idx) => (
-        <Link 
-          key={cat.slug} 
-          to={`/shop/${cat.slug}`} 
+        <Link
+          key={cat.slug}
+          to={`/shop/${cat.slug}`}
           className="group relative h-[75vh] w-full overflow-hidden block rounded-[3rem] border border-transparent hover:border-emerald-500/20 transition-all duration-700 shadow-sm hover:shadow-2xl"
         >
           {/* Image */}
@@ -34,28 +34,28 @@ export function CategoryPreview() {
 
           {/* Interactive Information Overlay (Hover) */}
           <div className="absolute inset-x-0 bottom-0 p-12 bg-gradient-to-t from-black/80 via-black/40 to-transparent transform translate-y-8 group-hover:translate-y-0 transition-all duration-700 opacity-0 group-hover:opacity-100 z-10 text-white">
-             <motion.span 
-               initial={{ opacity: 0, x: -10 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] block mb-4"
-             >
-                Explore The Collection
-             </motion.span>
-             <h3 className="text-white text-4xl font-serif font-black tracking-tight italic">{cat.name}</h3>
-             <div className="mt-8 flex items-center gap-4">
-                <div className="w-12 h-[1px] bg-white/30" />
-                <span className="text-[10px] text-white/60 font-black uppercase tracking-widest">Shop Collection</span>
-             </div>
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] block mb-4"
+            >
+              Explore The Collection
+            </motion.span>
+            <h3 className="text-white text-4xl font-serif font-black tracking-tight italic">{cat.name}</h3>
+            <div className="mt-8 flex items-center gap-4">
+              <div className="w-12 h-[1px] bg-white/30" />
+              <span className="text-[10px] text-white/60 font-black uppercase tracking-widest">Shop Collection</span>
+            </div>
           </div>
 
           {/* Centered Modern Card (Visible initially) */}
           <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-700 pointer-events-none p-4 z-20">
-             <div className={`backdrop-blur-xl p-8 px-12 border text-center rounded-[2rem] shadow-2xl transition-all scale-100 group-hover:scale-110
+            <div className={`backdrop-blur-xl p-8 px-12 border text-center rounded-[2rem] shadow-2xl transition-all scale-100 group-hover:scale-110
                ${isDarkMode ? 'bg-black/40 border-white/10 text-white' : 'bg-white/80 border-slate-100 text-slate-900'}`}>
-                 <h3 className="text-2xl font-serif font-black tracking-tighter italic">{cat.name}</h3>
-                 <div className={`h-[2px] w-12 mx-auto my-3 transition-all group-hover:w-20 ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-sage'}`} />
-                 <span className={`text-[9px] font-black uppercase tracking-[0.3em] ${isDarkMode ? 'text-white/60' : 'text-slate-400'}`}>Discover More</span>
-             </div>
+              <h3 className="text-2xl font-serif font-black tracking-tighter italic">{cat.name}</h3>
+              <div className={`h-[2px] w-12 mx-auto my-3 transition-all group-hover:w-20 ${isDarkMode ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-sage'}`} />
+              <span className={`text-[9px] font-black uppercase tracking-[0.3em] ${isDarkMode ? 'text-white/60' : 'text-slate-400'}`}>Discover More</span>
+            </div>
           </div>
         </Link>
       ))}

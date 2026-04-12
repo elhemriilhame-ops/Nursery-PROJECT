@@ -26,6 +26,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/AuthContext';
+import axios from 'axios';
 
 const MOROCCAN_CITIES = [
   'Agadir', 'Al Hoceima', 'Azilal', 'Beni Mellal', 'Benslimane', 'Berkane', 'Berrechid', 
@@ -50,13 +52,50 @@ export default function Cart() {
   const shipping = 15;
   const total = subtotal + shipping;
 
-  const handlePayment = () => {
+  const { user } = useAuth();
+  const handlePayment = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      const { token } = JSON.parse(storedUser);
+
+      const orderData = {
+        items: items.map(item => ({
+          product: item.id, // Assuming item.id is the MongoDB ObjectId
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          size: item.size
+        })),
+        amount: total,
+        shippingAddress: {
+          name: user.name,
+          city: shippingCity,
+          // Other fields are placeholders for now
+          street: 'Main Street 123',
+          postalCode: '10000',
+          country: 'Morocco'
+        }
+      };
+
+      await axios.post('http://localhost:5000/api/orders', orderData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
       setIsProcessing(false);
       setIsConfirmed(true);
       if (clearCart) clearCart();
-    }, 2500);
+    } catch (err) {
+      console.error('Payment failed:', err);
+      setIsProcessing(false);
+      const message = err.response?.data?.message || 'Order creation failed. Please try again.';
+      alert(message);
+    }
   };
 
   return (
@@ -113,7 +152,7 @@ export default function Cart() {
 
                <div className="w-full space-y-4">
                  <Button 
-                   onClick={() => navigate('/my-orders')} 
+                   onClick={() => navigate('/account/orders')} 
                    className={`w-full h-16 rounded-2xl uppercase tracking-[0.3em] text-[10px] font-black transition-all
                      ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400' : 'bg-slate-900 text-white hover:bg-sage'}`}>
                    View My Orders
