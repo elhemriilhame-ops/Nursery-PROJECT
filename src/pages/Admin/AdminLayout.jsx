@@ -21,7 +21,8 @@ import {
   AlertTriangle,
   Wallet,
   Inbox,
-  ShieldCheck
+  ShieldCheck,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
@@ -77,6 +78,7 @@ const AdminLayout = () => {
     { name: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
     { name: 'Requests', icon: Inbox, path: '/admin/requests' },
     { name: 'Products', icon: Package, path: '/admin/products' },
+    { name: 'Guides', icon: BookOpen, path: '/admin/guides' },
     { name: 'Orders', icon: ShoppingBag, path: '/admin/orders' },
     { name: 'Sellers', icon: Store, path: '/admin/sellers' },
     { name: 'Deliveries', icon: TrendingUp, path: '/admin/deliveries' },

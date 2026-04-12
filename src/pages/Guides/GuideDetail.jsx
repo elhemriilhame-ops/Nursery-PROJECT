@@ -13,8 +13,19 @@ export default function GuideDetail() {
   const [guide, setGuide] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const { guides } = useProducts();
+
   useEffect(() => {
     const fetchGuide = async () => {
+      // 1. Try local context first (fixes mock IDs like 'g1')
+      const localGuide = guides.find(g => g.id === id || g._id === id);
+      if (localGuide) {
+        setGuide(localGuide);
+        setLoading(false);
+        return;
+      }
+
+      // 2. Only fetch from API if not in context
       try {
         const { data } = await axios.get(`http://localhost:5000/api/guides/${id}`);
         setGuide(data);
@@ -25,7 +36,7 @@ export default function GuideDetail() {
       }
     };
     fetchGuide();
-  }, [id]);
+  }, [id, guides]);
 
   if (loading) {
     return (

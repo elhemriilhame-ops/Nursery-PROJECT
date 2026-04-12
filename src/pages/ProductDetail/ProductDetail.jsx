@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { FLOWERS, PLANTS, OILS } from '@/data/mockData';
+import { useProducts } from '@/context/ProductContext';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -27,17 +27,24 @@ import { useTheme } from '@/context/ThemeContext';
 export default function ProductDetail() {
   const { id } = useParams();
   const { isDarkMode } = useTheme();
+  const { products, loading } = useProducts();
   const [selectedSize, setSelectedSize] = useState('Standard');
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
   const product = useMemo(() => {
-    return [...FLOWERS, ...PLANTS, ...OILS].find(p => p.id === id);
-  }, [id]);
+    return products.find(p => p.id === id);
+  }, [id, products]);
+
+  if (loading) return (
+    <div className="pt-32 flex justify-center h-screen bg-[#FCFCFB] dark:bg-[#090909]">
+      <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+    </div>
+  );
 
   if (!product) return <div className="pt-32 text-center h-screen font-serif text-3xl opacity-40">Specimen Not Found.</div>;
 
-  const related = [...FLOWERS, ...PLANTS, ...OILS].filter(p => p.id !== id && p.category === product.category).slice(0, 4);
+  const related = products.filter(p => p.id !== id && p.category === product.category).slice(0, 4);
 
   return (
     <div className={`pt-24 min-h-screen transition-colors duration-700 ${isDarkMode ? 'bg-[#090909]' : 'bg-[#FCFCFB]'}`}>

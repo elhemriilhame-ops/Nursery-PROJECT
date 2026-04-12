@@ -1,12 +1,23 @@
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@/context/ThemeContext';
+import { useProducts } from '@/context/ProductContext';
 import { BookOpen, Sparkles } from 'lucide-react';
 
 export function PlantGuidesTeaser() {
   const { isDarkMode } = useTheme();
+  const { getFeaturedGuides, loading } = useProducts();
+  const [imgError, setImgError] = useState(false);
+  
+  const featuredGuide = getFeaturedGuides()[0] || {
+    title: 'Mastering the Art of Greenery',
+    description: 'Every plant tells a story. Discover the secrets of light, water, and earth.',
+    image: '/plant-1.png'
+  };
 
+  const displayImage = imgError ? 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=800&q=80' : featuredGuide.image;
   return (
     <section className="relative flex flex-col md:flex-row items-center py-32 overflow-visible">
       
@@ -18,7 +29,13 @@ export function PlantGuidesTeaser() {
            transition={{ duration: 1.5, ease: "easeOut" }}
            className={`w-full h-full bg-cover bg-center transition-all duration-1000
              ${isDarkMode ? 'brightness-75 group-hover:brightness-100' : 'grayscale-[0.2] group-hover:grayscale-0'}`}
-           style={{ backgroundImage: 'url("/plant-1.png")' }}
+           style={{ backgroundImage: `url("${displayImage}")` }}
+        />
+        <img 
+          src={featuredGuide.image} 
+          onError={() => setImgError(true)} 
+          className="hidden" 
+          alt="" 
         />
         
         {/* Animated Accent Frames */}
@@ -50,14 +67,14 @@ export function PlantGuidesTeaser() {
               </span>
               <BookOpen size={14} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
             </div>
-            <h2 className={`text-4xl md:text-5xl lg:text-6xl font-serif font-black tracking-tighter leading-[0.9] italic`}>
-              Mastering the <br />Art of <span className={isDarkMode ? 'text-emerald-400' : 'text-sage'}>Greenery</span>
+            <h2 className={`text-4xl md:text-5xl lg:text-5xl font-serif font-black tracking-tighter leading-[1.1] italic`}>
+              {featuredGuide.title}
             </h2>
           </div>
           
           <p className={`leading-relaxed max-w-md font-serif text-lg italic transition-colors
             ${isDarkMode ? 'text-white' : 'text-slate-600'}`}>
-            "Every plant tells a story. From the way it reaches for the sun to the delicate patterns on its leaves."
+            "{featuredGuide.description}"
           </p>
           
           <p className={`leading-relaxed max-w-sm text-sm font-bold transition-colors

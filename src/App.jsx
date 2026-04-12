@@ -32,6 +32,7 @@ import AdminReviews from './pages/Admin/AdminReviews';
 import AdminComplaints from './pages/Admin/AdminComplaints';
 import AdminEarnings from './pages/Admin/AdminEarnings';
 import AdminRequests from './pages/Admin/AdminRequests';
+import AdminGuides from './pages/Admin/AdminGuides';
 
 import SellerLayout from './pages/Seller/SellerLayout';
 import SellerDashboard from './pages/Seller/SellerDashboard';
@@ -90,6 +91,7 @@ function AppContent() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<ProductManagement />} />
+            <Route path="guides" element={<AdminGuides />} />
             <Route path="sellers" element={<AdminSellers />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="deliveries" element={<Deliveries />} />

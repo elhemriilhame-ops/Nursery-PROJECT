@@ -7,6 +7,7 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useFavorites } from '@/context/FavoritesContext';
+import GlobalSearch from './GlobalSearch';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,6 +16,15 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { favorites } = useFavorites();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsSearchOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,7 +104,11 @@ export default function Navbar() {
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           
-          <button className={cn("hover:scale-110 transition-transform", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}>
+          <button 
+            onClick={() => setIsSearchOpen(true)}
+            className={cn("hover:scale-110 transition-transform", (isScrolled || !isHomePage) ? (isDarkMode ? "text-white" : "text-slate-900") : "text-white drop-shadow-md")}
+            aria-label="Search"
+          >
             <Search size={22} strokeWidth={1.5} />
           </button>
           <div className="hidden sm:flex items-center">
@@ -158,6 +172,8 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      {/* Global Search Interface */}
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>
   );
 }

@@ -52,11 +52,15 @@ const ProductManagement = () => {
 
    const fetchProducts = async () => {
       try {
-         const response = await fetch('http://localhost:5000/api/products');
+         setLoading(true);
+         const response = await fetch('http://127.0.0.1:5000/api/products');
+         if (!response.ok) throw new Error('Network response was not ok');
          const data = await response.json();
-         setProducts(data);
+         setProducts(Array.isArray(data) ? data : []);
+         setError(null);
       } catch (err) {
-         setError('Failed to load products');
+         console.error('Fetch error:', err);
+         setError('Connection failed. Make sure the backend server (port 5000) is running.');
       } finally {
          setLoading(false);
       }
@@ -191,6 +195,18 @@ const ProductManagement = () => {
             </div>
          </div>
 
+         {error && (
+            <div className={`p-8 rounded-[2rem] flex items-center gap-4 border shadow-sm mb-8 transition-all
+               ${isDarkMode ? 'bg-red-500/10 border-red-500/20 text-red-100' : 'bg-red-50 border-red-100 text-red-600'}`}>
+               <AlertCircle size={32} className="shrink-0" />
+               <div className="space-y-1">
+                  <p className="font-black uppercase tracking-widest text-[10px]">Registry Retrieval Fault</p>
+                  <p className="text-sm font-medium">{error}</p>
+               </div>
+               <button onClick={fetchProducts} className="ml-auto px-6 py-3 bg-red-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">Retry Link</button>
+            </div>
+         )}
+
          {/* Products Table */}
          <div className={`rounded-[3rem] border shadow-sm overflow-hidden transition-all
             ${isDarkMode ? 'bg-[#141414] border-white/10' : 'bg-white border-slate-100'}`}>
@@ -226,7 +242,14 @@ const ProductManagement = () => {
                                  <div className="flex items-center gap-6">
                                     <div className={`w-16 h-16 rounded-2xl overflow-hidden shrink-0 border relative group shadow-sm transition-all
                                        ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-slate-100 border-slate-100'}`}>
-                                       <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                       <img 
+                                          src={p.image} 
+                                          alt={p.name} 
+                                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                                          onError={(e) => {
+                                             e.target.src = 'https://images.unsplash.com/photo-1501004318641-739e828a1751?auto=format&fit=crop&w=800&q=80';
+                                          }}
+                                       />
                                        {p.featured && (
                                           <div className="absolute top-1 left-1 bg-amber-400 w-2 h-2 rounded-full shadow-lg shadow-amber-400/50" />
                                        )}

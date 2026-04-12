@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { ProductCard } from '@/components/shop/ProductCard';
-import { FLOWERS, PLANTS, OILS } from '@/data/mockData';
+import { useProducts } from '@/context/ProductContext';
 import { useState, useMemo } from 'react';
 import { 
   ChevronDown, 
@@ -42,12 +42,19 @@ export default function Shop() {
   ];
   const colors = ["White", "Pink", "Red", "Yellow", "Lavender"];
 
+  const { products: allProducts, getFlowers, getPlants, getOils, loading } = useProducts();
+
   const products = useMemo(() => {
     let list = [];
-    if (category === 'flowers') list = [...FLOWERS];
-    else if (category === 'plants') list = [...PLANTS];
-    else if (category === 'oils') list = [...OILS];
-    else list = [...FLOWERS, ...PLANTS, ...OILS];
+    if (category === 'flowers') list = getFlowers();
+    else if (category === 'plants') list = getPlants();
+    else if (category === 'oils') list = getOils();
+    else list = [...allProducts];
+
+    // Safety check if list is empty but products exist, fallback to allProducts
+    if (list.length === 0 && allProducts.length > 0 && category !== 'all') {
+       // list = [...allProducts]; // Only fallback if we explicitly want to see something
+    }
 
     // Category specific filters
     if (category === 'flowers') {
@@ -83,6 +90,12 @@ export default function Shop() {
 
   return (
     <div className={`pt-24 min-h-screen transition-colors duration-700 ${isDarkMode ? 'bg-[#090909]' : 'bg-[#FCFCFB]'}`}>
+      
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+          <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+        </div>
+      )}
       
       {/* Page Header */}
       <div className="container mx-auto px-6 py-20 text-center space-y-6">

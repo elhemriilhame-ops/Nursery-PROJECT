@@ -7,16 +7,18 @@ import { cn } from '@/lib/utils';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useFavorites } from '@/context/FavoritesContext';
+import { useState } from 'react';
 
 export function ProductCard({ id, name, price, image, category, description, featured }) {
   const { addToCart } = useCart();
   const { isDarkMode } = useTheme();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const [imgError, setImgError] = useState(false);
 
   const isFav = isFavorite(id);
 
   const handleFavoriteClick = (e) => {
-    e.preventDefault(); // Prevents navigating to product detail
+    e.preventDefault(); 
     e.stopPropagation();
     toggleFavorite({ id, name, price, image, category, description, featured });
   };
@@ -24,6 +26,8 @@ export function ProductCard({ id, name, price, image, category, description, fea
   const handleAddToCart = () => {
     addToCart({ id, name, price, image, category, description });
   };
+
+  const displayImage = imgError ? 'https://images.unsplash.com/photo-1501004318641-739e828a1751?auto=format&fit=crop&w=800&q=80' : image;
 
   return (
     <motion.div
@@ -57,13 +61,15 @@ export function ProductCard({ id, name, price, image, category, description, fea
 
         {/* Product Image */}
         <Link to={`/product/${id}`}>
-          <div className="overflow-hidden aspect-[4/5]">
-            <motion.div
+          <div className="overflow-hidden aspect-[4/5] relative">
+            <motion.img
               whileHover={{ scale: 1.15 }}
               transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
-              className={`w-full h-full bg-cover bg-center transition-all duration-700
+              src={displayImage}
+              alt={name}
+              onError={() => setImgError(true)}
+              className={`w-full h-full object-cover transition-all duration-700
                 ${isDarkMode ? 'brightness-90 group-hover:brightness-110' : 'grayscale-[0.1] group-hover:grayscale-0'}`}
-              style={{ backgroundImage: `url("${image}")` }}
             />
           </div>
         </Link>
