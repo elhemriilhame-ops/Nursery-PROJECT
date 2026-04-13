@@ -120,7 +120,10 @@ const Login = () => {
             <p className={`font-serif italic text-base ${isDarkMode ? 'text-white/40' : 'text-slate-600'}`}>Identify yourself to access the boutique.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
+            {/* Hidden dummy inputs to trick browser autofill */}
+            <input type="text" style={{ display: 'none' }} />
+            <input type="password" style={{ display: 'none' }} />
             <div className="space-y-4">
               <AuthInput
                 icon={Mail}
@@ -130,6 +133,7 @@ const Login = () => {
                 onChange={setEmail}
                 placeholder="email@sunflower.io"
                 isDark={isDarkMode}
+                autoComplete="off"
               />
               <AuthInput
                 icon={Lock}
@@ -139,6 +143,7 @@ const Login = () => {
                 onChange={setPassword}
                 placeholder="••••••••"
                 isDark={isDarkMode}
+                autoComplete="new-password"
               />
             </div>
 
@@ -196,7 +201,7 @@ function StatCard({ value, label, isDark }) {
   );
 }
 
-function AuthInput({ icon: Icon, label, type, value, onChange, placeholder, isDark }) {
+function AuthInput({ icon: Icon, label, type, value, onChange, placeholder, isDark, autoComplete }) {
   return (
     <div className="space-y-2 group">
       <label className={`text-xs font-black uppercase tracking-[0.2em] ml-6 transition-colors
@@ -213,6 +218,7 @@ function AuthInput({ icon: Icon, label, type, value, onChange, placeholder, isDa
           onChange={(e) => onChange(e.target.value)}
           required
           placeholder={placeholder}
+          autoComplete={autoComplete || 'off'}
           className={`w-full pl-16 pr-8 py-3.5 rounded-2xl border outline-none transition-all font-bold text-base shadow-inner tracking-wide
             ${isDark
               ? 'bg-white/5 border-white/20 text-white placeholder:text-white/30 focus:bg-white/15'

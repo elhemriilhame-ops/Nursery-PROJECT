@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Twitter, Mail, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { Instagram, Facebook, MessageCircle, Mail, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTheme } from '@/context/ThemeContext';
@@ -25,9 +25,11 @@ export default function Footer() {
           </p>
           
           <div className="flex space-x-4 pt-4">
-            {[Instagram, Facebook, Twitter].map((Icon, i) => (
+            {[Instagram, Facebook, MessageCircle].map((Icon, i) => (
                <div key={i} className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all cursor-pointer shadow-xl
-                 ${isDarkMode ? 'bg-white/5 hover:bg-emerald-500 hover:text-white border border-white/5' : 'bg-white/20 hover:bg-slate-900 group-hover:scale-110'}`}>
+                 ${isDarkMode 
+                   ? 'bg-white/5 hover:bg-emerald-500 hover:text-white border border-white/5' 
+                   : 'bg-white/20 hover:bg-[#25D366] hover:text-white group-hover:scale-110'}`}>
                  <Icon size={20} strokeWidth={1.5} />
                </div>
             ))}

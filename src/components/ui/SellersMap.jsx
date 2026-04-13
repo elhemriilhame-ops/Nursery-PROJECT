@@ -193,7 +193,7 @@ export function SellersMap() {
                     Trusted Artisans
                  </span>
               </div>
-              <h2 className={`text-6xl lg:text-8xl font-serif leading-[0.85] tracking-tighter uppercase italic transition-colors
+              <h2 className={`text-5xl lg:text-7xl font-serif leading-[0.85] tracking-tighter uppercase italic transition-colors
                 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                 Artisan <br/> <span className="not-italic opacity-80">Network</span>
               </h2>

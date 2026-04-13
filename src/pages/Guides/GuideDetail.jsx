@@ -106,7 +106,14 @@ export default function GuideDetail() {
           </motion.div>
 
           {/* Content */}
-          <div className="max-w-2xl mx-auto prose prose-lg prose-slate dark:prose-invert prose-headings:font-serif prose-headings:italic prose-a:text-emerald-500 hover:prose-a:text-emerald-400 prose-img:rounded-[2rem]">
+          <div className={`max-w-3xl mx-auto prose prose-xl dark:prose-invert 
+            [&_h1]:text-3xl md:[&_h1]:text-4xl [&_h1]:font-black [&_h1]:tracking-tight [&_h1]:mb-12
+            [&_h2]:text-xl md:[&_h2]:text-3xl [&_h2]:font-black [&_h2]:tracking-tight [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:border-b-2 [&_h2]:pb-4
+            [&_h3]:text-lg md:[&_h3]:text-xl [&_h3]:font-black [&_h3]:mt-12 [&_h3]:mb-4
+            [&_p]:leading-snug [&_p]:text-lg md:[&_p]:text-xl [&_p]:mb-10 [&_p]:font-medium
+            [&_li]:leading-snug [&_li]:text-lg md:[&_li]:text-xl [&_li]:mb-4
+            prose-img:rounded-[2.5rem]
+            ${isDarkMode ? '[&_h1]:text-white [&_h2]:text-emerald-400 [&_h3]:text-emerald-500 [&_p]:text-white/80' : '[&_h1]:text-slate-900 [&_h2]:text-emerald-700 [&_h3]:text-emerald-800 [&_p]:text-slate-700'}`}>
             <ReactMarkdown>{guide.content}</ReactMarkdown>
           </div>
 

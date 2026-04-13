@@ -11,15 +11,18 @@ import {
   Calendar, 
   ChevronUp, 
   ChevronDown as ChevronDownIcon,
-  Sparkles 
+  Sparkles,
+  Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
+import GlobalSearch from '@/components/layout/GlobalSearch';
 
 export default function Shop() {
   const { category } = useParams();
   const { isDarkMode } = useTheme();
   const [sortBy, setSortBy] = useState('Featured');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   // Filter states
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
@@ -61,14 +64,15 @@ export default function Shop() {
       if (selectedOccasion) {
         list = list.filter(p => p.occasion === selectedOccasion);
       }
-      if (selectedColor) {
-        list = list.filter(p => p.color === selectedColor);
-      }
     }
 
     // Global filters
     if (selectedPrice) {
       list = list.filter(p => p.price >= selectedPrice.min && p.price <= selectedPrice.max);
+    }
+
+    if (selectedColor) {
+      list = list.filter(p => p.color === selectedColor);
     }
 
     // Sorting logic
@@ -164,6 +168,19 @@ export default function Shop() {
                 {/* Filters Section */}
                 <div className="space-y-8">
                    <div className="space-y-3">
+                      {/* Search Trigger (Dynamic: Hide on flowers as per user request) */}
+                      {category !== 'flowers' && (
+                        <button 
+                          onClick={() => setIsSearchOpen(true)}
+                          className={`w-full flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 group mb-4
+                            ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-white border-slate-100 hover:border-sage shadow-sm'}`}
+                        >
+                           <Search size={18} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                           <span className={`text-[11px] font-black uppercase tracking-[0.2em] transition-colors
+                             ${isDarkMode ? 'text-white/40 group-hover:text-white' : 'text-slate-400 group-hover:text-slate-900'}`}>Search entire boutique</span>
+                        </button>
+                      )}
+
                       <p className={`text-[10px] font-black uppercase tracking-[0.2em] italic transition-colors
                         ${isDarkMode ? 'text-emerald-400' : 'text-sage'}`}>
                         {products.length} specimens available
@@ -244,7 +261,7 @@ export default function Shop() {
                              onClick={() => setIsColorOpen(!isColorOpen)}
                              className="w-full flex items-center justify-between group py-1"
                            >
-                              <span className={`text-lg font-black tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Chromatics</span>
+                              <span className={`text-lg font-black tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Colors</span>
                               {isColorOpen ? <ChevronUp size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} /> : <ChevronDownIcon size={18} className={isDarkMode ? 'text-emerald-500' : 'text-slate-800'} />}
                            </button>
                            {isColorOpen && (
@@ -307,13 +324,40 @@ export default function Shop() {
              </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-32 pt-12 pb-32">
-            {products.map((p) => (
-              <ProductCard key={p.id} {...p} />
-            ))}
+          <div className="space-y-16 py-12">
+            <div className={`flex flex-col md:flex-row justify-between items-center gap-8 border-b transition-colors pb-12
+              ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
+               <div className="space-y-4 text-center md:text-left">
+                 <span className={`text-[14px] font-black uppercase tracking-[0.4em] transition-colors
+                    ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>All Products</span>
+                 <p className={`text-[11px] font-black uppercase tracking-[0.4em] transition-colors
+                   ${isDarkMode ? 'text-emerald-500' : 'text-sage'}`}>{products.length} specimens in collection</p>
+               </div>
+
+               <div className="w-full md:w-96">
+                  <button 
+                    onClick={() => setIsSearchOpen(true)}
+                    className={`w-full flex items-center justify-between px-8 py-5 rounded-2xl border transition-all duration-300
+                      ${isDarkMode ? 'bg-white/5 border-white/5 hover:border-emerald-500/50' : 'bg-white border-slate-100 hover:border-sage shadow-xl shadow-slate-200/40'}`}
+                  >
+                    <div className="flex items-center gap-4">
+                       <Search size={18} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                       <span className={`text-[11px] font-black uppercase tracking-[0.2em] transition-colors
+                         ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>Search archives...</span>
+                    </div>
+                  </button>
+               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-32 pb-32">
+              {products.map((p) => (
+                <ProductCard key={p.id} {...p} />
+              ))}
+            </div>
           </div>
         )}
       </div>
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }

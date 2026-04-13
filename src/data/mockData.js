@@ -243,18 +243,22 @@ export const GUIDES = [
   {
     id: 'g1',
     title: 'Caring for your Monstera',
+    category: 'Growth',
     description: 'A complete guide to keeping your Swiss Cheese Plant thriving and green.',
     image: '/plant-1.png',
     author: 'Elena Rossi',
-    date: 'March 15, 2026'
+    date: 'March 15, 2026',
+    content: "# Caring for your Monstera\n\nThe Swiss Cheese Plant is a classic of modern botanical interior design. Learn its secrets..."
   },
   {
     id: 'g2',
     title: 'The Art of Floral Arrangement',
+    category: 'Aesthetics',
     description: 'Learn the secrets of luxury florists: balance, color, and texture.',
     image: '/flower-1.png',
     author: 'Julian Thorne',
-    date: 'March 10, 2026'
+    date: 'March 10, 2026',
+    content: "# The Art of Floral Arrangement\n\nLuxury floriculture is an art of balance and timing. Discover how we select our blooms..."
   }
 ];
 

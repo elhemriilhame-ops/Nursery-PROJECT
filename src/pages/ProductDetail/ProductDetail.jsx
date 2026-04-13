@@ -58,14 +58,14 @@ export default function ProductDetail() {
         <span className={isDarkMode ? 'text-white shadow-emerald-500/10' : 'text-slate-900'}>{product.name}</span>
       </div>
 
-      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 py-12">
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 py-6">
         {/* Gallery Section */}
         <div className="space-y-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: 'easeOut' }}
-            className={`aspect-[4/5] bg-cover bg-center rounded-[3.5rem] shadow-2xl relative overflow-hidden group border transition-all duration-700
+            className={`aspect-square md:aspect-[4/5] lg:aspect-square bg-cover bg-center rounded-[3.5rem] shadow-2xl relative overflow-hidden group border transition-all duration-700
                ${isDarkMode ? 'border-white/5 shadow-black' : 'border-slate-100 shadow-slate-200'}`}
             style={{ backgroundImage: `url("${product.image}")` }}
           >
@@ -104,7 +104,7 @@ export default function ProductDetail() {
             </div>
 
             <div className="space-y-4">
-              <h1 className={`text-5xl md:text-7xl font-serif font-black leading-none tracking-tighter italic transition-colors
+              <h1 className={`text-4xl md:text-5xl font-serif font-black leading-none tracking-tighter italic transition-colors
                  ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                 {product.name}
               </h1>
@@ -115,75 +115,77 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Plant Care Advanced Section */}
-          {product.care && (
-            <div className={`rounded-[3rem] p-12 space-y-12 transition-all duration-700 border shadow-2xl
-              ${isDarkMode ? 'bg-[#141414] border-white/5 shadow-black' : 'bg-slate-50 border-slate-100 shadow-slate-100/50'}`}>
-              <div className="flex items-center gap-4">
-                <div className={`p-3 rounded-2xl transition-colors ${isDarkMode ? 'bg-white/5' : 'bg-white'}`}>
-                  <Info size={20} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+          {/* Unified Purchase & Care Hub */}
+          <div className="space-y-6">
+            <div className={`rounded-[2.5rem] p-8 space-y-6 border transition-all duration-700
+              ${isDarkMode ? 'bg-[#141414] border-white/5 shadow-2xl shadow-black' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50'}`}>
+              
+              {/* Mini Care Row - Top */}
+              {product.care && (
+                <div className={`pb-6 border-b transition-colors ${isDarkMode ? 'border-white/5' : 'border-slate-50'}`}>
+                   <div className="flex items-center gap-3 mb-6">
+                      <div className={`p-2 rounded-xl transition-colors ${isDarkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
+                        <Info size={14} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                      </div>
+                      <h3 className={`text-[9px] font-black uppercase tracking-[0.3em] italic transition-colors
+                           ${isDarkMode ? 'text-white/60' : 'text-slate-500'}`}>Botanical Care Guide</h3>
+                   </div>
+                   <div className="grid grid-cols-3 gap-6">
+                      <CareItem icon={Sun} label="Light" value={product.care.light} color="amber" isDark={isDarkMode} />
+                      <CareItem icon={ThermometerSun} label="Temp" value={product.care.temperature} color="orange" isDark={isDarkMode} />
+                      <CareItem icon={Waves} label="Humidity" value={product.care.humidity} color="cyan" isDark={isDarkMode} />
+                      <CareItem icon={Droplet} label="Water" value={product.care.watering} color="blue" isDark={isDarkMode} />
+                      <CareItem icon={Layers} label="Substrate" value={product.care.soil} color="stone" isDark={isDarkMode} />
+                      <CareItem icon={Sparkles} label="Social" value={product.care.sensitivity} color="purple" isDark={isDarkMode} />
+                   </div>
                 </div>
-                <h3 className={`text-[11px] font-black uppercase tracking-[0.4em] italic transition-colors
-                     ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Botanical Passport</h3>
+              )}
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
+                  <span className={isDarkMode ? 'text-white/40' : 'text-slate-400'}>Atelier Selection / Size</span>
+                  <button className={`flex items-center space-x-2 transition-colors ${isDarkMode ? 'text-emerald-500 hover:text-white' : 'text-sage hover:text-slate-900'}`}>
+                    <Ruler size={12} /> <span>Dimensions Guide</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-4 gap-3">
+                  {['Small', 'Standard', 'Deluxe', 'Premium'].map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`py-4 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 border
+                        ${selectedSize === size
+                          ? (isDarkMode ? 'bg-white text-black border-white' : 'bg-slate-900 text-white border-slate-900')
+                          : (isDarkMode ? 'border-white/5 text-white/40 hover:border-white/20' : 'border-slate-100 text-slate-400 hover:border-slate-900')
+                        }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-y-12 gap-x-8">
-                <CareItem icon={Sun} label="Light" value={product.care.light} color="amber" isDark={isDarkMode} />
-                <CareItem icon={ThermometerSun} label="Temp" value={product.care.temperature} color="orange" isDark={isDarkMode} />
-                <CareItem icon={Waves} label="Humidity" value={product.care.humidity} color="cyan" isDark={isDarkMode} />
-                <CareItem icon={Droplet} label="Water" value={product.care.watering} color="blue" isDark={isDarkMode} />
-                <CareItem icon={Layers} label="Substrate" value={product.care.soil} color="stone" isDark={isDarkMode} />
-                <CareItem icon={Sparkles} label="Social" value={product.care.sensitivity} color="purple" isDark={isDarkMode} />
-              </div>
-            </div>
-          )}
-
-          {/* Configuration Section */}
-          <div className="space-y-10">
-            <div className="space-y-6">
-              <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                <span className={isDarkMode ? 'text-white/40' : 'text-slate-400'}>Atelier Selection / Size</span>
-                <button className={`flex items-center space-x-2 transition-colors ${isDarkMode ? 'text-emerald-500 hover:text-white' : 'text-sage hover:text-slate-900'}`}>
-                  <Ruler size={14} /> <span>Dimensions Guide</span>
+              {/* Actions */}
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+                <div className={`flex items-center rounded-2xl px-4 h-16 transition-all border
+                  ${isDarkMode ? 'bg-white/5 border-white/5 text-white' : 'bg-slate-50 border-slate-100 text-slate-900'}`}>
+                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-xl px-2 hover:scale-125 transition-transform">-</button>
+                  <span className="text-lg w-10 text-center font-black">{quantity}</span>
+                  <button onClick={() => setQuantity(q => q + 1)} className="text-xl px-2 hover:scale-125 transition-transform">+</button>
+                </div>
+                <Button
+                  onClick={() => addToCart(product, quantity, selectedSize)}
+                  className={`flex-1 h-16 rounded-2xl font-black uppercase tracking-[0.3em] text-[10px] shadow-2xl transition-all hover:scale-[1.02] active:scale-95 group
+                    ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}
+                >
+                  <ShoppingBag size={18} className="mr-3 group-hover:rotate-12 transition-transform" />
+                  Reserve Specimen
+                </Button>
+                <button className={`w-16 h-16 flex items-center justify-center rounded-2xl border transition-all shrink-0 hover:scale-110
+                  ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-rose-500/10 hover:text-rose-500' : 'bg-white border-slate-100 text-slate-800 hover:text-rose-500'}`}>
+                  <Heart size={20} className="transition-all" />
                 </button>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {['Small', 'Standard', 'Deluxe', 'Premium'].map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`py-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border
-                      ${selectedSize === size
-                        ? (isDarkMode ? 'bg-white text-black border-white' : 'bg-slate-900 text-white border-slate-900')
-                        : (isDarkMode ? 'border-white/5 text-white/40 hover:border-white/20' : 'border-slate-100 text-slate-400 hover:border-slate-900')
-                      }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-6 items-stretch">
-              <div className={`flex items-center rounded-3xl px-6 h-20 transition-all border
-                ${isDarkMode ? 'bg-white/5 border-white/5 text-white' : 'bg-slate-50 border-slate-100 text-slate-900'}`}>
-                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-2xl px-4 hover:scale-125 transition-transform">-</button>
-                <span className="text-xl w-12 text-center font-black">{quantity}</span>
-                <button onClick={() => setQuantity(q => q + 1)} className="text-2xl px-4 hover:scale-125 transition-transform">+</button>
-              </div>
-              <Button
-                onClick={() => addToCart(product, quantity, selectedSize)}
-                className={`flex-1 h-20 rounded-[1.5rem] font-black uppercase tracking-[0.3em] text-[10px] shadow-2xl transition-all hover:scale-[1.02] active:scale-95 group
-                  ${isDarkMode ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20' : 'bg-slate-900 text-white hover:bg-sage shadow-slate-900/10'}`}
-              >
-                <ShoppingBag size={20} className="mr-4 group-hover:rotate-12 transition-transform" />
-                Reserve Specimen
-              </Button>
-              <button className={`w-20 h-20 flex items-center justify-center rounded-[1.5rem] border transition-all shrink-0 hover:scale-110
-                ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-rose-500/10 hover:text-rose-500' : 'bg-white border-slate-100 text-slate-800 hover:text-rose-500'}`}>
-                <Heart size={24} className="transition-all" />
-              </button>
             </div>
           </div>
 
@@ -249,7 +251,7 @@ function CareItem({ icon: Icon, label, value, color, isDark }) {
         <Icon size={24} strokeWidth={2} />
       </div>
       <div className="space-y-1">
-        <p className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isDark ? 'text-white/30' : 'text-slate-400'}`}>{label}</p>
+        <p className={`text-[11px] font-black uppercase tracking-widest transition-colors ${isDark ? 'text-white/60' : 'text-slate-600'}`}>{label}</p>
         <p className={`text-[13px] font-black tracking-tight leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{value}</p>
       </div>
     </div>
@@ -274,8 +276,8 @@ function PromiseItem({ icon: Icon, title, desc, isDark }) {
 function NarrativeBlock({ title, content, isDark }) {
   return (
     <div className="space-y-6 group">
-      <h4 className={`text-[10px] font-black uppercase tracking-[0.4em] transition-colors group-hover:text-emerald-500
-        ${isDark ? 'text-white/40' : 'text-slate-400'}`}>{title}</h4>
+      <h4 className={`text-sm font-black uppercase tracking-[0.4em] transition-colors group-hover:text-emerald-500
+        ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h4>
       <p className={`text-lg font-serif italic leading-[1.8] transition-colors
         ${isDark ? 'text-white/70' : 'text-slate-600'}`}>{content}</p>
     </div>

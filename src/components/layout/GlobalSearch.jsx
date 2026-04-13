@@ -140,10 +140,25 @@ export default function GlobalSearch({ isOpen, onClose }) {
 
               {/* No results */}
               {query && !loading && !hasResults && (
-                <div className="py-12 text-center">
-                  <p className="text-slate-400 text-sm">
-                    No results for "<strong className="text-slate-700">{query}</strong>"
-                  </p>
+                <div className="py-20 text-center space-y-6">
+                  <div className="w-20 h-20 rounded-full bg-slate-50 mx-auto flex items-center justify-center">
+                    <Search size={32} className="text-slate-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-slate-900 font-serif text-xl italic leading-none">
+                      Aucun spécimen trouvé
+                    </p>
+                    <p className="text-slate-400 text-sm">
+                      We couldn't find any matches for "<strong className="text-slate-600">{query}</strong>"
+                    </p>
+                  </div>
+                  <Link 
+                    to="/shop/all"
+                    onClick={onClose}
+                    className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-slate-900 text-white text-[11px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all hover:scale-105 active:scale-95"
+                  >
+                     Explore Full Boutique
+                  </Link>
                 </div>
               )}
 

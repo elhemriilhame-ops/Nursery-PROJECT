@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, BookOpen, Sparkles, Share2, Bookmark, Clock, User } from 'lucide-react';
+import { ArrowRight, BookOpen, Sparkles, Share2, Bookmark, Clock, User, Search } from 'lucide-react';
+import GlobalSearch from '@/components/layout/GlobalSearch';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
 import { useProducts } from '@/context/ProductContext';
@@ -11,6 +12,7 @@ export default function Guides() {
   const { isDarkMode } = useTheme();
   const { guides, loading, error } = useProducts();
   const [filter, setFilter] = useState('All');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [imgErrors, setImgErrors] = useState({});
 
   const handleImgError = (id) => {
@@ -45,7 +47,7 @@ export default function Guides() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-6xl md:text-8xl lg:text-9xl font-serif font-black tracking-tighter italic leading-[0.85] uppercase"
+              className="text-5xl md:text-6xl lg:text-7xl font-serif font-black tracking-tighter italic leading-[0.85] uppercase"
             >
               Nurture <br /> <span className="not-italic opacity-80">Insight.</span>
             </motion.h1>
@@ -60,6 +62,27 @@ export default function Guides() {
           >
             "Archive of rare techniques and botanical philosophies for the modern sanctuary. Curated by our lead artisans."
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="max-w-md mx-auto"
+          >
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className={`w-full flex items-center justify-between px-8 py-5 rounded-[2rem] border transition-all duration-500 group
+                ${isDarkMode ? 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-emerald-500/50' : 'bg-white border-slate-100 hover:border-sage shadow-xl shadow-slate-200/50 hover:shadow-2xl'}`}
+            >
+              <div className="flex items-center gap-4">
+                <Search size={20} className={isDarkMode ? 'text-emerald-500' : 'text-sage'} />
+                <span className={`text-[11px] font-black uppercase tracking-[0.3em] transition-colors
+                  ${isDarkMode ? 'text-white/40 group-hover:text-white' : 'text-slate-400 group-hover:text-slate-900'}`}>Search entire boutique...</span>
+              </div>
+              <div className={`px-3 py-1.5 rounded-xl text-[9px] font-black tracking-widest uppercase transition-colors
+                ${isDarkMode ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-100 text-slate-400'}`}>Global</div>
+            </button>
+          </motion.div>
         </div>
       </section>
 
@@ -139,7 +162,7 @@ export default function Guides() {
            </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-20">
+         <div className="grid grid-cols-1 gap-16 md:gap-32">
           {loading ? (
              <div className="col-span-full py-20 text-center opacity-50 uppercase tracking-widest text-[10px] font-black">
                Loading Botanical Archive...
@@ -158,12 +181,13 @@ export default function Guides() {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: idx * 0.1, duration: 0.8 }}
-               className="group flex flex-col h-full"
+               className="group flex flex-col md:flex-row gap-12 items-center lg:items-start"
              >
-               <div className={`relative aspect-[4/5] rounded-[3.5rem] overflow-hidden border mb-10 transition-all duration-700
+               {/* Editorial Image Container - Now side by side like a book */}
+               <div className={`relative w-full md:w-56 lg:w-72 aspect-[1/1] shrink-0 rounded-[2.5rem] overflow-hidden border transition-all duration-700
                  ${isDarkMode ? 'border-white/5 shadow-2xl shadow-black' : 'border-slate-100 shadow-sm'}`}>
                  <motion.img 
-                    whileHover={{ scale: 1.15 }}
+                    whileHover={{ scale: 1.1 }}
                     transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
                     src={guide.image} 
                     alt={guide.title}
@@ -171,41 +195,43 @@ export default function Guides() {
                  />
                  
                  {/* Floating Badges */}
-                 <div className="absolute top-8 left-8 flex flex-col gap-3">
-                    <span className="w-10 h-10 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/20 text-white transition-transform group-hover:scale-110">
-                       <Bookmark size={16} />
+                 <div className="absolute top-6 left-6 flex flex-col gap-3">
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/20 text-white transition-transform group-hover:scale-110">
+                       <Bookmark size={14} />
                     </span>
-                 </div>
-                 
-                 {/* Glass Action Overlay */}
-                 <div className="absolute inset-x-8 bottom-8 p-3 rounded-[2.5rem] bg-black/40 backdrop-blur-2xl border border-white/10 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex items-center justify-between">
-                    <div className="flex items-center gap-3 pl-4">
-                       <User size={14} className="text-emerald-500" />
-                       <span className="text-white text-[9px] font-black uppercase tracking-widest">{guide.author}</span>
-                    </div>
-                    <Link to={`/guides/${guide.id}`} className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                       <ArrowRight size={20} />
-                    </Link>
                  </div>
                </div>
 
-               <div className="space-y-6 flex-grow">
+               {/* Journal Text Content */}
+               <div className="space-y-6 py-2">
                  <div className="flex items-center gap-4">
                     <span className={`text-[10px] font-black uppercase tracking-[0.2em] py-1 border-b transition-colors
                       ${isDarkMode ? 'text-white/20 border-white/5 group-hover:text-emerald-500 group-hover:border-emerald-500/50' : 'text-slate-400 border-slate-100 group-hover:text-slate-900 group-hover:border-slate-900'}`}>
                       {guide.date}
                     </span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-colors
+                      ${isDarkMode ? 'bg-white/5 text-white/40 border-white/10' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
+                      {guide.category}
+                    </span>
                  </div>
-                 <Link to={`/guides/${guide.id}`}>
-                   <h3 className={`text-3xl font-serif font-black italic tracking-tighter leading-snug group-hover:translate-x-3 transition-transform duration-500
-                     ${isDarkMode ? 'text-white hover:text-emerald-400' : 'text-slate-900 hover:text-emerald-700'}`}>
-                     {guide.title}
-                   </h3>
+                 
+                 <div className="space-y-4">
+                   <Link to={`/guides/${guide.id}`}>
+                     <h3 className={`text-4xl md:text-5xl font-serif font-black italic tracking-tighter leading-none group-hover:translate-x-3 transition-transform duration-500
+                       ${isDarkMode ? 'text-white hover:text-emerald-400' : 'text-slate-900 hover:text-emerald-700'}`}>
+                       {guide.title}
+                     </h3>
+                   </Link>
+                   <p className={`text-xl font-serif italic leading-relaxed line-clamp-3 transition-colors max-w-2xl
+                     ${isDarkMode ? 'text-white/40 group-hover:text-white/60' : 'text-slate-500 group-hover:text-slate-700'}`}>
+                     "{guide.description}"
+                   </p>
+                 </div>
+
+                 <Link to={`/guides/${guide.id}`} className={`inline-flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.3em] transition-all
+                   ${isDarkMode ? 'text-emerald-500 hover:text-emerald-400' : 'text-sage hover:text-slate-900'}`}>
+                   Read Chronicle <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
                  </Link>
-                 <p className={`text-base font-serif italic leading-relaxed line-clamp-2 transition-colors
-                   ${isDarkMode ? 'text-white/40 group-hover:text-white/60' : 'text-slate-500 group-hover:text-slate-700'}`}>
-                   "{guide.description}"
-                 </p>
                </div>
              </motion.article>
           ))}
@@ -258,6 +284,7 @@ export default function Guides() {
       </section>
 
       <StoreReviews />
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }
